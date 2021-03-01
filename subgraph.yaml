@@ -1,0 +1,23 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: OptionFactory
+    network: kovan
+    source:
+      address: "0x46e9E947F9318a9A6a0b2df13A27E2206eae0E3D"
+      abi: OptionFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - OptionCreated
+      abis:
+        - name: OptionFactory
+          file: ./abis/OptionFactory.json
+      eventHandlers:
+        - event: OptionCreated(indexed address,address,uint8,uint8,address,address,uint256,uint256,uint256)
+          handler: handleOptionCreated
+      file: ./src/mapping.ts

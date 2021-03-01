@@ -1,0 +1,6 @@
+type ExampleEntity @entity {
+  id: ID!
+  count: BigInt!
+  deployer: Bytes! # address
+  option: Bytes! # address
+}
