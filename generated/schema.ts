@@ -12,7 +12,7 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ExampleEntity extends Entity {
+export class Action extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -20,17 +20,17 @@ export class ExampleEntity extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ExampleEntity entity without an ID");
+    assert(id !== null, "Cannot save Action entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save ExampleEntity entity with non-string ID. " +
+      "Cannot save Action entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("ExampleEntity", id.toString(), this);
+    store.set("Action", id.toString(), this);
   }
 
-  static load(id: string): ExampleEntity | null {
-    return store.get("ExampleEntity", id) as ExampleEntity | null;
+  static load(id: string): Action | null {
+    return store.get("Action", id) as Action | null;
   }
 
   get id(): string {
@@ -42,30 +42,938 @@ export class ExampleEntity extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get count(): BigInt {
-    let value = this.get("count");
+  get type(): string {
+    let value = this.get("type");
+    return value.toString();
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+
+  get user(): string {
+    let value = this.get("user");
+    return value.toString();
+  }
+
+  set user(value: string) {
+    this.set("user", Value.fromString(value));
+  }
+
+  get option(): string {
+    let value = this.get("option");
+    return value.toString();
+  }
+
+  set option(value: string) {
+    this.set("option", Value.fromString(value));
+  }
+
+  get pool(): string | null {
+    let value = this.get("pool");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set pool(value: string | null) {
+    if (value === null) {
+      this.unset("pool");
+    } else {
+      this.set("pool", Value.fromString(value as string));
+    }
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get hash(): Bytes {
+    let value = this.get("hash");
+    return value.toBytes();
+  }
+
+  set hash(value: Bytes) {
+    this.set("hash", Value.fromBytes(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
+
+  get inputTokenA(): BigInt {
+    let value = this.get("inputTokenA");
     return value.toBigInt();
   }
 
-  set count(value: BigInt) {
-    this.set("count", Value.fromBigInt(value));
+  set inputTokenA(value: BigInt) {
+    this.set("inputTokenA", Value.fromBigInt(value));
   }
 
-  get deployer(): Bytes {
-    let value = this.get("deployer");
+  get inputTokenB(): BigInt {
+    let value = this.get("inputTokenB");
+    return value.toBigInt();
+  }
+
+  set inputTokenB(value: BigInt) {
+    this.set("inputTokenB", Value.fromBigInt(value));
+  }
+
+  get outputTokenA(): BigInt {
+    let value = this.get("outputTokenA");
+    return value.toBigInt();
+  }
+
+  set outputTokenA(value: BigInt) {
+    this.set("outputTokenA", Value.fromBigInt(value));
+  }
+
+  get outputTokenB(): BigInt {
+    let value = this.get("outputTokenB");
+    return value.toBigInt();
+  }
+
+  set outputTokenB(value: BigInt) {
+    this.set("outputTokenB", Value.fromBigInt(value));
+  }
+
+  get nextSigma(): BigInt | null {
+    let value = this.get("nextSigma");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextSigma(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextSigma");
+    } else {
+      this.set("nextSigma", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextPremium(): BigInt | null {
+    let value = this.get("nextPremium");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextPremium(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextPremium");
+    } else {
+      this.set("nextPremium", Value.fromBigInt(value as BigInt));
+    }
+  }
+}
+
+export class OptionFactory extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save OptionFactory entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save OptionFactory entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("OptionFactory", id.toString(), this);
+  }
+
+  static load(id: string): OptionFactory | null {
+    return store.get("OptionFactory", id) as OptionFactory | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+}
+
+export class OptionExchange extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save OptionExchange entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save OptionExchange entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("OptionExchange", id.toString(), this);
+  }
+
+  static load(id: string): OptionExchange | null {
+    return store.get("OptionExchange", id) as OptionExchange | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+}
+
+export class PoolFactory extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PoolFactory entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PoolFactory entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PoolFactory", id.toString(), this);
+  }
+
+  static load(id: string): PoolFactory | null {
+    return store.get("PoolFactory", id) as PoolFactory | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+}
+
+export class Option extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Option entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Option entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Option", id.toString(), this);
+  }
+
+  static load(id: string): Option | null {
+    return store.get("Option", id) as Option | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
     return value.toBytes();
   }
 
-  set deployer(value: Bytes) {
-    this.set("deployer", Value.fromBytes(value));
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 
-  get option(): Bytes {
+  get optionType(): i32 {
+    let value = this.get("optionType");
+    return value.toI32();
+  }
+
+  set optionType(value: i32) {
+    this.set("optionType", Value.fromI32(value));
+  }
+
+  get underlyingAsset(): Bytes {
+    let value = this.get("underlyingAsset");
+    return value.toBytes();
+  }
+
+  set underlyingAsset(value: Bytes) {
+    this.set("underlyingAsset", Value.fromBytes(value));
+  }
+
+  get strikeAsset(): Bytes {
+    let value = this.get("strikeAsset");
+    return value.toBytes();
+  }
+
+  set strikeAsset(value: Bytes) {
+    this.set("strikeAsset", Value.fromBytes(value));
+  }
+
+  get strikePrice(): BigInt {
+    let value = this.get("strikePrice");
+    return value.toBigInt();
+  }
+
+  set strikePrice(value: BigInt) {
+    this.set("strikePrice", Value.fromBigInt(value));
+  }
+
+  get expiration(): BigInt {
+    let value = this.get("expiration");
+    return value.toBigInt();
+  }
+
+  set expiration(value: BigInt) {
+    this.set("expiration", Value.fromBigInt(value));
+  }
+
+  get exerciseWindowSize(): BigInt {
+    let value = this.get("exerciseWindowSize");
+    return value.toBigInt();
+  }
+
+  set exerciseWindowSize(value: BigInt) {
+    this.set("exerciseWindowSize", Value.fromBigInt(value));
+  }
+
+  get actions(): Array<string> {
+    let value = this.get("actions");
+    return value.toStringArray();
+  }
+
+  set actions(value: Array<string>) {
+    this.set("actions", Value.fromStringArray(value));
+  }
+
+  get positions(): Array<string> | null {
+    let value = this.get("positions");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set positions(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("positions");
+    } else {
+      this.set("positions", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get hourActivity(): Array<string> | null {
+    let value = this.get("hourActivity");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set hourActivity(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("hourActivity");
+    } else {
+      this.set("hourActivity", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get dayActivity(): Array<string> | null {
+    let value = this.get("dayActivity");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set dayActivity(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("dayActivity");
+    } else {
+      this.set("dayActivity", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get pool(): string | null {
+    let value = this.get("pool");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set pool(value: string | null) {
+    if (value === null) {
+      this.unset("pool");
+    } else {
+      this.set("pool", Value.fromString(value as string));
+    }
+  }
+
+  get exerciseStart(): BigInt | null {
+    let value = this.get("exerciseStart");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set exerciseStart(value: BigInt | null) {
+    if (value === null) {
+      this.unset("exerciseStart");
+    } else {
+      this.set("exerciseStart", Value.fromBigInt(value as BigInt));
+    }
+  }
+}
+
+export class Pool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Pool entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Pool entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Pool", id.toString(), this);
+  }
+
+  static load(id: string): Pool | null {
+    return store.get("Pool", id) as Pool | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
+  }
+
+  get option(): string {
     let value = this.get("option");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set option(value: Bytes) {
-    this.set("option", Value.fromBytes(value));
+  set option(value: string) {
+    this.set("option", Value.fromString(value));
+  }
+}
+
+export class User extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save User entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save User entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("User", id.toString(), this);
+  }
+
+  static load(id: string): User | null {
+    return store.get("User", id) as User | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get actions(): Array<string> | null {
+    let value = this.get("actions");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set actions(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("actions");
+    } else {
+      this.set("actions", Value.fromStringArray(value as Array<string>));
+    }
+  }
+
+  get positions(): Array<string> | null {
+    let value = this.get("positions");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set positions(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("positions");
+    } else {
+      this.set("positions", Value.fromStringArray(value as Array<string>));
+    }
+  }
+}
+
+export class Position extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Position entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Position entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Position", id.toString(), this);
+  }
+
+  static load(id: string): Position | null {
+    return store.get("Position", id) as Position | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get user(): string {
+    let value = this.get("user");
+    return value.toString();
+  }
+
+  set user(value: string) {
+    this.set("user", Value.fromString(value));
+  }
+
+  get option(): string {
+    let value = this.get("option");
+    return value.toString();
+  }
+
+  set option(value: string) {
+    this.set("option", Value.fromString(value));
+  }
+
+  get premiumPaid(): BigInt {
+    let value = this.get("premiumPaid");
+    return value.toBigInt();
+  }
+
+  set premiumPaid(value: BigInt) {
+    this.set("premiumPaid", Value.fromBigInt(value));
+  }
+
+  get premiumReceived(): BigInt {
+    let value = this.get("premiumReceived");
+    return value.toBigInt();
+  }
+
+  set premiumReceived(value: BigInt) {
+    this.set("premiumReceived", Value.fromBigInt(value));
+  }
+
+  get optionsBought(): BigInt {
+    let value = this.get("optionsBought");
+    return value.toBigInt();
+  }
+
+  set optionsBought(value: BigInt) {
+    this.set("optionsBought", Value.fromBigInt(value));
+  }
+
+  get optionsSold(): BigInt {
+    let value = this.get("optionsSold");
+    return value.toBigInt();
+  }
+
+  set optionsSold(value: BigInt) {
+    this.set("optionsSold", Value.fromBigInt(value));
+  }
+
+  get optionsMinted(): BigInt {
+    let value = this.get("optionsMinted");
+    return value.toBigInt();
+  }
+
+  set optionsMinted(value: BigInt) {
+    this.set("optionsMinted", Value.fromBigInt(value));
+  }
+
+  get optionsUnminted(): BigInt {
+    let value = this.get("optionsUnminted");
+    return value.toBigInt();
+  }
+
+  set optionsUnminted(value: BigInt) {
+    this.set("optionsUnminted", Value.fromBigInt(value));
+  }
+
+  get optionsExercised(): BigInt {
+    let value = this.get("optionsExercised");
+    return value.toBigInt();
+  }
+
+  set optionsExercised(value: BigInt) {
+    this.set("optionsExercised", Value.fromBigInt(value));
+  }
+
+  get underlyingWithdrawn(): BigInt {
+    let value = this.get("underlyingWithdrawn");
+    return value.toBigInt();
+  }
+
+  set underlyingWithdrawn(value: BigInt) {
+    this.set("underlyingWithdrawn", Value.fromBigInt(value));
+  }
+
+  get collateralWithdrawn(): BigInt {
+    let value = this.get("collateralWithdrawn");
+    return value.toBigInt();
+  }
+
+  set collateralWithdrawn(value: BigInt) {
+    this.set("collateralWithdrawn", Value.fromBigInt(value));
+  }
+
+  get initialOptionsProvided(): BigInt {
+    let value = this.get("initialOptionsProvided");
+    return value.toBigInt();
+  }
+
+  set initialOptionsProvided(value: BigInt) {
+    this.set("initialOptionsProvided", Value.fromBigInt(value));
+  }
+
+  get initialTokensProvided(): BigInt {
+    let value = this.get("initialTokensProvided");
+    return value.toBigInt();
+  }
+
+  set initialTokensProvided(value: BigInt) {
+    this.set("initialTokensProvided", Value.fromBigInt(value));
+  }
+
+  get finalOptionsRemoved(): BigInt {
+    let value = this.get("finalOptionsRemoved");
+    return value.toBigInt();
+  }
+
+  set finalOptionsRemoved(value: BigInt) {
+    this.set("finalOptionsRemoved", Value.fromBigInt(value));
+  }
+
+  get finalTokensRemoved(): BigInt {
+    let value = this.get("finalTokensRemoved");
+    return value.toBigInt();
+  }
+
+  set finalTokensRemoved(value: BigInt) {
+    this.set("finalTokensRemoved", Value.fromBigInt(value));
+  }
+
+  get optionsSent(): BigInt {
+    let value = this.get("optionsSent");
+    return value.toBigInt();
+  }
+
+  set optionsSent(value: BigInt) {
+    this.set("optionsSent", Value.fromBigInt(value));
+  }
+
+  get optionsReceived(): BigInt {
+    let value = this.get("optionsReceived");
+    return value.toBigInt();
+  }
+
+  set optionsReceived(value: BigInt) {
+    this.set("optionsReceived", Value.fromBigInt(value));
+  }
+}
+
+export class OptionHourActivity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save OptionHourActivity entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save OptionHourActivity entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("OptionHourActivity", id.toString(), this);
+  }
+
+  static load(id: string): OptionHourActivity | null {
+    return store.get("OptionHourActivity", id) as OptionHourActivity | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get option(): string {
+    let value = this.get("option");
+    return value.toString();
+  }
+
+  set option(value: string) {
+    this.set("option", Value.fromString(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
+
+  get day(): i32 {
+    let value = this.get("day");
+    return value.toI32();
+  }
+
+  set day(value: i32) {
+    this.set("day", Value.fromI32(value));
+  }
+
+  get hour(): i32 {
+    let value = this.get("hour");
+    return value.toI32();
+  }
+
+  set hour(value: i32) {
+    this.set("hour", Value.fromI32(value));
+  }
+
+  get hourlyPremiumReceived(): BigInt {
+    let value = this.get("hourlyPremiumReceived");
+    return value.toBigInt();
+  }
+
+  set hourlyPremiumReceived(value: BigInt) {
+    this.set("hourlyPremiumReceived", Value.fromBigInt(value));
+  }
+
+  get hourlyPremiumPaid(): BigInt {
+    let value = this.get("hourlyPremiumPaid");
+    return value.toBigInt();
+  }
+
+  set hourlyPremiumPaid(value: BigInt) {
+    this.set("hourlyPremiumPaid", Value.fromBigInt(value));
+  }
+
+  get hourlyVolumeOptions(): BigInt {
+    let value = this.get("hourlyVolumeOptions");
+    return value.toBigInt();
+  }
+
+  set hourlyVolumeOptions(value: BigInt) {
+    this.set("hourlyVolumeOptions", Value.fromBigInt(value));
+  }
+
+  get hourlyVolumeTokens(): BigInt {
+    let value = this.get("hourlyVolumeTokens");
+    return value.toBigInt();
+  }
+
+  set hourlyVolumeTokens(value: BigInt) {
+    this.set("hourlyVolumeTokens", Value.fromBigInt(value));
+  }
+
+  get hourlyActionsCount(): BigInt {
+    let value = this.get("hourlyActionsCount");
+    return value.toBigInt();
+  }
+
+  set hourlyActionsCount(value: BigInt) {
+    this.set("hourlyActionsCount", Value.fromBigInt(value));
+  }
+}
+
+export class OptionDayActivity extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save OptionDayActivity entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save OptionDayActivity entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("OptionDayActivity", id.toString(), this);
+  }
+
+  static load(id: string): OptionDayActivity | null {
+    return store.get("OptionDayActivity", id) as OptionDayActivity | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get option(): string {
+    let value = this.get("option");
+    return value.toString();
+  }
+
+  set option(value: string) {
+    this.set("option", Value.fromString(value));
+  }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
+
+  get day(): i32 {
+    let value = this.get("day");
+    return value.toI32();
+  }
+
+  set day(value: i32) {
+    this.set("day", Value.fromI32(value));
+  }
+
+  get dailyPremiumReceived(): BigInt {
+    let value = this.get("dailyPremiumReceived");
+    return value.toBigInt();
+  }
+
+  set dailyPremiumReceived(value: BigInt) {
+    this.set("dailyPremiumReceived", Value.fromBigInt(value));
+  }
+
+  get dailyPremiumPaid(): BigInt {
+    let value = this.get("dailyPremiumPaid");
+    return value.toBigInt();
+  }
+
+  set dailyPremiumPaid(value: BigInt) {
+    this.set("dailyPremiumPaid", Value.fromBigInt(value));
+  }
+
+  get dailyVolumeOptions(): BigInt {
+    let value = this.get("dailyVolumeOptions");
+    return value.toBigInt();
+  }
+
+  set dailyVolumeOptions(value: BigInt) {
+    this.set("dailyVolumeOptions", Value.fromBigInt(value));
+  }
+
+  get dailyVolumeTokens(): BigInt {
+    let value = this.get("dailyVolumeTokens");
+    return value.toBigInt();
+  }
+
+  set dailyVolumeTokens(value: BigInt) {
+    this.set("dailyVolumeTokens", Value.fromBigInt(value));
+  }
+
+  get dailyActionsCount(): BigInt {
+    let value = this.get("dailyActionsCount");
+    return value.toBigInt();
+  }
+
+  set dailyActionsCount(value: BigInt) {
+    this.set("dailyActionsCount", Value.fromBigInt(value));
   }
 }

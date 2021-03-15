@@ -1,6 +1,168 @@
-type ExampleEntity @entity {
+# -------------
+# Actions
+# -------------
+
+enum ActionType {
+  Buy
+  Sell
+  Mint
+  Unmint
+  AddLiquidity
+  RemoveLiquidity
+  Exercise
+  Withdraw
+  TransferFrom
+  TransferTo
+}
+
+type Action @entity {
   id: ID!
-  count: BigInt!
-  deployer: Bytes! # address
-  option: Bytes! # address
+  type: ActionType!
+  user: User!
+  option: Option!
+  pool: Pool
+
+  from: Bytes!
+  hash: Bytes!
+  timestamp: Int!
+
+  # Input for Option Tokens (A)
+  inputTokenA: BigInt!
+  # Input for Stablecoin Tokens (B)
+  inputTokenB: BigInt!
+  # Output for Option Tokens (A)
+  outputTokenA: BigInt!
+  # Output for Stablecoin Tokens (A)
+  outputTokenB: BigInt!
+
+  # Track next Implied Volatility
+  nextSigma: BigInt
+
+  # Track next Premium
+  nextPremium: BigInt
+}
+
+# -------------
+# Elements
+# -------------
+
+type OptionFactory @entity {
+  id: ID!
+}
+
+type OptionExchange @entity {
+  id: ID!
+}
+
+type PoolFactory @entity {
+  id: ID!
+}
+
+type Option @entity {
+  # Created
+  id: ID!
+  from: Bytes!
+
+  optionType: Int!
+
+  underlyingAsset: Bytes!
+  strikeAsset: Bytes!
+
+  strikePrice: BigInt!
+  expiration: BigInt!
+  exerciseWindowSize: BigInt!
+
+  # Generated or Bound
+  actions: [Action!]! @derivedFrom(field: "option")
+  positions: [Position!] @derivedFrom(field: "option")
+  hourActivity: [OptionHourActivity!] @derivedFrom(field: "option")
+  dayActivity: [OptionDayActivity!] @derivedFrom(field: "option")
+  pool: Pool
+  exerciseStart: BigInt
+}
+
+type Pool @entity {
+  # Created
+  id: ID!
+  from: Bytes!
+  option: Option!
+}
+
+type User @entity {
+  id: ID!
+  # Generated or Bound
+  actions: [Action!] @derivedFrom(field: "user")
+  positions: [Position!] @derivedFrom(field: "user")
+}
+
+type Position @entity {
+  id: ID!
+  user: User!
+  option: Option!
+  # # # # # # # # #
+  # Buyer's premium
+  premiumPaid: BigInt!
+  # Seller's premium
+  premiumReceived: BigInt!
+  #
+  # Buyer's cover
+  optionsBought: BigInt!
+  # Seller's goods
+  optionsSold: BigInt!
+  #
+  # Minter's lock
+  optionsMinted: BigInt!
+  # Minter's release
+  optionsUnminted: BigInt!
+  #
+  # Exerciser options
+  optionsExercised: BigInt!
+  # Withdraw amounts
+  underlyingWithdrawn: BigInt!
+  collateralWithdrawn: BigInt!
+  #
+  # LP's input amounts
+  initialOptionsProvided: BigInt!
+  initialTokensProvided: BigInt!
+  #
+  # LP's output/exit amounts
+  finalOptionsRemoved: BigInt!
+  finalTokensRemoved: BigInt!
+  #
+  # Transfers
+  optionsSent: BigInt! # TransferFrom
+  optionsReceived: BigInt! # TransferTo
+}
+
+type OptionHourActivity @entity {
+  id: ID!
+  option: Option!
+
+  timestamp: Int!
+  day: Int!
+  hour: Int!
+
+  hourlyPremiumReceived: BigInt!
+  hourlyPremiumPaid: BigInt!
+
+  hourlyVolumeOptions: BigInt!
+  hourlyVolumeTokens: BigInt!
+
+  hourlyActionsCount: BigInt!
+}
+
+type OptionDayActivity @entity {
+  id: ID!
+  option: Option!
+
+  timestamp: Int!
+  day: Int!
+
+  dailyPremiumReceived: BigInt!
+  dailyPremiumPaid: BigInt!
+
+  dailyVolumeOptions: BigInt!
+  dailyVolumeTokens: BigInt!
+
+  dailyActionsCount: BigInt!
 }
