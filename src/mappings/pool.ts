@@ -14,7 +14,7 @@ export function handlePoolCreated(event: PoolCreated): void {
     return;
   }
 
-  // PoolTemplate.create(poolId);
+  PoolTemplate.create(poolId);
 
   entity.from = event.params.deployer;
   entity.option = option.id;
