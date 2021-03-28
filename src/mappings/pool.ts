@@ -1,4 +1,4 @@
-import { log, BigInt } from "@graphprotocol/graph-ts";
+import { log, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { PoolCreated } from "../../generated/OptionAMMFactory/OptionAMMFactory";
 import { OptionAMMPool as PoolTemplate } from "../../generated/templates";
 import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionAMMPool/OptionAMMPool";
@@ -25,6 +25,9 @@ export function handlePoolCreated(event: PoolCreated): void {
   let contract = PoolContract.bind(poolId);
   entity.tokenADecimals = BigInt.fromI32(contract.tokenADecimals());
   entity.tokenBDecimals = BigInt.fromI32(contract.tokenBDecimals());
+
+  entity.tokenA = event.params.option;
+  entity.tokenB = contract.tokenB();
 
   entity.save();
   option.save();

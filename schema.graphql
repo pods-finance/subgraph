@@ -93,6 +93,9 @@ type Pool @entity {
   from: Bytes!
   option: Option!
 
+  tokenA: Bytes!
+  tokenB: Bytes!
+
   tokenADecimals: BigInt!
   tokenBDecimals: BigInt!
 }

@@ -582,6 +582,24 @@ export class Pool extends Entity {
     this.set("option", Value.fromString(value));
   }
 
+  get tokenA(): Bytes {
+    let value = this.get("tokenA");
+    return value.toBytes();
+  }
+
+  set tokenA(value: Bytes) {
+    this.set("tokenA", Value.fromBytes(value));
+  }
+
+  get tokenB(): Bytes {
+    let value = this.get("tokenB");
+    return value.toBytes();
+  }
+
+  set tokenB(value: Bytes) {
+    this.set("tokenB", Value.fromBytes(value));
+  }
+
   get tokenADecimals(): BigInt {
     let value = this.get("tokenADecimals");
     return value.toBigInt();
