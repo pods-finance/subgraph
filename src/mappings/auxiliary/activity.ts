@@ -17,12 +17,29 @@ export function updateActivityBuy(
   if (hour) {
     hour.hourlyPremiumPaid = hour.hourlyPremiumPaid.plus(action.inputTokenB);
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.inputTokenA
+    );
     hour.save();
   }
 
   if (day) {
     day.dailyPremiumPaid = day.dailyPremiumPaid.plus(action.inputTokenB);
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.inputTokenA
+    );
+
     day.save();
   }
 }
@@ -39,12 +56,30 @@ export function updateActivitySell(
       action.outputTokenB
     );
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.inputTokenB.div(option.strikePrice)
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens
+      .plus(action.outputTokenB)
+      .plus(action.inputTokenB);
+
     hour.save();
   }
 
   if (day) {
     day.dailyPremiumPaid = day.dailyPremiumPaid.plus(action.outputTokenB);
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.inputTokenB.div(option.strikePrice)
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens
+      .plus(action.outputTokenB)
+      .plus(action.inputTokenB);
+
     day.save();
   }
 }
@@ -58,11 +93,28 @@ export function updateActivityMint(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.inputTokenB
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.inputTokenB
+    );
     day.save();
   }
 }
@@ -76,11 +128,28 @@ export function updateActivityUnmint(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
     day.save();
   }
 }
@@ -94,11 +163,29 @@ export function updateActivityExercise(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     day.save();
   }
 }
@@ -112,11 +199,29 @@ export function updateActivityWithdraw(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     day.save();
   }
 }
@@ -130,11 +235,29 @@ export function updateActivityAddLiquidity(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.inputTokenB
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.inputTokenB
+    );
+
     day.save();
   }
 }
@@ -148,11 +271,29 @@ export function updateActivityRemoveLiquidity(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.outputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
     day.save();
   }
 }
@@ -166,11 +307,23 @@ export function updateActivityTransfer(
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
     hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+
     hour.save();
   }
 
   if (day) {
     day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+
     day.save();
   }
 }

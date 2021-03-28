@@ -39,7 +39,10 @@ type Action @entity {
   nextSigma: BigInt
 
   # Track next Premium
-  nextPremium: BigInt
+  nextSellingPrice: BigInt
+  nextBuyingPrice: BigInt
+  nextTokenALiquidity: BigInt
+  nextTokenBLiquidity: BigInt
 }
 
 # -------------
@@ -68,6 +71,9 @@ type Option @entity {
   underlyingAsset: Bytes!
   strikeAsset: Bytes!
 
+  underlyingAssetDecimals: BigInt!
+  strikeAssetDecimals: BigInt!
+
   strikePrice: BigInt!
   expiration: BigInt!
   exerciseWindowSize: BigInt!
@@ -86,6 +92,9 @@ type Pool @entity {
   id: ID!
   from: Bytes!
   option: Option!
+
+  tokenADecimals: BigInt!
+  tokenBDecimals: BigInt!
 }
 
 type User @entity {
@@ -145,8 +154,8 @@ type OptionHourActivity @entity {
   hourlyPremiumReceived: BigInt!
   hourlyPremiumPaid: BigInt!
 
-  hourlyVolumeOptions: BigInt!
-  hourlyVolumeTokens: BigInt!
+  hourlyGrossVolumeOptions: BigInt!
+  hourlyGrossVolumeTokens: BigInt!
 
   hourlyActionsCount: BigInt!
 }
@@ -161,8 +170,8 @@ type OptionDayActivity @entity {
   dailyPremiumReceived: BigInt!
   dailyPremiumPaid: BigInt!
 
-  dailyVolumeOptions: BigInt!
-  dailyVolumeTokens: BigInt!
+  dailyGrossVolumeOptions: BigInt!
+  dailyGrossVolumeTokens: BigInt!
 
   dailyActionsCount: BigInt!
 }

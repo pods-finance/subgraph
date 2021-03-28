@@ -1,6 +1,7 @@
-import { log } from "@graphprotocol/graph-ts";
+import { log, BigInt } from "@graphprotocol/graph-ts";
 import { PoolCreated } from "../../generated/OptionAMMFactory/OptionAMMFactory";
 import { OptionAMMPool as PoolTemplate } from "../../generated/templates";
+import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionAMMPool/OptionAMMPool";
 import { Pool } from "../../generated/schema";
 import { getOptionById } from "../helpers";
 
@@ -19,5 +20,12 @@ export function handlePoolCreated(event: PoolCreated): void {
   entity.from = event.params.deployer;
   entity.option = option.id;
 
+  option.pool = entity.id;
+
+  let contract = PoolContract.bind(poolId);
+  entity.tokenADecimals = BigInt.fromI32(contract.tokenADecimals());
+  entity.tokenBDecimals = BigInt.fromI32(contract.tokenBDecimals());
+
   entity.save();
+  option.save();
 }

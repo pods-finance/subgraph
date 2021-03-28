@@ -1,6 +1,8 @@
 import { OptionCreated } from "../../generated/OptionFactory/OptionFactory";
 import { PodOption as OptionTemplate } from "../../generated/templates";
+import { PodOption as OptionContract } from "../../generated/templates/PodOption/PodOption";
 import { Option } from "../../generated/schema";
+import { BigInt } from "@graphprotocol/graph-ts";
 
 export function handleOptionCreated(event: OptionCreated): void {
   let optionId = event.params.option;
@@ -21,6 +23,12 @@ export function handleOptionCreated(event: OptionCreated): void {
   entity.exerciseStart = event.params.expiration.minus(
     event.params.exerciseWindowSize
   );
+
+  let contract = OptionContract.bind(optionId);
+  entity.underlyingAssetDecimals = BigInt.fromI32(
+    contract.underlyingAssetDecimals()
+  );
+  entity.strikeAssetDecimals = BigInt.fromI32(contract.strikeAssetDecimals());
 
   entity.save();
 }

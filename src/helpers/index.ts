@@ -161,8 +161,8 @@ export function getOrCreateOptionHourActivity(
 
     activity.hourlyPremiumReceived = zero;
     activity.hourlyPremiumPaid = zero;
-    activity.hourlyVolumeOptions = zero;
-    activity.hourlyVolumeTokens = zero;
+    activity.hourlyGrossVolumeOptions = zero;
+    activity.hourlyGrossVolumeTokens = zero;
     activity.hourlyActionsCount = zero;
   }
 
@@ -182,8 +182,6 @@ export function getOrCreateOptionDayActivity(
     BigInt.fromI32(dayIndex).toString()
   );
 
-  log.debug("[PodLog] [Activity] {}", [id]);
-
   let activity = OptionDayActivity.load(id);
   if (activity == null) {
     activity = new OptionDayActivity(id);
@@ -193,8 +191,8 @@ export function getOrCreateOptionDayActivity(
 
     activity.dailyPremiumReceived = zero;
     activity.dailyPremiumPaid = zero;
-    activity.dailyVolumeOptions = zero;
-    activity.dailyVolumeTokens = zero;
+    activity.dailyGrossVolumeOptions = zero;
+    activity.dailyGrossVolumeTokens = zero;
     activity.dailyActionsCount = zero;
   }
 

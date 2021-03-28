@@ -166,8 +166,8 @@ export class Action extends Entity {
     }
   }
 
-  get nextPremium(): BigInt | null {
-    let value = this.get("nextPremium");
+  get nextSellingPrice(): BigInt | null {
+    let value = this.get("nextSellingPrice");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -175,11 +175,62 @@ export class Action extends Entity {
     }
   }
 
-  set nextPremium(value: BigInt | null) {
+  set nextSellingPrice(value: BigInt | null) {
     if (value === null) {
-      this.unset("nextPremium");
+      this.unset("nextSellingPrice");
     } else {
-      this.set("nextPremium", Value.fromBigInt(value as BigInt));
+      this.set("nextSellingPrice", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextBuyingPrice(): BigInt | null {
+    let value = this.get("nextBuyingPrice");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextBuyingPrice(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextBuyingPrice");
+    } else {
+      this.set("nextBuyingPrice", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextTokenALiquidity(): BigInt | null {
+    let value = this.get("nextTokenALiquidity");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextTokenALiquidity(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextTokenALiquidity");
+    } else {
+      this.set("nextTokenALiquidity", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextTokenBLiquidity(): BigInt | null {
+    let value = this.get("nextTokenBLiquidity");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextTokenBLiquidity(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextTokenBLiquidity");
+    } else {
+      this.set("nextTokenBLiquidity", Value.fromBigInt(value as BigInt));
     }
   }
 }
@@ -341,6 +392,24 @@ export class Option extends Entity {
 
   set strikeAsset(value: Bytes) {
     this.set("strikeAsset", Value.fromBytes(value));
+  }
+
+  get underlyingAssetDecimals(): BigInt {
+    let value = this.get("underlyingAssetDecimals");
+    return value.toBigInt();
+  }
+
+  set underlyingAssetDecimals(value: BigInt) {
+    this.set("underlyingAssetDecimals", Value.fromBigInt(value));
+  }
+
+  get strikeAssetDecimals(): BigInt {
+    let value = this.get("strikeAssetDecimals");
+    return value.toBigInt();
+  }
+
+  set strikeAssetDecimals(value: BigInt) {
+    this.set("strikeAssetDecimals", Value.fromBigInt(value));
   }
 
   get strikePrice(): BigInt {
@@ -511,6 +580,24 @@ export class Pool extends Entity {
 
   set option(value: string) {
     this.set("option", Value.fromString(value));
+  }
+
+  get tokenADecimals(): BigInt {
+    let value = this.get("tokenADecimals");
+    return value.toBigInt();
+  }
+
+  set tokenADecimals(value: BigInt) {
+    this.set("tokenADecimals", Value.fromBigInt(value));
+  }
+
+  get tokenBDecimals(): BigInt {
+    let value = this.get("tokenBDecimals");
+    return value.toBigInt();
+  }
+
+  set tokenBDecimals(value: BigInt) {
+    this.set("tokenBDecimals", Value.fromBigInt(value));
   }
 }
 
@@ -847,22 +934,22 @@ export class OptionHourActivity extends Entity {
     this.set("hourlyPremiumPaid", Value.fromBigInt(value));
   }
 
-  get hourlyVolumeOptions(): BigInt {
-    let value = this.get("hourlyVolumeOptions");
+  get hourlyGrossVolumeOptions(): BigInt {
+    let value = this.get("hourlyGrossVolumeOptions");
     return value.toBigInt();
   }
 
-  set hourlyVolumeOptions(value: BigInt) {
-    this.set("hourlyVolumeOptions", Value.fromBigInt(value));
+  set hourlyGrossVolumeOptions(value: BigInt) {
+    this.set("hourlyGrossVolumeOptions", Value.fromBigInt(value));
   }
 
-  get hourlyVolumeTokens(): BigInt {
-    let value = this.get("hourlyVolumeTokens");
+  get hourlyGrossVolumeTokens(): BigInt {
+    let value = this.get("hourlyGrossVolumeTokens");
     return value.toBigInt();
   }
 
-  set hourlyVolumeTokens(value: BigInt) {
-    this.set("hourlyVolumeTokens", Value.fromBigInt(value));
+  set hourlyGrossVolumeTokens(value: BigInt) {
+    this.set("hourlyGrossVolumeTokens", Value.fromBigInt(value));
   }
 
   get hourlyActionsCount(): BigInt {
@@ -950,22 +1037,22 @@ export class OptionDayActivity extends Entity {
     this.set("dailyPremiumPaid", Value.fromBigInt(value));
   }
 
-  get dailyVolumeOptions(): BigInt {
-    let value = this.get("dailyVolumeOptions");
+  get dailyGrossVolumeOptions(): BigInt {
+    let value = this.get("dailyGrossVolumeOptions");
     return value.toBigInt();
   }
 
-  set dailyVolumeOptions(value: BigInt) {
-    this.set("dailyVolumeOptions", Value.fromBigInt(value));
+  set dailyGrossVolumeOptions(value: BigInt) {
+    this.set("dailyGrossVolumeOptions", Value.fromBigInt(value));
   }
 
-  get dailyVolumeTokens(): BigInt {
-    let value = this.get("dailyVolumeTokens");
+  get dailyGrossVolumeTokens(): BigInt {
+    let value = this.get("dailyGrossVolumeTokens");
     return value.toBigInt();
   }
 
-  set dailyVolumeTokens(value: BigInt) {
-    this.set("dailyVolumeTokens", Value.fromBigInt(value));
+  set dailyGrossVolumeTokens(value: BigInt) {
+    this.set("dailyGrossVolumeTokens", Value.fromBigInt(value));
   }
 
   get dailyActionsCount(): BigInt {
