@@ -76,9 +76,9 @@ export function handleSell(event: OptionsSold): void {
   action.user = user.id;
   action.option = option.id;
 
-  action.inputTokenB = option.strikePrice.times(
-    event.params.optionsSold.div(convertExponentToBigInt(pool.tokenADecimals))
-  );
+  action.inputTokenB = option.strikePrice
+    .times(event.params.optionsSold)
+    .div(convertExponentToBigInt(pool.tokenADecimals));
   action.outputTokenB = event.params.outputBought;
 
   positionHandler.updatePositionSell(
@@ -113,9 +113,9 @@ export function handleMint(event: Mint): void {
   action.user = user.id;
   action.option = option.id;
 
-  action.inputTokenB = option.strikePrice.times(
-    event.params.amount.div(convertExponentToBigInt(pool.tokenADecimals))
-  );
+  action.inputTokenB = option.strikePrice
+    .times(event.params.amount)
+    .div(convertExponentToBigInt(pool.tokenADecimals));
   action.outputTokenA = event.params.amount;
 
   positionHandler.updatePositionMint(user, option, action);

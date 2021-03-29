@@ -200,8 +200,8 @@ export function getOrCreateOptionDayActivity(
 }
 
 export function convertExponentToBigInt(decimals: BigInt): BigInt {
-  let base = BigInt.fromI32(10);
-  for (let i = zero; i.le(decimals); i = i.plus(one)) {
+  let base = BigInt.fromI32(1);
+  for (let i = zero; i.lt(decimals); i = i.plus(one)) {
     base = base.times(BigInt.fromI32(10));
   }
   return base;
