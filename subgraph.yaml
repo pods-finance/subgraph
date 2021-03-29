@@ -94,7 +94,7 @@ templates:
           handler: handleExercise
         - event: Mint(indexed address,uint256)
           handler: handleMint
-        - event: Unmint(indexed address,uint256)
+        - event: Unmint(indexed address,uint256,uint256,uint256)
           handler: handleUnmint
         - event: Withdraw(indexed address,uint256,uint256)
           handler: handleWithdraw

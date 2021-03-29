@@ -1,4 +1,4 @@
-import { log, store } from "@graphprotocol/graph-ts";
+import { log, store, BigInt } from "@graphprotocol/graph-ts";
 import {
   OptionsBought,
   OptionsSold,
@@ -21,6 +21,7 @@ import {
   getPoolById,
   getActionById,
   createBaseAction,
+  convertExponentToBigInt,
 } from "../helpers";
 
 import { addresses } from "../constants";
@@ -60,6 +61,8 @@ export function handleSell(event: OptionsSold): void {
     return;
   }
 
+  let pool = getPoolById(option.pool);
+
   /**
    * Safety check: is there a Mint event pre-registered by the transaction
    */
@@ -73,11 +76,23 @@ export function handleSell(event: OptionsSold): void {
   action.user = user.id;
   action.option = option.id;
 
-  action.inputTokenB = event.params.optionsSold.times(option.strikePrice);
+  action.inputTokenB = option.strikePrice.times(
+    event.params.optionsSold.div(convertExponentToBigInt(pool.tokenADecimals))
+  );
   action.outputTokenB = event.params.outputBought;
 
-  positionHandler.updatePositionSell(user, option, action);
-  statsHander.updateActivitySell(option, action, event);
+  positionHandler.updatePositionSell(
+    user,
+    option,
+    action,
+    event.params.optionsSold
+  );
+  statsHander.updateActivitySell(
+    option,
+    action,
+    event,
+    event.params.optionsSold
+  );
   action = trackHandler.updateNextValues(option, action);
 
   action.save();
@@ -93,10 +108,14 @@ export function handleMint(event: Mint): void {
     return;
   }
 
+  let pool = getPoolById(option.pool);
+
   action.user = user.id;
   action.option = option.id;
 
-  action.inputTokenB = event.params.amount.times(option.strikePrice);
+  action.inputTokenB = option.strikePrice.times(
+    event.params.amount.div(convertExponentToBigInt(pool.tokenADecimals))
+  );
   action.outputTokenA = event.params.amount;
 
   positionHandler.updatePositionMint(user, option, action);
@@ -118,8 +137,8 @@ export function handleUnmint(event: Unmint): void {
   action.user = user.id;
   action.option = option.id;
 
-  action.inputTokenA = event.params.amount;
-  action.outputTokenB = event.params.amount.times(option.strikePrice);
+  action.inputTokenA = event.params.optionAmount;
+  action.outputTokenB = event.params.strikeAmount;
 
   positionHandler.updatePositionUnmint(user, option, action);
   statsHander.updateActivityUnmint(option, action, event);
@@ -138,11 +157,15 @@ export function handleExercise(event: Exercise): void {
     return;
   }
 
+  let pool = getPoolById(option.pool);
+
   action.user = user.id;
   action.option = option.id;
 
   action.inputTokenA = event.params.amount;
-  action.outputTokenB = event.params.amount.times(option.strikePrice);
+  action.outputTokenB = option.strikePrice
+    .times(event.params.amount)
+    .div(convertExponentToBigInt(pool.tokenADecimals));
 
   positionHandler.updatePositionExercise(user, option, action);
   statsHander.updateActivityExercise(option, action, event);

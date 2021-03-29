@@ -1,5 +1,6 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import { Action, Option, User } from "../../../generated/schema";
-import { getOrCreatePosition } from "../../helpers";
+import { getOrCreatePosition, convertExponentToBigInt } from "../../helpers";
 
 export function updatePositionBuy(
   user: User,
@@ -18,13 +19,12 @@ export function updatePositionBuy(
 export function updatePositionSell(
   user: User,
   option: Option,
-  action: Action
+  action: Action,
+  optionsAmount: BigInt
 ): void {
   let position = getOrCreatePosition(user, option);
   if (position) {
-    position.optionsSold = position.optionsSold.plus(
-      action.inputTokenB.div(option.strikePrice)
-    );
+    position.optionsSold = position.optionsSold.plus(optionsAmount);
     position.premiumReceived = position.premiumReceived.plus(
       action.outputTokenB
     );

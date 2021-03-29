@@ -1,4 +1,4 @@
-import { ethereum } from "@graphprotocol/graph-ts";
+import { ethereum, BigInt } from "@graphprotocol/graph-ts";
 import { Action, Option } from "../../../generated/schema";
 import {
   getOrCreateOptionHourActivity,
@@ -47,7 +47,8 @@ export function updateActivityBuy(
 export function updateActivitySell(
   option: Option,
   action: Action,
-  event: ethereum.Event
+  event: ethereum.Event,
+  optionAmount: BigInt
 ): void {
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
@@ -59,7 +60,7 @@ export function updateActivitySell(
 
     /** Gross Volume */
     hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
-      action.inputTokenB.div(option.strikePrice)
+      optionAmount
     );
     hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens
       .plus(action.outputTokenB)
@@ -74,7 +75,7 @@ export function updateActivitySell(
 
     /** Gross Volume */
     day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
-      action.inputTokenB.div(option.strikePrice)
+      optionAmount
     );
     day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens
       .plus(action.outputTokenB)

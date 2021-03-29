@@ -9,7 +9,7 @@ import {
   OptionDayActivity,
 } from "../../generated/schema";
 
-import { zero } from "../constants";
+import { one, zero } from "../constants";
 
 function _generateActionId(type: string, hash: string): string {
   let id = "Action"
@@ -197,4 +197,12 @@ export function getOrCreateOptionDayActivity(
   }
 
   return activity as OptionDayActivity;
+}
+
+export function convertExponentToBigInt(decimals: BigInt): BigInt {
+  let base = BigInt.fromI32(10);
+  for (let i = zero; i.le(decimals); i = i.plus(one)) {
+    base = base.times(BigInt.fromI32(10));
+  }
+  return base;
 }
