@@ -266,7 +266,7 @@ export class OptionFactory extends Entity {
   }
 }
 
-export class OptionExchange extends Entity {
+export class OptionHelper extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -274,17 +274,17 @@ export class OptionExchange extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save OptionExchange entity without an ID");
+    assert(id !== null, "Cannot save OptionHelper entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save OptionExchange entity with non-string ID. " +
+      "Cannot save OptionHelper entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("OptionExchange", id.toString(), this);
+    store.set("OptionHelper", id.toString(), this);
   }
 
-  static load(id: string): OptionExchange | null {
-    return store.get("OptionExchange", id) as OptionExchange | null;
+  static load(id: string): OptionHelper | null {
+    return store.get("OptionHelper", id) as OptionHelper | null;
   }
 
   get id(): string {
@@ -766,6 +766,15 @@ export class Position extends Entity {
 
   set optionsSold(value: BigInt) {
     this.set("optionsSold", Value.fromBigInt(value));
+  }
+
+  get optionsResold(): BigInt {
+    let value = this.get("optionsResold");
+    return value.toBigInt();
+  }
+
+  set optionsResold(value: BigInt) {
+    this.set("optionsResold", Value.fromBigInt(value));
   }
 
   get optionsMinted(): BigInt {

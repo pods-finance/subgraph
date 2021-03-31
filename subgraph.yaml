@@ -6,9 +6,9 @@ dataSources:
     name: OptionFactory
     network: kovan
     source:
-      address: "0x1acB2299Fa7285ABBB251a6075a31C4AeE1772D6"
+      address: "0xFB91fdE1622BC8d366824e4E67bd9a3edA9C69f0"
       abi: OptionFactory
-      startBlock: 23843029
+      startBlock: 24115851
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -25,36 +25,38 @@ dataSources:
           handler: handleOptionCreated
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
-    name: OptionExchange
+    name: OptionHelper
     network: kovan
     source:
-      address: "0x2aFbdc587F9503d707aFf961fc2AB5AaBe45f056"
-      abi: OptionExchange
-      startBlock: 23844853	
+      address: "0xc1a2891B292F070BEe7610b2B4A833Ca2BC17a99"
+      abi: OptionHelper
+      startBlock: 24115916	
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - OptionExchange
+        - OptionHelper
       abis:
-        - name: OptionExchange
-          file: ./abis/OptionExchange.json
+        - name: OptionHelper
+          file: ./abis/OptionHelper.json
         - name: OptionAMMPool
           file: ./abis/OptionAMMPool.json
       eventHandlers:
         - event: OptionsBought(indexed address,indexed address,uint256,address,uint256)
           handler: handleBuy
         - event: OptionsSold(indexed address,indexed address,uint256,address,uint256)
+          handler: handleResell
+        - event: OptionsMintedAndSold(indexed address,indexed address,uint256,address,uint256)
           handler: handleSell
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMFactory
     network: kovan
     source:
-      address: "0x06CFf1Dc3cc6244E0D5ffbF2b9b98a4781C3E703"
+      address: "0x8F041613b613c0383bc5c1236f991457896540ec"
       abi: OptionAMMFactory
-      startBlock: 23844844
+      startBlock: 24115906
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

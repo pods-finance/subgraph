@@ -57,6 +57,11 @@ export function getPoolById(id: string): Pool {
   return pool as Pool;
 }
 
+export function getUserById(id: string): User {
+  let user = User.load(id);
+  return user as User;
+}
+
 export function getOrCreateUserById(id: string): User {
   let user = User.load(id);
   if (user == null) {
@@ -114,6 +119,7 @@ export function getOrCreatePosition(user: User, option: Option): Position {
 
     position.optionsBought = zero;
     position.optionsSold = zero;
+    position.optionsResold = zero;
 
     position.optionsMinted = zero;
     position.optionsUnminted = zero;
@@ -200,6 +206,8 @@ export function getOrCreateOptionDayActivity(
 }
 
 export function convertExponentToBigInt(decimals: BigInt): BigInt {
+  log.error("[PodLog] E1: {} ", [decimals.toString()]);
+
   let base = BigInt.fromI32(1);
   for (let i = zero; i.lt(decimals); i = i.plus(one)) {
     base = base.times(BigInt.fromI32(10));

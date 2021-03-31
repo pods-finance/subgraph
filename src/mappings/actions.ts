@@ -2,7 +2,8 @@ import { log, store, BigInt } from "@graphprotocol/graph-ts";
 import {
   OptionsBought,
   OptionsSold,
-} from "../../generated/OptionExchange/OptionExchange";
+  OptionsMintedAndSold,
+} from "../../generated/OptionHelper/OptionHelper";
 import {
   Exercise,
   Mint,
@@ -20,6 +21,7 @@ import {
   getOptionById,
   getPoolById,
   getActionById,
+  getUserById,
   createBaseAction,
   convertExponentToBigInt,
 } from "../helpers";
@@ -51,7 +53,7 @@ export function handleBuy(event: OptionsBought): void {
 
   action.save();
 }
-export function handleSell(event: OptionsSold): void {
+export function handleSell(event: OptionsMintedAndSold): void {
   let action = createBaseAction("Sell", event);
   let user = getOrCreateUserById(event.params.seller.toHexString());
   let option = getOptionById(event.params.optionAddress.toHexString());
@@ -77,7 +79,7 @@ export function handleSell(event: OptionsSold): void {
   action.option = option.id;
 
   action.inputTokenB = option.strikePrice
-    .times(event.params.optionsSold)
+    .times(event.params.optionsMintedAndSold)
     .div(convertExponentToBigInt(pool.tokenADecimals));
   action.outputTokenB = event.params.outputBought;
 
@@ -85,14 +87,41 @@ export function handleSell(event: OptionsSold): void {
     user,
     option,
     action,
-    event.params.optionsSold
+    event.params.optionsMintedAndSold
   );
   statsHander.updateActivitySell(
     option,
     action,
     event,
-    event.params.optionsSold
+    event.params.optionsMintedAndSold
   );
+  action = trackHandler.updateNextValues(option, action);
+
+  action.save();
+}
+
+export function handleResell(event: OptionsSold): void {
+  let action = createBaseAction("Resell", event);
+  let user = getOrCreateUserById(event.params.seller.toHexString());
+  let option = getOptionById(event.params.optionAddress.toHexString());
+
+  if (user == null || option == null) {
+    log.debug("Linked entities are missing: User / Option", []);
+    return;
+  }
+
+  /**
+   * Safety check: is there a Mint event pre-registered by the transaction
+   */
+
+  action.user = user.id;
+  action.option = option.id;
+
+  action.inputTokenA = event.params.optionsSold;
+  action.outputTokenB = event.params.outputReceived;
+
+  positionHandler.updatePositionResell(user, option, action);
+  statsHander.updateActivityResell(option, action, event);
   action = trackHandler.updateNextValues(option, action);
 
   action.save();
@@ -108,18 +137,34 @@ export function handleMint(event: Mint): void {
     return;
   }
 
+  log.error("[PodLog] M1", []);
+
   let pool = getPoolById(option.pool);
+
+  log.error("[PodLog] M2", []);
 
   action.user = user.id;
   action.option = option.id;
 
+  log.error("[PodLog] M3", []);
+
   action.inputTokenB = option.strikePrice
     .times(event.params.amount)
     .div(convertExponentToBigInt(pool.tokenADecimals));
+
+  log.error("[PodLog] M4", []);
+
   action.outputTokenA = event.params.amount;
 
+  log.error("[PodLog] M5", []);
+
   positionHandler.updatePositionMint(user, option, action);
+
+  log.error("[PodLog] M6", []);
   statsHander.updateActivityMint(option, action, event);
+
+  log.error("[PodLog] M7", []);
+
   action = trackHandler.updateNextValues(option, action);
 
   action.save();
@@ -254,14 +299,25 @@ export function handleOptionTransfer(event: Transfer): void {
     return;
   }
 
+  /**
+   * Check for blacklist - transfers happening on between contracts
+   */
   let blacklist = addresses;
-  blacklist.push(option.id);
+  blacklist.push(event.address.toHexString());
   blacklist.push(option.pool);
 
   if (
     blacklist.includes(event.transaction.from.toHexString()) ||
     blacklist.includes(event.transaction.to.toHexString())
   ) {
+    return;
+  }
+
+  /**
+   * Check for existing sender "user" - enforce the user only transfer by tracking only existing from users
+   */
+
+  if (getUserById(event.params.from.toHexString()) == null) {
     return;
   }
 

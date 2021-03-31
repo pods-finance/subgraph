@@ -33,6 +33,22 @@ export function updatePositionSell(
   position.save();
 }
 
+export function updatePositionResell(
+  user: User,
+  option: Option,
+  action: Action
+): void {
+  let position = getOrCreatePosition(user, option);
+  if (position) {
+    position.optionsResold = position.optionsResold.plus(action.inputTokenA);
+    position.premiumReceived = position.premiumReceived.plus(
+      action.outputTokenB
+    );
+  }
+
+  position.save();
+}
+
 export function updatePositionMint(
   user: User,
   option: Option,

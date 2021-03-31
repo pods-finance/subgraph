@@ -5,6 +5,7 @@
 enum ActionType {
   Buy
   Sell
+  Resell
   Mint
   Unmint
   AddLiquidity
@@ -53,7 +54,7 @@ type OptionFactory @entity {
   id: ID!
 }
 
-type OptionExchange @entity {
+type OptionHelper @entity {
   id: ID!
 }
 
@@ -121,6 +122,8 @@ type Position @entity {
   optionsBought: BigInt!
   # Seller's goods
   optionsSold: BigInt!
+  # Reseller's goods
+  optionsResold: BigInt!
   #
   # Minter's lock
   optionsMinted: BigInt!

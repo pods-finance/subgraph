@@ -85,6 +85,46 @@ export function updateActivitySell(
   }
 }
 
+export function updateActivityResell(
+  option: Option,
+  action: Action,
+  event: ethereum.Event
+): void {
+  let hour = getOrCreateOptionHourActivity(option, event);
+  let day = getOrCreateOptionDayActivity(option, event);
+  if (hour) {
+    hour.hourlyPremiumReceived = hour.hourlyPremiumReceived.plus(
+      action.outputTokenB
+    );
+    hour.hourlyActionsCount = hour.hourlyActionsCount.plus(one);
+
+    /** Gross Volume */
+    hour.hourlyGrossVolumeOptions = hour.hourlyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    hour.hourlyGrossVolumeTokens = hour.hourlyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
+    hour.save();
+  }
+
+  if (day) {
+    day.dailyPremiumPaid = day.dailyPremiumPaid.plus(action.outputTokenB);
+    day.dailyActionsCount = day.dailyActionsCount.plus(one);
+
+    /** Gross Volume */
+    day.dailyGrossVolumeOptions = day.dailyGrossVolumeOptions.plus(
+      action.inputTokenA
+    );
+    day.dailyGrossVolumeTokens = day.dailyGrossVolumeTokens.plus(
+      action.outputTokenB
+    );
+
+    day.save();
+  }
+}
+
 export function updateActivityMint(
   option: Option,
   action: Action,
