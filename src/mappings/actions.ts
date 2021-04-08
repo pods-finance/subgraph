@@ -302,7 +302,7 @@ export function handleOptionTransfer(event: Transfer): void {
   /**
    * Check for blacklist - transfers happening on between contracts
    */
-  let blacklist = addresses;
+  let blacklist = addresses();
   blacklist.push(event.address.toHexString());
   blacklist.push(option.pool);
 
@@ -314,10 +314,15 @@ export function handleOptionTransfer(event: Transfer): void {
   }
 
   /**
-   * Check for existing sender "user" - enforce the user only transfer by tracking only existing from users
+   * Check for existing options/pools with the from/to addresses
    */
 
-  if (getUserById(event.params.from.toHexString()) == null) {
+  if (
+    getPoolById(event.params.from.toHexString()) != null ||
+    getOptionById(event.params.from.toHexString()) != null ||
+    getPoolById(event.params.to.toHexString()) != null ||
+    getOptionById(event.params.to.toHexString()) != null
+  ) {
     return;
   }
 
