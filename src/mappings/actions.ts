@@ -1,4 +1,4 @@
-import { log, store, BigInt } from "@graphprotocol/graph-ts";
+import { log, store, Address } from "@graphprotocol/graph-ts";
 import {
   OptionsBought,
   OptionsSold,
@@ -303,6 +303,9 @@ export function handleOptionTransfer(event: Transfer): void {
    * Check for blacklist - transfers happening on between contracts
    */
   let blacklist = addresses();
+  for (let i = 0; i < blacklist.length; i++) {
+    blacklist[i] = Address.fromHexString(blacklist[i]).toHexString();
+  }
   blacklist.push(event.address.toHexString());
   blacklist.push(option.pool);
 
