@@ -1,5 +1,5 @@
 export let network = "kovan";
-export let optionFactory = "0xFB91fdE1622BC8d366824e4E67bd9a3edA9C69f0";
-export let optionHelper = "0xc1a2891B292F070BEe7610b2B4A833Ca2BC17a99";
-export let optionAMMFactory = "0x8F041613b613c0383bc5c1236f991457896540ec";
+export let optionFactory = "0xC7896c2fb74d8A42d9999EFd1Dcb3bA858597EFb";
+export let optionHelper = "0x10D490c80C22D45d20Bc7475F1725D3c45e71040";
+export let optionAMMFactory = "0x47ad060d13416396d0447cA664cb61a0B23EC5D7";
 export let startBlock = 24115850;
