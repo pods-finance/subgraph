@@ -1,5 +1,5 @@
 import { log, BigInt } from "@graphprotocol/graph-ts";
-import { PoolCreated } from "../../generated/OptionAMMFactory/OptionAMMFactory";
+import { PoolCreated } from "../../generated/ConfigurationManager/OptionAMMFactory";
 import { OptionAMMPool as PoolTemplate } from "../../generated/templates";
 import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionAMMPool/OptionAMMPool";
 import { Pool } from "../../generated/schema";
@@ -11,7 +11,7 @@ export function handlePoolCreated(event: PoolCreated): void {
   let option = getOptionById(event.params.option.toHexString());
 
   if (option == null) {
-    log.debug("[PodLog] Linked entities are missing: Option", []);
+    log.debug("PodLog Linked entities are missing: Option", []);
     return;
   }
 

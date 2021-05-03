@@ -9,7 +9,19 @@ import {
   OptionDayActivity,
 } from "../../generated/schema";
 
-import { one, zero } from "../constants";
+import { zero } from "../constants";
+
+export {
+  createConfiguration,
+  getConfigurationById,
+  getActiveConfiguration,
+  getOrCreateManager,
+  getOptionFactoryById,
+  getOptionHelperById,
+  getPoolFactoryById,
+} from "./configuration";
+
+export { convertExponentToBigInt, convertStringToPaddedZero } from "./utils";
 
 function _generateActionId(type: string, hash: string): string {
   let id = "Action"
@@ -95,6 +107,8 @@ export function createBaseAction(type: string, event: ethereum.Event): Action {
   entity.inputTokenB = zero;
   entity.outputTokenA = zero;
   entity.outputTokenB = zero;
+
+  entity.spotPrice = zero;
 
   entity.from = event.transaction.from;
   entity.type = type;
@@ -203,14 +217,4 @@ export function getOrCreateOptionDayActivity(
   }
 
   return activity as OptionDayActivity;
-}
-
-export function convertExponentToBigInt(decimals: BigInt): BigInt {
-  log.error("[PodLog] E1: {} ", [decimals.toString()]);
-
-  let base = BigInt.fromI32(1);
-  for (let i = zero; i.lt(decimals); i = i.plus(one)) {
-    base = base.times(BigInt.fromI32(10));
-  }
-  return base;
 }

@@ -35,20 +35,56 @@ type Action @entity {
   outputTokenA: BigInt!
   # Output for Stablecoin Tokens (A)
   outputTokenB: BigInt!
+  # Spot price at the time of the trade
+  spotPrice: BigInt!
+
+  ##### NEXT VALUES POST-ACTION ####
 
   # Track next Implied Volatility
   nextSigma: BigInt
 
   # Track next Premium
-  nextSellingPrice: BigInt
-  nextBuyingPrice: BigInt
-  nextTokenALiquidity: BigInt
-  nextTokenBLiquidity: BigInt
+  nextSellingPrice: BigInt #For one option
+  nextBuyingPrice: BigInt #For one option
+  nextDynamicSellingPrice: BigInt
+  nextDynamicBuyingPrice: BigInt
+
+  nextUserTokenALiquidity: BigInt
+  nextUserTokenBLiquidity: BigInt
+
+  nextTBA: BigInt
+  nextTBB: BigInt
+
+  nextDBA: BigInt
+  nextDBB: BigInt
+
+  nextFeesA: BigInt
+  nextFeesB: BigInt
+
+  nextCollateralTVL: BigInt
+  nextPoolTokenATVL: BigInt
+  nextPoolTokenBTVL: BigInt
 }
 
 # -------------
 # Elements
 # -------------
+
+type Manager @entity {
+  id: ID!
+  configurations: [Configuration!]! @derivedFrom(field: "manager")
+  configuration: Configuration!
+
+  owner: Bytes
+}
+
+type Configuration @entity {
+  id: ID!
+  manager: Manager!
+  optionFactory: OptionFactory
+  optionHelper: OptionHelper
+  poolFactory: PoolFactory
+}
 
 type OptionFactory @entity {
   id: ID!
@@ -86,6 +122,8 @@ type Option @entity {
   dayActivity: [OptionDayActivity!] @derivedFrom(field: "option")
   pool: Pool
   exerciseStart: BigInt
+
+  configuration: Configuration!
 }
 
 type Pool @entity {

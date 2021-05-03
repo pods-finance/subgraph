@@ -149,6 +149,15 @@ export class Action extends Entity {
     this.set("outputTokenB", Value.fromBigInt(value));
   }
 
+  get spotPrice(): BigInt {
+    let value = this.get("spotPrice");
+    return value.toBigInt();
+  }
+
+  set spotPrice(value: BigInt) {
+    this.set("spotPrice", Value.fromBigInt(value));
+  }
+
   get nextSigma(): BigInt | null {
     let value = this.get("nextSigma");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -200,8 +209,8 @@ export class Action extends Entity {
     }
   }
 
-  get nextTokenALiquidity(): BigInt | null {
-    let value = this.get("nextTokenALiquidity");
+  get nextDynamicSellingPrice(): BigInt | null {
+    let value = this.get("nextDynamicSellingPrice");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -209,16 +218,16 @@ export class Action extends Entity {
     }
   }
 
-  set nextTokenALiquidity(value: BigInt | null) {
+  set nextDynamicSellingPrice(value: BigInt | null) {
     if (value === null) {
-      this.unset("nextTokenALiquidity");
+      this.unset("nextDynamicSellingPrice");
     } else {
-      this.set("nextTokenALiquidity", Value.fromBigInt(value as BigInt));
+      this.set("nextDynamicSellingPrice", Value.fromBigInt(value as BigInt));
     }
   }
 
-  get nextTokenBLiquidity(): BigInt | null {
-    let value = this.get("nextTokenBLiquidity");
+  get nextDynamicBuyingPrice(): BigInt | null {
+    let value = this.get("nextDynamicBuyingPrice");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -226,11 +235,355 @@ export class Action extends Entity {
     }
   }
 
-  set nextTokenBLiquidity(value: BigInt | null) {
+  set nextDynamicBuyingPrice(value: BigInt | null) {
     if (value === null) {
-      this.unset("nextTokenBLiquidity");
+      this.unset("nextDynamicBuyingPrice");
     } else {
-      this.set("nextTokenBLiquidity", Value.fromBigInt(value as BigInt));
+      this.set("nextDynamicBuyingPrice", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextUserTokenALiquidity(): BigInt | null {
+    let value = this.get("nextUserTokenALiquidity");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextUserTokenALiquidity(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextUserTokenALiquidity");
+    } else {
+      this.set("nextUserTokenALiquidity", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextUserTokenBLiquidity(): BigInt | null {
+    let value = this.get("nextUserTokenBLiquidity");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextUserTokenBLiquidity(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextUserTokenBLiquidity");
+    } else {
+      this.set("nextUserTokenBLiquidity", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextTBA(): BigInt | null {
+    let value = this.get("nextTBA");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextTBA(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextTBA");
+    } else {
+      this.set("nextTBA", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextTBB(): BigInt | null {
+    let value = this.get("nextTBB");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextTBB(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextTBB");
+    } else {
+      this.set("nextTBB", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextDBA(): BigInt | null {
+    let value = this.get("nextDBA");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextDBA(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextDBA");
+    } else {
+      this.set("nextDBA", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextDBB(): BigInt | null {
+    let value = this.get("nextDBB");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextDBB(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextDBB");
+    } else {
+      this.set("nextDBB", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextFeesA(): BigInt | null {
+    let value = this.get("nextFeesA");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextFeesA(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextFeesA");
+    } else {
+      this.set("nextFeesA", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextFeesB(): BigInt | null {
+    let value = this.get("nextFeesB");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextFeesB(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextFeesB");
+    } else {
+      this.set("nextFeesB", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextCollateralTVL(): BigInt | null {
+    let value = this.get("nextCollateralTVL");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextCollateralTVL(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextCollateralTVL");
+    } else {
+      this.set("nextCollateralTVL", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextPoolTokenATVL(): BigInt | null {
+    let value = this.get("nextPoolTokenATVL");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextPoolTokenATVL(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextPoolTokenATVL");
+    } else {
+      this.set("nextPoolTokenATVL", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextPoolTokenBTVL(): BigInt | null {
+    let value = this.get("nextPoolTokenBTVL");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextPoolTokenBTVL(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextPoolTokenBTVL");
+    } else {
+      this.set("nextPoolTokenBTVL", Value.fromBigInt(value as BigInt));
+    }
+  }
+}
+
+export class Manager extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Manager entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Manager entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Manager", id.toString(), this);
+  }
+
+  static load(id: string): Manager | null {
+    return store.get("Manager", id) as Manager | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get configurations(): Array<string> {
+    let value = this.get("configurations");
+    return value.toStringArray();
+  }
+
+  set configurations(value: Array<string>) {
+    this.set("configurations", Value.fromStringArray(value));
+  }
+
+  get configuration(): string {
+    let value = this.get("configuration");
+    return value.toString();
+  }
+
+  set configuration(value: string) {
+    this.set("configuration", Value.fromString(value));
+  }
+
+  get owner(): Bytes | null {
+    let value = this.get("owner");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set owner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromBytes(value as Bytes));
+    }
+  }
+}
+
+export class Configuration extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Configuration entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Configuration entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Configuration", id.toString(), this);
+  }
+
+  static load(id: string): Configuration | null {
+    return store.get("Configuration", id) as Configuration | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get manager(): string {
+    let value = this.get("manager");
+    return value.toString();
+  }
+
+  set manager(value: string) {
+    this.set("manager", Value.fromString(value));
+  }
+
+  get optionFactory(): string | null {
+    let value = this.get("optionFactory");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set optionFactory(value: string | null) {
+    if (value === null) {
+      this.unset("optionFactory");
+    } else {
+      this.set("optionFactory", Value.fromString(value as string));
+    }
+  }
+
+  get optionHelper(): string | null {
+    let value = this.get("optionHelper");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set optionHelper(value: string | null) {
+    if (value === null) {
+      this.unset("optionHelper");
+    } else {
+      this.set("optionHelper", Value.fromString(value as string));
+    }
+  }
+
+  get poolFactory(): string | null {
+    let value = this.get("poolFactory");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set poolFactory(value: string | null) {
+    if (value === null) {
+      this.unset("poolFactory");
+    } else {
+      this.set("poolFactory", Value.fromString(value as string));
     }
   }
 }
@@ -531,6 +884,15 @@ export class Option extends Entity {
     } else {
       this.set("exerciseStart", Value.fromBigInt(value as BigInt));
     }
+  }
+
+  get configuration(): string {
+    let value = this.get("configuration");
+    return value.toString();
+  }
+
+  set configuration(value: string) {
+    this.set("configuration", Value.fromString(value));
   }
 }
 

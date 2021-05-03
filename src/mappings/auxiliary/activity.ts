@@ -5,13 +5,15 @@ import {
   getOrCreateOptionDayActivity,
 } from "../../helpers";
 
-import { one } from "../../constants";
+import { one, isDev } from "../../constants";
 
 export function updateActivityBuy(
   option: Option,
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -50,6 +52,8 @@ export function updateActivitySell(
   event: ethereum.Event,
   optionAmount: BigInt
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -90,6 +94,8 @@ export function updateActivityResell(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -130,6 +136,8 @@ export function updateActivityMint(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -165,6 +173,8 @@ export function updateActivityUnmint(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -200,6 +210,8 @@ export function updateActivityExercise(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -236,6 +248,8 @@ export function updateActivityWithdraw(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -272,6 +286,8 @@ export function updateActivityAddLiquidity(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -308,6 +324,8 @@ export function updateActivityRemoveLiquidity(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {
@@ -344,6 +362,8 @@ export function updateActivityTransfer(
   action: Action,
   event: ethereum.Event
 ): void {
+  if (!isDev()) return;
+
   let hour = getOrCreateOptionHourActivity(option, event);
   let day = getOrCreateOptionDayActivity(option, event);
   if (hour) {

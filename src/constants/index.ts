@@ -1,27 +1,29 @@
-import { BigInt, dataSource, log } from "@graphprotocol/graph-ts";
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import * as environment from "./env";
 
-import * as kovan from "./kovan";
-import * as mainnet from "./mainnet";
-import * as mumbai from "./mumbai";
-import * as matic from "./matic";
+import { convertStringToPaddedZero } from "../helpers/utils";
 
-export function addresses(): string[] {
-  let network = dataSource.network();
+export function isDev(): boolean {
+  return environment.dev;
+}
 
-  if (network == "kovan")
-    return [kovan.optionFactory, kovan.optionHelper, kovan.optionAMMFactory];
-  else if (network == "mainnet")
-    return [
-      mainnet.optionFactory,
-      mainnet.optionHelper,
-      mainnet.optionAMMFactory,
-    ];
-  else if (network == "mumbai")
-    return [mumbai.optionFactory, mumbai.optionHelper, mumbai.optionAMMFactory];
-  else if (network == "matic")
-    return [matic.optionFactory, matic.optionHelper, matic.optionAMMFactory];
-  else return [kovan.optionFactory, kovan.optionHelper, kovan.optionAMMFactory]; // throw new Error("Unsupported network");
+export function getManagerId(): string {
+  return environment.manager;
 }
 
 export let zero = BigInt.fromI32(0);
 export let one = BigInt.fromI32(1);
+
+export let ADDRESS_ZERO = Bytes.fromHexString(
+  "0x0000000000000000000000000000000000000000"
+);
+
+export let MODULE_AMM_FACTORY = convertStringToPaddedZero(
+  Bytes.fromUTF8("AMM_FACTORY").toHexString()
+);
+export let MODULE_OPTION_FACTORY = convertStringToPaddedZero(
+  Bytes.fromUTF8("OPTION_FACTORY").toHexString()
+);
+export let MODULE_OPTION_HELPER = convertStringToPaddedZero(
+  Bytes.fromUTF8("OPTION_HELPER").toHexString()
+);

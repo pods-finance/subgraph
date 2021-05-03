@@ -3,7 +3,7 @@ import {
   OptionsBought,
   OptionsSold,
   OptionsMintedAndSold,
-} from "../../generated/OptionHelper/OptionHelper";
+} from "../../generated/ConfigurationManager/OptionHelper";
 import {
   Exercise,
   Mint,
@@ -21,12 +21,15 @@ import {
   getOptionById,
   getPoolById,
   getActionById,
-  getUserById,
   createBaseAction,
   convertExponentToBigInt,
+  getOptionHelperById,
+  getPoolFactoryById,
+  getOptionFactoryById,
 } from "../helpers";
 
-import { addresses } from "../constants";
+import { zero } from "../constants";
+
 import * as positionHandler from "./auxiliary/position";
 import * as statsHander from "./auxiliary/activity";
 import * as trackHandler from "./auxiliary/trackers";
@@ -37,7 +40,7 @@ export function handleBuy(event: OptionsBought): void {
   let option = getOptionById(event.params.optionAddress.toHexString());
 
   if (user == null || option == null) {
-    log.debug("Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -49,7 +52,11 @@ export function handleBuy(event: OptionsBought): void {
 
   positionHandler.updatePositionBuy(user, option, action);
   statsHander.updateActivityBuy(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(
+    option,
+    action,
+    event.params.optionsBought
+  );
 
   action.save();
 }
@@ -59,7 +66,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
   let option = getOptionById(event.params.optionAddress.toHexString());
 
   if (user == null || option == null) {
-    log.debug("Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -72,7 +79,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
   let existing = getActionById(null, "Mint", event);
   if (existing) {
     store.remove("Action", existing.id);
-    log.debug("[PodLog] Removed existing Mint for Sale.", []);
+    log.debug("PodLog Removed existing Mint for Sale.", []);
   }
 
   action.user = user.id;
@@ -95,7 +102,11 @@ export function handleSell(event: OptionsMintedAndSold): void {
     event,
     event.params.optionsMintedAndSold
   );
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(
+    option,
+    action,
+    event.params.optionsMintedAndSold
+  );
 
   action.save();
 }
@@ -106,7 +117,7 @@ export function handleResell(event: OptionsSold): void {
   let option = getOptionById(event.params.optionAddress.toHexString());
 
   if (user == null || option == null) {
-    log.debug("Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -122,7 +133,11 @@ export function handleResell(event: OptionsSold): void {
 
   positionHandler.updatePositionResell(user, option, action);
   statsHander.updateActivityResell(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(
+    option,
+    action,
+    event.params.optionsSold
+  );
 
   action.save();
 }
@@ -133,39 +148,26 @@ export function handleMint(event: Mint): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("[PodLog] Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
-  log.error("[PodLog] M1", []);
-
   let pool = getPoolById(option.pool);
-
-  log.error("[PodLog] M2", []);
 
   action.user = user.id;
   action.option = option.id;
-
-  log.error("[PodLog] M3", []);
 
   action.inputTokenB = option.strikePrice
     .times(event.params.amount)
     .div(convertExponentToBigInt(pool.tokenADecimals));
 
-  log.error("[PodLog] M4", []);
-
   action.outputTokenA = event.params.amount;
-
-  log.error("[PodLog] M5", []);
 
   positionHandler.updatePositionMint(user, option, action);
 
-  log.error("[PodLog] M6", []);
   statsHander.updateActivityMint(option, action, event);
 
-  log.error("[PodLog] M7", []);
-
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(option, action, event.params.amount);
 
   action.save();
 }
@@ -175,7 +177,7 @@ export function handleUnmint(event: Unmint): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("[PodLog] Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -187,7 +189,11 @@ export function handleUnmint(event: Unmint): void {
 
   positionHandler.updatePositionUnmint(user, option, action);
   statsHander.updateActivityUnmint(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(
+    option,
+    action,
+    event.params.optionAmount
+  );
 
   action.save();
 }
@@ -198,7 +204,7 @@ export function handleExercise(event: Exercise): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("[PodLog] Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -214,7 +220,7 @@ export function handleExercise(event: Exercise): void {
 
   positionHandler.updatePositionExercise(user, option, action);
   statsHander.updateActivityExercise(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(option, action, zero);
 
   action.save();
 }
@@ -224,7 +230,7 @@ export function handleWithdraw(event: Withdraw): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("[PodLog] Linked entities are missing: User / Option", []);
+    log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -236,7 +242,7 @@ export function handleWithdraw(event: Withdraw): void {
 
   positionHandler.updatePositionWithdraw(user, option, action);
   statsHander.updateActivityWithdraw(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(option, action, zero);
 
   action.save();
 }
@@ -246,7 +252,7 @@ export function handleAddLiquidity(event: AddLiquidity): void {
   let pool = getPoolById(event.address.toHexString());
 
   if (user == null || pool == null) {
-    log.debug("[PodLog] Linked entities are missing: User / Pool", []);
+    log.debug("PodLog Linked entities are missing: User / Pool", []);
     return;
   }
 
@@ -261,7 +267,11 @@ export function handleAddLiquidity(event: AddLiquidity): void {
 
   positionHandler.updatePositionAddLiquidity(user, option, action);
   statsHander.updateActivityAddLiquidity(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(
+    option,
+    action,
+    event.params.amountA || zero
+  );
 
   action.save();
 }
@@ -271,7 +281,7 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
   let pool = getPoolById(event.address.toHexString());
 
   if (user == null || pool == null) {
-    log.debug("[PodLog] Linked entities are missing: User / Pool", []);
+    log.debug("PodLog Linked entities are missing: User / Pool", []);
     return;
   }
 
@@ -286,7 +296,11 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
 
   positionHandler.updatePositionRemoveLiquidity(user, option, action);
   statsHander.updateActivityRemoveLiquidity(option, action, event);
-  action = trackHandler.updateNextValues(option, action);
+  action = trackHandler.updateNextValues(
+    option,
+    action,
+    event.params.amountA || zero
+  );
 
   action.save();
 }
@@ -295,23 +309,21 @@ export function handleOptionTransfer(event: Transfer): void {
   let option = getOptionById(event.address.toHexString());
 
   if (option == null) {
-    log.debug("[PodLog] Linked entities are missing: Option", []);
+    log.debug("PodLog Linked entities are missing: Option", []);
     return;
   }
 
   /**
    * Check for blacklist - transfers happening on between contracts
    */
-  let blacklist = addresses();
-  for (let i = 0; i < blacklist.length; i++) {
-    blacklist[i] = Address.fromHexString(blacklist[i]).toHexString();
-  }
-  blacklist.push(event.address.toHexString());
-  blacklist.push(option.pool);
 
   if (
-    blacklist.includes(event.transaction.from.toHexString()) ||
-    blacklist.includes(event.transaction.to.toHexString())
+    getOptionFactoryById(event.params.from.toHexString()) != null ||
+    getOptionHelperById(event.params.from.toHexString()) != null ||
+    getPoolFactoryById(event.params.from.toHexString()) != null ||
+    getOptionFactoryById(event.params.to.toHexString()) != null ||
+    getOptionHelperById(event.params.to.toHexString()) != null ||
+    getOptionFactoryById(event.params.to.toHexString()) != null
   ) {
     return;
   }
@@ -336,7 +348,7 @@ export function handleOptionTransfer(event: Transfer): void {
   let userTo = getOrCreateUserById(event.params.to.toHexString());
 
   if (userFrom == null || userTo === null) {
-    log.debug("[PodLog] Linked entities are missing: User (2)", []);
+    log.debug("PodLog Linked entities are missing: User (2)", []);
     return;
   }
 
@@ -352,8 +364,8 @@ export function handleOptionTransfer(event: Transfer): void {
   positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);
   positionHandler.updatePositionTransferTo(userTo, option, actionTo);
   statsHander.updateActivityTransfer(option, actionFrom, event);
-  actionFrom = trackHandler.updateNextValues(option, actionFrom);
-  actionTo = trackHandler.updateNextValues(option, actionTo);
+  actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
+  actionTo = trackHandler.updateNextValues(option, actionTo, zero);
 
   actionFrom.save();
   actionTo.save();

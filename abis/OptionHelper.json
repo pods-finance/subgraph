@@ -2,8 +2,8 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "configurationManager",
+        "internalType": "contract IConfigurationManager",
+        "name": "_configurationManager",
         "type": "address"
       }
     ],
@@ -172,6 +172,29 @@
       },
       {
         "internalType": "uint256",
+        "name": "tokenAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "addLiquidity",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IPodOption",
+        "name": "option",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "optionAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "maxTokenAmount",
         "type": "uint256"
       },
@@ -222,6 +245,19 @@
     "name": "buyOptionsWithExactTokens",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "configurationManager",
+    "outputs": [
+      {
+        "internalType": "contract IConfigurationManager",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

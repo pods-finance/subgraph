@@ -1,14 +1,47 @@
-specVersion: 0.0.2
+specVersion: 0.0.3
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
+    name: ConfigurationManager
+    network: {{network}}
+    source:
+      address: '{{manager}}'
+      abi: ConfigurationManager
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Manager
+      abis:
+        - name: ConfigurationManager
+          file: ./abis/ConfigurationManager.json
+        - name: OptionFactory
+          file: ./abis/OptionFactory.json
+        - name: PodOption
+          file: ./abis/PodOption.json
+        - name: OptionAMMFactory
+          file: ./abis/OptionAMMFactory.json
+        - name: OptionAMMPool
+          file: ./abis/OptionAMMPool.json
+        - name: OptionHelper
+          file: ./abis/OptionHelper.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleManagerOwnershipTransferred
+        - event: ParameterSet(bytes32,uint256)
+          handler: handleManagerParameterSet   
+        - event: ModuleSet(indexed bytes32,indexed address)
+          handler: handleManagerModuleSet
+      file: ./src/mappings/index.ts
+templates:
+  - kind: ethereum/contract
     name: OptionFactory
     network: {{network}}
     source:
-      address: '{{optionFactory}}'
       abi: OptionFactory
-      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -28,9 +61,7 @@ dataSources:
     name: OptionHelper
     network: {{network}}
     source:
-      address: '{{optionHelper}}'
       abi: OptionHelper
-      startBlock: {{startBlock}}	
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -54,9 +85,7 @@ dataSources:
     name: OptionAMMFactory
     network: {{network}}
     source:
-      address: '{{optionAMMFactory}}'
       abi: OptionAMMFactory
-      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -72,7 +101,6 @@ dataSources:
         - event: PoolCreated(indexed address,address,address)
           handler: handlePoolCreated
       file: ./src/mappings/index.ts
-templates:
   - kind: ethereum/contract
     name: PodOption
     network: {{network}}
