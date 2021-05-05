@@ -1,4 +1,4 @@
-import { ethereum, log, Bytes } from "@graphprotocol/graph-ts";
+import { ethereum, Bytes } from "@graphprotocol/graph-ts";
 import {
   Manager,
   Configuration,
@@ -18,18 +18,15 @@ function _generateConfigurationId(event: ethereum.Event): string {
 
 export function getOrCreateManager(event: ethereum.Event): Manager {
   let id = getManagerId();
-  log.error("PodLog Manager Id", [id]);
   let manager = Manager.load(id);
   if (manager == null) {
     manager = new Manager(id);
-    manager.owner = ADDRESS_ZERO as Bytes;
 
     let configurationId = _generateConfigurationId(event);
     let configuration = new Configuration(configurationId);
+    configuration.owner = ADDRESS_ZERO as Bytes;
     configuration.manager = manager.id;
     configuration.save();
-
-    log.error("PodLog Configuration Id", [configuration.id]);
 
     manager.configuration = configuration.id;
     manager.save();
@@ -46,6 +43,7 @@ export function createConfiguration(event: ethereum.Event): Configuration {
 
   let configuration = new Configuration(_generateConfigurationId(event));
   configuration.manager = manager.id;
+  configuration.owner = current.owner;
   configuration.optionFactory = current.optionFactory;
   configuration.optionHelper = current.optionHelper;
   configuration.poolFactory = current.poolFactory;

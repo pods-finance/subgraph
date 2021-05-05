@@ -478,23 +478,6 @@ export class Manager extends Entity {
   set configuration(value: string) {
     this.set("configuration", Value.fromString(value));
   }
-
-  get owner(): Bytes | null {
-    let value = this.get("owner");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set owner(value: Bytes | null) {
-    if (value === null) {
-      this.unset("owner");
-    } else {
-      this.set("owner", Value.fromBytes(value as Bytes));
-    }
-  }
 }
 
 export class Configuration extends Entity {
@@ -534,6 +517,23 @@ export class Configuration extends Entity {
 
   set manager(value: string) {
     this.set("manager", Value.fromString(value));
+  }
+
+  get owner(): Bytes | null {
+    let value = this.get("owner");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set owner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromBytes(value as Bytes));
+    }
   }
 
   get optionFactory(): string | null {
@@ -617,6 +617,23 @@ export class OptionFactory extends Entity {
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
+
+  get options(): Array<string> | null {
+    let value = this.get("options");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set options(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("options");
+    } else {
+      this.set("options", Value.fromStringArray(value as Array<string>));
+    }
+  }
 }
 
 export class OptionHelper extends Entity {
@@ -678,6 +695,23 @@ export class PoolFactory extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get pools(): Array<string> | null {
+    let value = this.get("pools");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set pools(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("pools");
+    } else {
+      this.set("pools", Value.fromStringArray(value as Array<string>));
+    }
   }
 }
 
@@ -886,13 +920,13 @@ export class Option extends Entity {
     }
   }
 
-  get configuration(): string {
-    let value = this.get("configuration");
+  get factory(): string {
+    let value = this.get("factory");
     return value.toString();
   }
 
-  set configuration(value: string) {
-    this.set("configuration", Value.fromString(value));
+  set factory(value: string) {
+    this.set("factory", Value.fromString(value));
   }
 }
 
@@ -942,6 +976,15 @@ export class Pool extends Entity {
 
   set option(value: string) {
     this.set("option", Value.fromString(value));
+  }
+
+  get factory(): string {
+    let value = this.get("factory");
+    return value.toString();
+  }
+
+  set factory(value: string) {
+    this.set("factory", Value.fromString(value));
   }
 
   get tokenA(): Bytes {

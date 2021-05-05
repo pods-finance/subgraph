@@ -213,22 +213,22 @@ export function updateNextValues(
   action.nextDynamicBuyingPrice = dynamicPrices[0];
   action.nextDynamicSellingPrice = dynamicPrices[1];
 
-  let TBs = callNextTBs(pool);
-  action.nextTBA = TBs[0];
-  action.nextTBB = TBs[1];
+  // let TBs = callNextTBs(pool);
+  // action.nextTBA = TBs[0];
+  // action.nextTBB = TBs[1];
 
-  let DBs = callNextDBs(pool);
-  action.nextTBA = DBs[0];
-  action.nextTBB = DBs[1];
+  // let DBs = callNextDBs(pool);
+  // action.nextTBA = DBs[0];
+  // action.nextTBB = DBs[1];
 
-  let fees = callNextFees(pool);
-  action.nextFeesA = fees[0];
-  action.nextFeesB = fees[1];
+  // let fees = callNextFees(pool);
+  // action.nextFeesA = fees[0];
+  // action.nextFeesB = fees[1];
 
-  let TVLs = callNextTVLs(pool);
-  action.nextCollateralTVL = TVLs[0];
-  action.nextPoolTokenATVL = TVLs[1];
-  action.nextPoolTokenBTVL = TVLs[2];
+  // let TVLs = callNextTVLs(pool);
+  // action.nextCollateralTVL = TVLs[0];
+  // action.nextPoolTokenATVL = TVLs[1];
+  // action.nextPoolTokenBTVL = TVLs[2];
 
   return action;
 }

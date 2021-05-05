@@ -3,7 +3,7 @@ import { PoolCreated } from "../../generated/ConfigurationManager/OptionAMMFacto
 import { OptionAMMPool as PoolTemplate } from "../../generated/templates";
 import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionAMMPool/OptionAMMPool";
 import { Pool } from "../../generated/schema";
-import { getOptionById } from "../helpers";
+import { getOptionById, getOrCreateManager } from "../helpers";
 
 export function handlePoolCreated(event: PoolCreated): void {
   let poolId = event.params.pool;
@@ -29,6 +29,9 @@ export function handlePoolCreated(event: PoolCreated): void {
 
   entity.tokenA = event.params.option;
   entity.tokenB = contract.tokenB();
+
+  entity.factory = event.address.toHexString();
+  getOrCreateManager(event);
 
   entity.save();
   option.save();

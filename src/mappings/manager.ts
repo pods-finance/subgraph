@@ -27,8 +27,12 @@ export function handleManagerOwnershipTransferred(
   event: OwnershipTransferred
 ): void {
   let manager = getOrCreateManager(event);
-  manager.owner = event.params.newOwner;
+  let configuration = createConfiguration(event);
 
+  configuration.owner = event.params.newOwner;
+  manager.configuration = configuration.id;
+
+  configuration.save();
   manager.save();
 }
 
@@ -45,27 +49,26 @@ export function handleManagerModuleSet(event: ModuleSet): void {
     PoolFactoryTemplate.create(address);
     configuration.poolFactory = address.toHexString();
     configuration.save();
-
+    module.save();
     manager.configuration = configuration.id;
     manager.save();
-    module.save();
   } else if (event.params.name.toHexString() == MODULE_OPTION_FACTORY) {
     let module = new OptionFactory(address.toHexString());
     OptionFactoryTemplate.create(address);
     configuration.optionFactory = address.toHexString();
     configuration.save();
+    module.save();
 
     manager.configuration = configuration.id;
     manager.save();
-    module.save();
   } else if (event.params.name.toHexString() == MODULE_OPTION_HELPER) {
     let module = new OptionHelper(address.toHexString());
     OptionHelperTemplate.create(address);
     configuration.optionHelper = address.toHexString();
     configuration.save();
+    module.save();
 
     manager.configuration = configuration.id;
     manager.save();
-    module.save();
   }
 }

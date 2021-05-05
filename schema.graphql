@@ -74,13 +74,13 @@ type Manager @entity {
   id: ID!
   configurations: [Configuration!]! @derivedFrom(field: "manager")
   configuration: Configuration!
-
-  owner: Bytes
 }
 
 type Configuration @entity {
   id: ID!
   manager: Manager!
+
+  owner: Bytes
   optionFactory: OptionFactory
   optionHelper: OptionHelper
   poolFactory: PoolFactory
@@ -88,6 +88,7 @@ type Configuration @entity {
 
 type OptionFactory @entity {
   id: ID!
+  options: [Option!] @derivedFrom(field: "factory")
 }
 
 type OptionHelper @entity {
@@ -96,6 +97,7 @@ type OptionHelper @entity {
 
 type PoolFactory @entity {
   id: ID!
+  pools: [Pool!] @derivedFrom(field: "factory")
 }
 
 type Option @entity {
@@ -123,7 +125,7 @@ type Option @entity {
   pool: Pool
   exerciseStart: BigInt
 
-  configuration: Configuration!
+  factory: OptionFactory!
 }
 
 type Pool @entity {
@@ -131,6 +133,7 @@ type Pool @entity {
   id: ID!
   from: Bytes!
   option: Option!
+  factory: PoolFactory!
 
   tokenA: Bytes!
   tokenB: Bytes!

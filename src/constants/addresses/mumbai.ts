@@ -1,5 +1,5 @@
 export let variant = "mumbai";
 export let dev = false;
 export let network = "mumbai";
-export let manager = "0x4bf370725D74133d1ECF6fB9C137E8b92B07a9E5";
-export let startBlock = 13256670;
+export let manager = "0x92E3807d9a7d5542aDe6C86EE04fD67FaFCd972b";
+export let startBlock = 13474840;

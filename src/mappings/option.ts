@@ -1,9 +1,9 @@
 import { OptionCreated } from "../../generated/ConfigurationManager/OptionFactory";
 import { PodOption as OptionTemplate } from "../../generated/templates";
 import { PodOption as OptionContract } from "../../generated/templates/PodOption/PodOption";
-import { Option } from "../../generated/schema";
+import { Option, Configuration } from "../../generated/schema";
 import { BigInt } from "@graphprotocol/graph-ts";
-import { getOrCreateManager } from "../helpers";
+import { getConfigurationById, getOrCreateManager } from "../helpers";
 
 export function handleOptionCreated(event: OptionCreated): void {
   let optionId = event.params.option;
@@ -31,8 +31,8 @@ export function handleOptionCreated(event: OptionCreated): void {
   );
   entity.strikeAssetDecimals = BigInt.fromI32(contract.strikeAssetDecimals());
 
-  let manager = getOrCreateManager(event);
-  entity.configuration = manager.configuration;
+  entity.factory = event.address.toHexString();
+  getOrCreateManager(event);
 
   entity.save();
 }

@@ -7,7 +7,7 @@ export {
   handleRemoveLiquidity,
   handleExercise,
   handleWithdraw,
-  // handleOptionTransfer,
+  handleOptionTransfer,
   handleResell,
 } from "./actions";
 export { handleOptionCreated } from "./option";
