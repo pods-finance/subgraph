@@ -61,6 +61,7 @@ export function handleBuy(event: OptionsBought): void {
   action.save();
 }
 export function handleSell(event: OptionsMintedAndSold): void {
+  let id = event.transaction.hash.toHexString();
   let action = createBaseAction("Sell", event);
   let user = getOrCreateUserById(event.params.seller.toHexString());
   let option = getOptionById(event.params.optionAddress.toHexString());
@@ -76,8 +77,8 @@ export function handleSell(event: OptionsMintedAndSold): void {
    * Safety check: is there a Mint event pre-registered by the transaction
    */
 
-  let existing = getActionById(null, "Mint", event);
-  if (existing) {
+  let existing = getActionById(id);
+  if (existing.type == "Mint") {
     store.remove("Action", existing.id);
     log.debug("PodLog Removed existing Mint for Sale.", []);
   }

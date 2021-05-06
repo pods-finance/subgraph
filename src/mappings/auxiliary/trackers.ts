@@ -1,5 +1,5 @@
 import { log, Address, BigInt } from "@graphprotocol/graph-ts";
-import { Action, Pool, Option } from "../../../generated/schema";
+import { Action, Pool, Option, User } from "../../../generated/schema";
 import { OptionAMMPool as PoolContract } from "../../../generated/templates/OptionAMMPool/OptionAMMPool";
 import { ERC20 as ERC20Contract } from "../../../generated/templates/PodOption/ERC20";
 import { isDev, one, zero } from "../../constants";
@@ -101,11 +101,11 @@ export function callNextTBs(pool: Pool): BigInt[] {
   let balances = [zero, zero] as BigInt[];
 
   balances[0] = callNextERC20Balance(
-    Address.fromString(pool.tokenA.toString()),
+    Address.fromString(pool.tokenA.toHexString()),
     Address.fromString(pool.id)
   );
   balances[1] = callNextERC20Balance(
-    Address.fromString(pool.tokenB.toString()),
+    Address.fromString(pool.tokenB.toHexString()),
     Address.fromString(pool.id)
   );
 
@@ -143,8 +143,8 @@ export function callNextFees(pool: Pool): BigInt[] {
     log.info("PodLog FeePoolA call reverted", []);
   } else {
     balances[0] = callNextERC20Balance(
-      Address.fromHexString(pool.tokenA.toHexString()) as Address,
-      queryFeePoolA.value
+      Address.fromString(pool.tokenA.toHexString()),
+      queryFeePoolA.value as Address
     );
   }
 
@@ -153,8 +153,8 @@ export function callNextFees(pool: Pool): BigInt[] {
     log.info("PodLog FeePoolB call reverted", []);
   } else {
     balances[1] = callNextERC20Balance(
-      Address.fromHexString(pool.tokenB.toHexString()) as Address,
-      queryFeePoolB.value
+      Address.fromString(pool.tokenB.toHexString()),
+      queryFeePoolB.value as Address
     );
   }
 
@@ -165,22 +165,37 @@ function callNextTVLs(pool: Pool): BigInt[] {
   let balances = [zero, zero, zero] as BigInt[];
 
   let nextCollateralTVL = callNextERC20Balance(
-    Address.fromHexString(pool.tokenB.toHexString()) as Address,
-    Address.fromString(pool.option) as Address
+    Address.fromString(pool.tokenB.toHexString()),
+    Address.fromString(pool.option)
   );
 
   let nextPoolTokenATVL = callNextERC20Balance(
-    Address.fromHexString(pool.tokenA.toHexString()) as Address,
-    Address.fromHexString(pool.id) as Address
+    Address.fromString(pool.tokenA.toHexString()),
+    Address.fromString(pool.id)
   ).times(callNextSellingPrice(pool, one));
 
   let nextPoolTokenBTVL = callNextERC20Balance(
-    Address.fromHexString(pool.tokenB.toHexString()) as Address,
-    Address.fromHexString(pool.id) as Address
+    Address.fromString(pool.tokenB.toHexString()),
+    Address.fromString(pool.id)
   );
 
   balances = [nextCollateralTVL, nextPoolTokenATVL, nextPoolTokenBTVL];
   return balances as BigInt[];
+}
+
+export function callNextUserSnapshot(user: User, pool: Pool): BigInt[] {
+  let snapshot = [zero, zero, zero] as BigInt[];
+
+  let contract = PoolContract.bind(Address.fromString(pool.id));
+
+  let query = contract.try_getUserDepositSnapshot(Address.fromString(user.id));
+  if (query.reverted) {
+    log.info("PodLog Snapshot call reverted", []);
+  } else {
+    snapshot = [query.value.value0, query.value.value1, query.value.value2];
+  }
+
+  return snapshot as BigInt[];
 }
 
 export function updateNextValues(
@@ -213,22 +228,27 @@ export function updateNextValues(
   action.nextDynamicBuyingPrice = dynamicPrices[0];
   action.nextDynamicSellingPrice = dynamicPrices[1];
 
-  // let TBs = callNextTBs(pool);
-  // action.nextTBA = TBs[0];
-  // action.nextTBB = TBs[1];
+  let TBs = callNextTBs(pool);
+  action.nextTBA = TBs[0];
+  action.nextTBB = TBs[1];
 
-  // let DBs = callNextDBs(pool);
-  // action.nextTBA = DBs[0];
-  // action.nextTBB = DBs[1];
+  let DBs = callNextDBs(pool);
+  action.nextDBA = DBs[0];
+  action.nextDBB = DBs[1];
 
-  // let fees = callNextFees(pool);
-  // action.nextFeesA = fees[0];
-  // action.nextFeesB = fees[1];
+  let fees = callNextFees(pool);
+  action.nextFeesA = fees[0];
+  action.nextFeesB = fees[1];
 
-  // let TVLs = callNextTVLs(pool);
-  // action.nextCollateralTVL = TVLs[0];
-  // action.nextPoolTokenATVL = TVLs[1];
-  // action.nextPoolTokenBTVL = TVLs[2];
+  let TVLs = callNextTVLs(pool);
+  action.nextCollateralTVL = TVLs[0];
+  action.nextPoolTokenATVL = TVLs[1];
+  action.nextPoolTokenBTVL = TVLs[2];
+
+  let snapshot = callNextUserSnapshot(user, pool);
+  action.nextUserTokenAOriginalBalance = snapshot[0];
+  action.nextUserTokenBOriginalBalance = snapshot[1];
+  action.nextUserSnapshotFIMP = snapshot[2];
 
   return action;
 }

@@ -36,7 +36,7 @@ type Action @entity {
   # Output for Stablecoin Tokens (A)
   outputTokenB: BigInt!
   # Spot price at the time of the trade
-  spotPrice: BigInt!
+  spotPrice: SpotPrice
 
   ##### NEXT VALUES POST-ACTION ####
 
@@ -64,6 +64,16 @@ type Action @entity {
   nextCollateralTVL: BigInt
   nextPoolTokenATVL: BigInt
   nextPoolTokenBTVL: BigInt
+
+  nextUserSnapshotFIMP: BigInt
+  nextUserTokenAOriginalBalance: BigInt
+  nextUserTokenBOriginalBalance: BigInt
+}
+
+type SpotPrice @entity {
+  id: ID!
+  value: BigInt!
+  Action: Action
 }
 
 # -------------

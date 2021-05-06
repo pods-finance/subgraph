@@ -17,3 +17,5 @@ export {
   handleManagerParameterSet,
   handleManagerModuleSet,
 } from "./manager";
+
+export { handleSpotPrice } from "./utility";

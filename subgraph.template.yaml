@@ -16,6 +16,8 @@ dataSources:
       entities:
         - Manager
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: ConfigurationManager
           file: ./abis/ConfigurationManager.json
         - name: OptionFactory
@@ -49,6 +51,10 @@ templates:
       entities:
         - OptionFactory
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: OptionAMMPool
+          file: ./abis/OptionAMMPool.json
         - name: OptionFactory
           file: ./abis/OptionFactory.json
         - name: PodOption
@@ -71,6 +77,8 @@ templates:
       abis:
         - name: OptionHelper
           file: ./abis/OptionHelper.json
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: OptionAMMPool
           file: ./abis/OptionAMMPool.json
       eventHandlers:
@@ -95,6 +103,8 @@ templates:
       abis:
         - name: OptionAMMFactory
           file: ./abis/OptionAMMFactory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: OptionAMMPool
           file: ./abis/OptionAMMPool.json
       eventHandlers:
@@ -143,6 +153,8 @@ templates:
       entities:
         - Pool
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: OptionAMMPool
           file: ./abis/OptionAMMPool.json
       eventHandlers:
@@ -150,4 +162,6 @@ templates:
           handler: handleAddLiquidity
         - event: RemoveLiquidity(indexed address,uint256,uint256)
           handler: handleRemoveLiquidity
+        - event: TradeInfo(uint256,uint256)
+          handler: handleSpotPrice
       file: ./src/mappings/index.ts

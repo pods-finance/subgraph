@@ -149,13 +149,21 @@ export class Action extends Entity {
     this.set("outputTokenB", Value.fromBigInt(value));
   }
 
-  get spotPrice(): BigInt {
+  get spotPrice(): string | null {
     let value = this.get("spotPrice");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set spotPrice(value: BigInt) {
-    this.set("spotPrice", Value.fromBigInt(value));
+  set spotPrice(value: string | null) {
+    if (value === null) {
+      this.unset("spotPrice");
+    } else {
+      this.set("spotPrice", Value.fromString(value as string));
+    }
   }
 
   get nextSigma(): BigInt | null {
@@ -428,6 +436,103 @@ export class Action extends Entity {
     } else {
       this.set("nextPoolTokenBTVL", Value.fromBigInt(value as BigInt));
     }
+  }
+
+  get nextUserSnapshotFIMP(): BigInt | null {
+    let value = this.get("nextUserSnapshotFIMP");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextUserSnapshotFIMP(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextUserSnapshotFIMP");
+    } else {
+      this.set("nextUserSnapshotFIMP", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get nextUserTokenAOriginalBalance(): BigInt | null {
+    let value = this.get("nextUserTokenAOriginalBalance");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextUserTokenAOriginalBalance(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextUserTokenAOriginalBalance");
+    } else {
+      this.set(
+        "nextUserTokenAOriginalBalance",
+        Value.fromBigInt(value as BigInt)
+      );
+    }
+  }
+
+  get nextUserTokenBOriginalBalance(): BigInt | null {
+    let value = this.get("nextUserTokenBOriginalBalance");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextUserTokenBOriginalBalance(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextUserTokenBOriginalBalance");
+    } else {
+      this.set(
+        "nextUserTokenBOriginalBalance",
+        Value.fromBigInt(value as BigInt)
+      );
+    }
+  }
+}
+
+export class SpotPrice extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SpotPrice entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SpotPrice entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SpotPrice", id.toString(), this);
+  }
+
+  static load(id: string): SpotPrice | null {
+    return store.get("SpotPrice", id) as SpotPrice | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
   }
 }
 

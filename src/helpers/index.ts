@@ -7,6 +7,7 @@ import {
   Position,
   OptionHourActivity,
   OptionDayActivity,
+  SpotPrice,
 } from "../../generated/schema";
 
 import { zero } from "../constants";
@@ -23,13 +24,7 @@ export {
 
 export { convertExponentToBigInt, convertStringToPaddedZero } from "./utils";
 
-function _generateActionId(type: string, hash: string): string {
-  let id = "Action"
-    .concat("-")
-    .concat(type)
-    .concat("-")
-    .concat(hash);
-
+function _generateActionId(id: string): string {
   return id;
 }
 
@@ -74,6 +69,11 @@ export function getUserById(id: string): User {
   return user as User;
 }
 
+export function getSpotPriceById(id: string): SpotPrice {
+  let price = SpotPrice.load(id);
+  return price as SpotPrice;
+}
+
 export function getOrCreateUserById(id: string): User {
   let user = User.load(id);
   if (user == null) {
@@ -84,23 +84,14 @@ export function getOrCreateUserById(id: string): User {
   return user as User;
 }
 
-export function getActionById(
-  id: string | null,
-  type: string | null,
-  event: ethereum.Event | null
-): Action {
-  if (id === null && (type === null || event === null)) return null;
-
-  let actionId =
-    id !== null
-      ? id
-      : _generateActionId(type, event.transaction.hash.toHexString());
+export function getActionById(id: string | null): Action {
+  let actionId = _generateActionId(id);
   let action = Action.load(actionId);
   return action as Action;
 }
 
 export function createBaseAction(type: string, event: ethereum.Event): Action {
-  let actionId = _generateActionId(type, event.transaction.hash.toHexString());
+  let actionId = _generateActionId(event.transaction.hash.toHexString());
   let entity = new Action(actionId);
 
   entity.inputTokenA = zero;
@@ -108,7 +99,8 @@ export function createBaseAction(type: string, event: ethereum.Event): Action {
   entity.outputTokenA = zero;
   entity.outputTokenB = zero;
 
-  entity.spotPrice = zero;
+  let price = getSpotPriceById(actionId);
+  if (price) entity.spotPrice = price.id;
 
   entity.from = event.transaction.from;
   entity.type = type;

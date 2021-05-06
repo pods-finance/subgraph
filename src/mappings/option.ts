@@ -1,9 +1,9 @@
 import { OptionCreated } from "../../generated/ConfigurationManager/OptionFactory";
 import { PodOption as OptionTemplate } from "../../generated/templates";
 import { PodOption as OptionContract } from "../../generated/templates/PodOption/PodOption";
-import { Option, Configuration } from "../../generated/schema";
+import { Option } from "../../generated/schema";
 import { BigInt } from "@graphprotocol/graph-ts";
-import { getConfigurationById, getOrCreateManager } from "../helpers";
+import { getOrCreateManager } from "../helpers";
 
 export function handleOptionCreated(event: OptionCreated): void {
   let optionId = event.params.option;
