@@ -63,3 +63,5 @@ typings/
 generated
 build
 contracts/
+
+src/_generated/

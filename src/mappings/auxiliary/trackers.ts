@@ -3,9 +3,11 @@ import { Action, Pool, Option, User } from "../../../generated/schema";
 import { OptionAMMPool as PoolContract } from "../../../generated/templates/OptionAMMPool/OptionAMMPool";
 import { ERC20 as ERC20Contract } from "../../../generated/templates/PodOption/ERC20";
 import { isDev, one, zero } from "../../constants";
-import { getPoolById, getUserById } from "../../helpers";
-export { convertExponentToBigInt } from "../../helpers/utils";
-
+import {
+  getPoolById,
+  getUserById,
+  convertExponentToBigInt,
+} from "../../helpers";
 
 function callNextERC20Balance(address: Address, owner: Address): BigInt {
   let balance = zero;
@@ -165,13 +167,12 @@ export function callNextFees(pool: Pool): BigInt[] {
 
 function callNextTVLs(pool: Pool): BigInt[] {
   let balances = [zero, zero, zero] as BigInt[];
+  let oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals));
 
   let nextCollateralTVL = callNextERC20Balance(
     Address.fromString(pool.tokenB.toHexString()),
     Address.fromString(pool.option)
   );
-
-  const oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals))
 
   let nextPoolTokenATVL = callNextERC20Balance(
     Address.fromString(pool.tokenA.toHexString()),
@@ -215,14 +216,11 @@ export function updateNextValues(
   let user = getUserById(action.user);
 
   if (pool == null) return action;
-
-  const oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals))
+  let oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals));
 
   let nextSigma = callNextSigma(pool);
   let nextBuyingPrice = callNextBuyingPrice(pool, oneAdapted);
   let nextSellingPrice = callNextSellingPrice(pool, oneAdapted);
-
- 
 
   action.nextSigma = nextSigma;
   action.nextBuyingPrice = nextBuyingPrice;

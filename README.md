@@ -7,7 +7,7 @@ The configuration variables (e.g. the manager address or start block) can be man
 
 ## Preprocessing
 
-In order to provide a dynamic generation and deploy for the subgraph (multi-network and multi-context), the `yarn deploy:#variant#` will include a series of preprocessing steps. The flow:
+In order to provide a dynamic generation and deploy for the subgraph (multi-network and multi-context), the `yarn deploy:$VARIANT` will include a series of preprocessing steps. The flow:
 
 1. The deploy **variant** will decide the network and the context e.g. `yarn deploy:kovan-dev` will set the $VARIANT variable
 2. Based on the chosen variant, the right typescript configuration file will be compiled into a javascript file that will be used as **source** for mustache.<br/>`[yarn configure] src/constants/addresses/$VARIANT.ts → src/_generated/$VARIANT.js`
@@ -29,3 +29,8 @@ Because a) mustache can only handle `js` files as **source** and b) assembly scr
 - The `src/_generated` folder is not replaceable by a single `ts` file because mustache is not able to read `ts`. It can only handle `js` files as **source**.
 - The `src/_generated` folder is not replaceable by a single `js` file because the `--outFile` flag is not usable with `tsc` when the `--module` flag is CommonJS. We need this so mustache can read the exports.
 - AssemblyScript doesn't allow for `js` or `json` files to be imported directly into `ts`
+
+
+## Deployment procedure
+0. `yarn run codegen` (if there were changes to the schema.graphql)
+1. `yarn deploy:kovan-dev --access-token XXXXXXX` (the $VARIANT here is kovan-dev | for the access token, see the dashboard for the pods account) 
