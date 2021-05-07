@@ -153,7 +153,7 @@ export function callNextFees(pool: Pool): BigInt[] {
     log.info("PodLog FeePoolB call reverted", []);
   } else {
     balances[1] = callNextERC20Balance(
-      Address.fromString(pool.tokenB.toHexString()),
+      Address.fromString(pool.tokenA.toHexString()),
       queryFeePoolB.value as Address
     );
   }
