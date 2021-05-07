@@ -1,4 +1,4 @@
-import { log, store } from "@graphprotocol/graph-ts";
+import { log, store, Address } from "@graphprotocol/graph-ts";
 import {
   OptionsBought,
   OptionsSold,
@@ -30,7 +30,7 @@ import {
   getOptionFactoryById,
 } from "../helpers";
 
-import { zero } from "../constants";
+import { ADDRESS_ZERO, zero } from "../constants";
 
 import * as positionHandler from "./auxiliary/position";
 import * as statsHander from "./auxiliary/activity";
@@ -45,9 +45,11 @@ export function handleBuy(event: OptionsBought): void {
     log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
+  let pool = getPoolById(option.pool);
 
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.inputTokenB = event.params.inputSold;
   action.outputTokenA = event.params.optionsBought;
@@ -88,6 +90,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
 
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.inputTokenB = option.strikePrice
     .times(event.params.optionsMintedAndSold)
@@ -128,6 +131,7 @@ export function handleResell(event: OptionsSold): void {
     log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
+  let pool = getPoolById(option.pool);
 
   /**
    * Safety check: is there a Mint event pre-registered by the transaction
@@ -135,6 +139,7 @@ export function handleResell(event: OptionsSold): void {
 
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.inputTokenA = event.params.optionsSold;
   action.outputTokenB = event.params.outputReceived;
@@ -164,6 +169,7 @@ export function handleMint(event: Mint): void {
 
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.inputTokenB = option.strikePrice
     .times(event.params.amount)
@@ -188,9 +194,11 @@ export function handleUnmint(event: Unmint): void {
     log.debug("PodLog Linked entities are missing: User / Option", []);
     return;
   }
+  let pool = getPoolById(option.pool);
 
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.inputTokenA = event.params.optionAmount;
   action.outputTokenB = event.params.strikeAmount;
@@ -220,6 +228,7 @@ export function handleExercise(event: Exercise): void {
 
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.inputTokenA = event.params.amount;
   action.outputTokenB = option.strikePrice
@@ -242,8 +251,11 @@ export function handleWithdraw(event: Withdraw): void {
     return;
   }
 
+  let pool = getPoolById(option.pool);
+
   action.user = user.id;
   action.option = option.id;
+  action.pool = pool.id;
 
   action.outputTokenA = event.params.underlyingAmount;
   action.outputTokenB = event.params.strikeAmount;
@@ -326,6 +338,8 @@ export function handleOptionTransfer(event: Transfer): void {
    */
 
   if (
+    Address.fromString(event.params.from.toHexString()) === ADDRESS_ZERO ||
+    Address.fromString(event.params.to.toHexString()) === ADDRESS_ZERO ||
     getOptionFactoryById(event.params.from.toHexString()) != null ||
     getOptionHelperById(event.params.from.toHexString()) != null ||
     getPoolFactoryById(event.params.from.toHexString()) != null ||
