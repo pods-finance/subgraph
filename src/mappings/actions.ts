@@ -71,8 +71,6 @@ export function handleSell(event: OptionsMintedAndSold): void {
     return;
   }
 
-  let pool = getPoolById(option.pool);
-
   /**
    * Safety check: is there a Mint event pre-registered by the transaction
    */
@@ -86,10 +84,8 @@ export function handleSell(event: OptionsMintedAndSold): void {
   action.user = user.id;
   action.option = option.id;
 
-  action.inputTokenB = option.strikePrice
-    .times(event.params.optionsMintedAndSold)
-    .div(convertExponentToBigInt(pool.tokenADecimals));
-  action.outputTokenB = event.params.outputBought;
+  action.inputTokenA = event.params.optionsMintedAndSold //Options(TokenA) sold to the pool
+  action.outputTokenB = event.params.outputBought; // premium received
 
   positionHandler.updatePositionSell(
     user,
