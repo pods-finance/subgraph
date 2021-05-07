@@ -4,6 +4,8 @@ import { OptionAMMPool as PoolContract } from "../../../generated/templates/Opti
 import { ERC20 as ERC20Contract } from "../../../generated/templates/PodOption/ERC20";
 import { isDev, one, zero } from "../../constants";
 import { getPoolById, getUserById } from "../../helpers";
+export { convertExponentToBigInt } from "../../helpers/utils";
+
 
 function callNextERC20Balance(address: Address, owner: Address): BigInt {
   let balance = zero;
@@ -169,10 +171,12 @@ function callNextTVLs(pool: Pool): BigInt[] {
     Address.fromString(pool.option)
   );
 
+  const oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals))
+
   let nextPoolTokenATVL = callNextERC20Balance(
     Address.fromString(pool.tokenA.toHexString()),
     Address.fromString(pool.id)
-  ).times(callNextSellingPrice(pool, one));
+  ).times(callNextSellingPrice(pool, oneAdapted));
 
   let nextPoolTokenBTVL = callNextERC20Balance(
     Address.fromString(pool.tokenB.toHexString()),
@@ -212,9 +216,13 @@ export function updateNextValues(
 
   if (pool == null) return action;
 
+  const oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals))
+
   let nextSigma = callNextSigma(pool);
-  let nextBuyingPrice = callNextBuyingPrice(pool, one);
-  let nextSellingPrice = callNextSellingPrice(pool, one);
+  let nextBuyingPrice = callNextBuyingPrice(pool, oneAdapted);
+  let nextSellingPrice = callNextSellingPrice(pool, oneAdapted);
+
+ 
 
   action.nextSigma = nextSigma;
   action.nextBuyingPrice = nextBuyingPrice;
