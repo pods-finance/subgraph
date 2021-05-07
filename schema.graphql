@@ -16,6 +16,11 @@ enum ActionType {
   TransferTo
 }
 
+type Metadata @entity {
+  id: ID!
+  optionsMintedAndSold: BigInt
+}
+
 type Action @entity {
   id: ID!
   type: ActionType!
@@ -37,6 +42,8 @@ type Action @entity {
   outputTokenB: BigInt!
   # Spot price at the time of the trade
   spotPrice: SpotPrice
+  # Special metadata on a case-by-case basis
+  metadata: Metadata
 
   ##### NEXT VALUES POST-ACTION ####
 
@@ -73,7 +80,7 @@ type Action @entity {
 type SpotPrice @entity {
   id: ID!
   value: BigInt!
-  Action: Action
+  action: Action
 }
 
 # -------------

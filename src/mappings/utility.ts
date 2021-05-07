@@ -10,10 +10,12 @@ export function handleSpotPrice(event: TradeInfo): void {
 
   let entity = new SpotPrice(spotId);
   entity.value = event.params.spotPrice;
-  entity.save();
 
   if (action !== null) {
+    entity.action = action.id;
     action.spotPrice = spotId;
     action.save();
   }
+
+  entity.save();
 }

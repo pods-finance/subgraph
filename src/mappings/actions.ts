@@ -1,4 +1,4 @@
-import { log, store, Address } from "@graphprotocol/graph-ts";
+import { log, store } from "@graphprotocol/graph-ts";
 import {
   OptionsBought,
   OptionsSold,
@@ -15,6 +15,8 @@ import {
   AddLiquidity,
   RemoveLiquidity,
 } from "../../generated/templates/OptionAMMPool/OptionAMMPool";
+
+import { Metadata } from "../../generated/schema";
 
 import {
   getOrCreateUserById,
@@ -63,6 +65,7 @@ export function handleBuy(event: OptionsBought): void {
 export function handleSell(event: OptionsMintedAndSold): void {
   let id = event.transaction.hash.toHexString();
   let action = createBaseAction("Sell", event);
+  let metadata = new Metadata(id);
   let user = getOrCreateUserById(event.params.seller.toHexString());
   let option = getOptionById(event.params.optionAddress.toHexString());
 
@@ -90,6 +93,10 @@ export function handleSell(event: OptionsMintedAndSold): void {
     .times(event.params.optionsMintedAndSold)
     .div(convertExponentToBigInt(pool.tokenADecimals));
   action.outputTokenB = event.params.outputBought;
+
+  metadata.optionsMintedAndSold = event.params.optionsMintedAndSold;
+  action.metadata = metadata.id;
+  metadata.save();
 
   positionHandler.updatePositionSell(
     user,

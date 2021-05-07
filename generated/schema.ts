@@ -12,6 +12,54 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class Metadata extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Metadata entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Metadata entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Metadata", id.toString(), this);
+  }
+
+  static load(id: string): Metadata | null {
+    return store.get("Metadata", id) as Metadata | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get optionsMintedAndSold(): BigInt | null {
+    let value = this.get("optionsMintedAndSold");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set optionsMintedAndSold(value: BigInt | null) {
+    if (value === null) {
+      this.unset("optionsMintedAndSold");
+    } else {
+      this.set("optionsMintedAndSold", Value.fromBigInt(value as BigInt));
+    }
+  }
+}
+
 export class Action extends Entity {
   constructor(id: string) {
     super();
@@ -163,6 +211,23 @@ export class Action extends Entity {
       this.unset("spotPrice");
     } else {
       this.set("spotPrice", Value.fromString(value as string));
+    }
+  }
+
+  get metadata(): string | null {
+    let value = this.get("metadata");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set metadata(value: string | null) {
+    if (value === null) {
+      this.unset("metadata");
+    } else {
+      this.set("metadata", Value.fromString(value as string));
     }
   }
 
@@ -533,6 +598,23 @@ export class SpotPrice extends Entity {
 
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
+  }
+
+  get action(): string | null {
+    let value = this.get("action");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set action(value: string | null) {
+    if (value === null) {
+      this.unset("action");
+    } else {
+      this.set("action", Value.fromString(value as string));
+    }
   }
 }
 

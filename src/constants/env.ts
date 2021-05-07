@@ -1,5 +1,5 @@
-export let variant = 'kovan-dev';
-export let dev = true;
-export let network = 'kovan';
-export let manager = '0xce316ca47df83a50bb23f4ace7498fbb3376ec99';
-export let startBlock = 24537440;
+export let variant = 'matic';
+export let dev = false;
+export let network = 'matic';
+export let manager = '0x08fFffb55D21101187ef610f8d6A0C855b6BF804';
+export let startBlock = 13256260;
