@@ -16,7 +16,13 @@ import {
   OptionHelper as OptionHelperTemplate,
 } from "../../generated/templates";
 
-import { getOrCreateManager, createConfiguration } from "../helpers";
+import {
+  getOrCreateManager,
+  createConfiguration,
+  getPoolFactoryById,
+  getOptionFactoryById,
+  getOptionHelperById,
+} from "../helpers";
 import {
   MODULE_AMM_FACTORY,
   MODULE_OPTION_FACTORY,
@@ -45,6 +51,7 @@ export function handleManagerModuleSet(event: ModuleSet): void {
   let address = event.params.newAddress;
 
   if (event.params.name.toHexString() == MODULE_AMM_FACTORY) {
+    if (getPoolFactoryById(address.toHexString()) !== null) return;
     let module = new PoolFactory(address.toHexString());
     PoolFactoryTemplate.create(address);
     configuration.poolFactory = address.toHexString();
@@ -53,6 +60,7 @@ export function handleManagerModuleSet(event: ModuleSet): void {
     manager.configuration = configuration.id;
     manager.save();
   } else if (event.params.name.toHexString() == MODULE_OPTION_FACTORY) {
+    if (getOptionFactoryById(address.toHexString()) !== null) return;
     let module = new OptionFactory(address.toHexString());
     OptionFactoryTemplate.create(address);
     configuration.optionFactory = address.toHexString();
@@ -62,6 +70,7 @@ export function handleManagerModuleSet(event: ModuleSet): void {
     manager.configuration = configuration.id;
     manager.save();
   } else if (event.params.name.toHexString() == MODULE_OPTION_HELPER) {
+    if (getOptionHelperById(address.toHexString()) !== null) return;
     let module = new OptionHelper(address.toHexString());
     OptionHelperTemplate.create(address);
     configuration.optionHelper = address.toHexString();

@@ -101,6 +101,8 @@ type Configuration @entity {
   optionFactory: OptionFactory
   optionHelper: OptionHelper
   poolFactory: PoolFactory
+
+  timestamp: Int!
 }
 
 type OptionFactory @entity {

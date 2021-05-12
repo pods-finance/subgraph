@@ -773,6 +773,15 @@ export class Configuration extends Entity {
       this.set("poolFactory", Value.fromString(value as string));
     }
   }
+
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
 }
 
 export class OptionFactory extends Entity {

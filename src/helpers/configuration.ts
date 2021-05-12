@@ -24,6 +24,7 @@ export function getOrCreateManager(event: ethereum.Event): Manager {
 
     let configurationId = _generateConfigurationId(event);
     let configuration = new Configuration(configurationId);
+    configuration.timestamp = event.block.timestamp.toI32();
     configuration.owner = ADDRESS_ZERO as Bytes;
     configuration.manager = manager.id;
     configuration.save();
@@ -42,6 +43,7 @@ export function createConfiguration(event: ethereum.Event): Configuration {
   let current = Configuration.load(manager.configuration);
 
   let configuration = new Configuration(_generateConfigurationId(event));
+  configuration.timestamp = event.block.timestamp.toI32();
   configuration.manager = manager.id;
   configuration.owner = current.owner;
   configuration.optionFactory = current.optionFactory;
