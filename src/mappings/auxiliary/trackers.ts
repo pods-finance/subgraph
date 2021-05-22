@@ -24,20 +24,20 @@ function callNextERC20Balance(address: Address, owner: Address): BigInt {
   return balance;
 }
 
-export function callNextSigma(pool: Pool): BigInt {
-  let nextSigma = zero;
+export function callNextIV(pool: Pool): BigInt {
+  let nextIV = zero;
 
   let contract = PoolContract.bind(Address.fromString(pool.id));
   let query = contract.try_priceProperties();
 
   if (query.reverted) {
-    log.info("PodLog Sigma call reverted", []);
+    log.info("PodLog IV call reverted", []);
   } else {
-    nextSigma = query.value.value5;
-    log.info("PodLog Sigma call value: {}", [query.value.value5.toString()]);
+    nextIV = query.value.value5;
+    log.info("PodLog IV call value: {}", [query.value.value5.toString()]);
   }
 
-  return nextSigma;
+  return nextIV;
 }
 
 export function callNextBuyingPrice(pool: Pool, amount: BigInt): BigInt {
@@ -51,6 +51,21 @@ export function callNextBuyingPrice(pool: Pool, amount: BigInt): BigInt {
     log.info("PodLog] Buying price call reverted", []);
   } else {
     nextPrice = query.value.value0;
+  }
+
+  return nextPrice;
+}
+
+export function callNextABPrice(pool: Pool): BigInt {
+  let nextPrice = zero;
+
+  let contract = PoolContract.bind(Address.fromString(pool.id));
+  let query = contract.try_getABPrice();
+
+  if (query.reverted) {
+    log.info("PodLog] Buying price call reverted", []);
+  } else {
+    nextPrice = query.value;
   }
 
   return nextPrice;
@@ -218,11 +233,11 @@ export function updateNextValues(
   if (pool == null) return action;
   let oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals));
 
-  let nextSigma = callNextSigma(pool);
+  let nextIV = callNextIV(pool);
   let nextBuyingPrice = callNextBuyingPrice(pool, oneAdapted);
   let nextSellingPrice = callNextSellingPrice(pool, oneAdapted);
 
-  action.nextSigma = nextSigma;
+  action.nextIV = nextIV;
   action.nextBuyingPrice = nextBuyingPrice;
   action.nextSellingPrice = nextSellingPrice;
 
@@ -255,6 +270,9 @@ export function updateNextValues(
   action.nextUserTokenAOriginalBalance = snapshot[0];
   action.nextUserTokenBOriginalBalance = snapshot[1];
   action.nextUserSnapshotFIMP = snapshot[2];
+
+  let ABPrice = callNextABPrice(pool);
+  action.nextABPrice = ABPrice;
 
   return action;
 }

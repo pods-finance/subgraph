@@ -22,7 +22,11 @@ export {
   getPoolFactoryById,
 } from "./configuration";
 
-export { convertExponentToBigInt, convertStringToPaddedZero } from "./utils";
+export {
+  convertExponentToBigInt,
+  convertStringToPaddedZero,
+  callERC20Symbol,
+} from "./utils";
 
 function _generateActionId(id: string): string {
   return id;

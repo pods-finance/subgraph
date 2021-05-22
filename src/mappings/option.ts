@@ -1,12 +1,12 @@
+import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { OptionCreated } from "../../generated/ConfigurationManager/OptionFactory";
 import { PodOption as OptionTemplate } from "../../generated/templates";
 import { PodOption as OptionContract } from "../../generated/templates/PodOption/PodOption";
 import { Option } from "../../generated/schema";
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { getOrCreateManager } from "../helpers";
-import { ADDRESS_ZERO } from "../constants";
+import { getOrCreateManager, callERC20Symbol } from "../helpers";
+import { ADDRESS_ZERO, zero } from "../constants";
 
-export function _handleOptionRequired(
+export function handleOptionRequired(
   event: ethereum.Event,
   optionId: Address
 ): Option {
@@ -14,8 +14,10 @@ export function _handleOptionRequired(
   let contract = OptionContract.bind(optionId);
   OptionTemplate.create(optionId);
 
-  entity.from = ADDRESS_ZERO;
-  entity.optionType = contract.optionType();
+  entity.address = optionId;
+
+  entity.from = ADDRESS_ZERO as Bytes;
+  entity.type = contract.optionType();
 
   entity.underlyingAsset = contract.underlyingAsset();
   entity.strikeAsset = contract.strikeAsset();
@@ -23,12 +25,19 @@ export function _handleOptionRequired(
 
   entity.expiration = contract.expiration();
   entity.exerciseStart = contract.startOfExerciseWindow();
-  entity.exerciseWindowSize = entity.expiration.minus(entity.exerciseStart);
+  entity.exerciseWindowSize = entity.expiration.minus(
+    (entity.exerciseStart || zero) as BigInt
+  );
 
   entity.underlyingAssetDecimals = BigInt.fromI32(
     contract.underlyingAssetDecimals()
   );
   entity.strikeAssetDecimals = BigInt.fromI32(contract.strikeAssetDecimals());
+
+  entity.underlyingAssetSymbol = callERC20Symbol(
+    entity.underlyingAsset as Address
+  );
+  entity.strikeAssetSymbol = callERC20Symbol(entity.strikeAsset as Address);
 
   entity.factory = null;
   getOrCreateManager(event);
@@ -40,32 +49,38 @@ export function _handleOptionRequired(
 
 export function handleOptionCreated(event: OptionCreated): void {
   let optionId = event.params.option;
-  let entity = new Option(optionId.toHexString());
-
-  OptionTemplate.create(optionId);
-
-  entity.from = event.params.deployer;
-  entity.optionType = event.params._optionType;
-
-  entity.underlyingAsset = event.params.underlyingAsset;
-  entity.strikeAsset = event.params.strikeAsset;
-  entity.strikePrice = event.params.strikePrice;
-
-  entity.expiration = event.params.expiration;
-  entity.exerciseWindowSize = event.params.exerciseWindowSize;
-
-  entity.exerciseStart = event.params.expiration.minus(
-    event.params.exerciseWindowSize
-  );
-
-  let contract = OptionContract.bind(optionId);
-  entity.underlyingAssetDecimals = BigInt.fromI32(
-    contract.underlyingAssetDecimals()
-  );
-  entity.strikeAssetDecimals = BigInt.fromI32(contract.strikeAssetDecimals());
-
+  let entity = handleOptionRequired(event, optionId);
   entity.factory = event.address.toHexString();
-  getOrCreateManager(event);
 
   entity.save();
+
+  // let entity = new Option(optionId.toHexString());
+
+  // OptionTemplate.create(optionId);
+
+  // entity.address = optionId;
+  // entity.from = event.params.deployer;
+  // entity.type = event.params._optionType;
+
+  // entity.underlyingAsset = event.params.underlyingAsset;
+  // entity.strikeAsset = event.params.strikeAsset;
+  // entity.strikePrice = event.params.strikePrice;
+
+  // entity.expiration = event.params.expiration;
+  // entity.exerciseWindowSize = event.params.exerciseWindowSize;
+
+  // entity.exerciseStart = event.params.expiration.minus(
+  //   event.params.exerciseWindowSize
+  // );
+
+  // let contract = OptionContract.bind(optionId);
+  // entity.underlyingAssetDecimals = BigInt.fromI32(
+  //   contract.underlyingAssetDecimals()
+  // );
+  // entity.strikeAssetDecimals = BigInt.fromI32(contract.strikeAssetDecimals());
+
+  // entity.factory = event.address.toHexString();
+  // getOrCreateManager(event);
+
+  // entity.save();
 }

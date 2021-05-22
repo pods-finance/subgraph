@@ -48,7 +48,7 @@ type Action @entity {
   ##### NEXT VALUES POST-ACTION ####
 
   # Track next Implied Volatility
-  nextSigma: BigInt
+  nextIV: BigInt
 
   # Track next Premium
   nextSellingPrice: BigInt #For one option
@@ -75,6 +75,8 @@ type Action @entity {
   nextUserSnapshotFIMP: BigInt
   nextUserTokenAOriginalBalance: BigInt
   nextUserTokenBOriginalBalance: BigInt
+
+  nextABPrice: BigInt
 }
 
 type SpotPrice @entity {
@@ -122,15 +124,19 @@ type PoolFactory @entity {
 type Option @entity {
   # Created
   id: ID!
+  address: Bytes!
   from: Bytes!
 
-  optionType: Int!
+  type: Int!
 
   underlyingAsset: Bytes!
   strikeAsset: Bytes!
 
   underlyingAssetDecimals: BigInt!
   strikeAssetDecimals: BigInt!
+
+  underlyingAssetSymbol: String!
+  strikeAssetSymbol: String!
 
   strikePrice: BigInt!
   expiration: BigInt!
@@ -151,6 +157,7 @@ type Pool @entity {
   # Created
   id: ID!
   from: Bytes!
+  address: Bytes!
   option: Option!
   factory: PoolFactory!
 
@@ -159,10 +166,14 @@ type Pool @entity {
 
   tokenADecimals: BigInt!
   tokenBDecimals: BigInt!
+
+  tokenASymbol: String!
+  tokenBSymbol: String!
 }
 
 type User @entity {
   id: ID!
+  address: Bytes!
   # Generated or Bound
   actions: [Action!] @derivedFrom(field: "user")
   positions: [Position!] @derivedFrom(field: "user")

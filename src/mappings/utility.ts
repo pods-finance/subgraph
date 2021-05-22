@@ -1,5 +1,4 @@
 import { TradeInfo } from "../../generated/ConfigurationManager/OptionAMMPool";
-
 import { SpotPrice } from "../../generated/schema";
 
 import { getActionById } from "../helpers";

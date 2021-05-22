@@ -231,8 +231,8 @@ export class Action extends Entity {
     }
   }
 
-  get nextSigma(): BigInt | null {
-    let value = this.get("nextSigma");
+  get nextIV(): BigInt | null {
+    let value = this.get("nextIV");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -240,11 +240,11 @@ export class Action extends Entity {
     }
   }
 
-  set nextSigma(value: BigInt | null) {
+  set nextIV(value: BigInt | null) {
     if (value === null) {
-      this.unset("nextSigma");
+      this.unset("nextIV");
     } else {
-      this.set("nextSigma", Value.fromBigInt(value as BigInt));
+      this.set("nextIV", Value.fromBigInt(value as BigInt));
     }
   }
 
@@ -557,6 +557,23 @@ export class Action extends Entity {
         "nextUserTokenBOriginalBalance",
         Value.fromBigInt(value as BigInt)
       );
+    }
+  }
+
+  get nextABPrice(): BigInt | null {
+    let value = this.get("nextABPrice");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextABPrice(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextABPrice");
+    } else {
+      this.set("nextABPrice", Value.fromBigInt(value as BigInt));
     }
   }
 }
@@ -941,6 +958,15 @@ export class Option extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
   get from(): Bytes {
     let value = this.get("from");
     return value.toBytes();
@@ -950,13 +976,13 @@ export class Option extends Entity {
     this.set("from", Value.fromBytes(value));
   }
 
-  get optionType(): i32 {
-    let value = this.get("optionType");
+  get type(): i32 {
+    let value = this.get("type");
     return value.toI32();
   }
 
-  set optionType(value: i32) {
-    this.set("optionType", Value.fromI32(value));
+  set type(value: i32) {
+    this.set("type", Value.fromI32(value));
   }
 
   get underlyingAsset(): Bytes {
@@ -993,6 +1019,24 @@ export class Option extends Entity {
 
   set strikeAssetDecimals(value: BigInt) {
     this.set("strikeAssetDecimals", Value.fromBigInt(value));
+  }
+
+  get underlyingAssetSymbol(): string {
+    let value = this.get("underlyingAssetSymbol");
+    return value.toString();
+  }
+
+  set underlyingAssetSymbol(value: string) {
+    this.set("underlyingAssetSymbol", Value.fromString(value));
+  }
+
+  get strikeAssetSymbol(): string {
+    let value = this.get("strikeAssetSymbol");
+    return value.toString();
+  }
+
+  set strikeAssetSymbol(value: string) {
+    this.set("strikeAssetSymbol", Value.fromString(value));
   }
 
   get strikePrice(): BigInt {
@@ -1165,6 +1209,15 @@ export class Pool extends Entity {
     this.set("from", Value.fromBytes(value));
   }
 
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
   get option(): string {
     let value = this.get("option");
     return value.toString();
@@ -1218,6 +1271,24 @@ export class Pool extends Entity {
   set tokenBDecimals(value: BigInt) {
     this.set("tokenBDecimals", Value.fromBigInt(value));
   }
+
+  get tokenASymbol(): string {
+    let value = this.get("tokenASymbol");
+    return value.toString();
+  }
+
+  set tokenASymbol(value: string) {
+    this.set("tokenASymbol", Value.fromString(value));
+  }
+
+  get tokenBSymbol(): string {
+    let value = this.get("tokenBSymbol");
+    return value.toString();
+  }
+
+  set tokenBSymbol(value: string) {
+    this.set("tokenBSymbol", Value.fromString(value));
+  }
 }
 
 export class User extends Entity {
@@ -1248,6 +1319,15 @@ export class User extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
   }
 
   get actions(): Array<string> | null {
