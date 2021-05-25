@@ -5,23 +5,8 @@ import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionA
 import { Pool } from "../../generated/schema";
 import { callERC20Symbol, getOptionById, getOrCreateManager } from "../helpers";
 
-export function handlePoolRequired(
-  event: ethereum.Event,
-  poolId: Address
-): void {
-  let entity = new Pool(poolId.toHexString());
-  let contract = PoolContract.bind(poolId);
-  PoolTemplate.create(poolId);
-  /**
-   * Get the factory, find the optionId by asking the factory
-   * Link the option to the pool in that way (if the option is not yet registered it may need to be)
-   */
-}
-
 export function handlePoolCreated(event: PoolCreated): void {
   let poolId = event.params.pool;
-
-  // handlePoolCreated(event, poolId);
 
   let entity = new Pool(poolId.toHexString());
   let option = getOptionById(event.params.option.toHexString());

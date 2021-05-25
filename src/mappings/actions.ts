@@ -363,8 +363,8 @@ export function handleOptionTransfer(event: Transfer): void {
     return;
   }
 
-  let actionFrom = createBaseAction("TransferFrom", event);
   let actionTo = createBaseAction("TransferTo", event);
+  let actionFrom = createBaseAction("TransferFrom", event, "2");
 
   let userFrom = getOrCreateUserById(event.params.from.toHexString());
   let userTo = getOrCreateUserById(event.params.to.toHexString());
@@ -389,6 +389,6 @@ export function handleOptionTransfer(event: Transfer): void {
   actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
   actionTo = trackHandler.updateNextValues(option, actionTo, zero);
 
-  actionFrom.save();
   actionTo.save();
+  actionFrom.save();
 }

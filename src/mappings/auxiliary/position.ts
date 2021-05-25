@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { Action, Option, User } from "../../../generated/schema";
-import { getOrCreatePosition, convertExponentToBigInt } from "../../helpers";
+import { getOrCreatePosition } from "../../helpers";
 
 export function updatePositionBuy(
   user: User,

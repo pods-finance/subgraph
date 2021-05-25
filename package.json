@@ -8,6 +8,7 @@
     "configure": "tsc src/constants/addresses/$VARIANT.ts --outDir src/constants/_generated",
     "template": "mustache src/constants/_generated/$VARIANT.js subgraph.template.yaml > subgraph.yaml && mustache src/constants/_generated/$VARIANT.js src/constants/env.mustache > src/constants/env.ts",
     "prepare": "yarn configure && yarn template",
+    "deploy:experimental": "VARIANT=experimental yarn prepare && NAME=pods-experimental yarn deploy",
     "deploy:mainnet-dev": "VARIANT=mainnet-dev yarn prepare && NAME=pods-dev yarn deploy",
     "deploy:mainnet": "VARIANT=mainnet yarn prepare && NAME=pods yarn deploy",
     "deploy:kovan-dev": "VARIANT=kovan-dev yarn prepare && NAME=pods-kovan-dev yarn deploy",

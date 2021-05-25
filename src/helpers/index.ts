@@ -1,4 +1,4 @@
-import { log, ethereum, BigInt } from "@graphprotocol/graph-ts";
+import { log, ethereum, BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   Action,
   Option,
@@ -28,7 +28,8 @@ export {
   callERC20Symbol,
 } from "./utils";
 
-function _generateActionId(id: string): string {
+function _generateActionId(id: string, suffix: string | null): string {
+  if (suffix) return id + "-" + suffix;
   return id;
 }
 
@@ -82,20 +83,31 @@ export function getOrCreateUserById(id: string): User {
   let user = User.load(id);
   if (user == null) {
     user = new User(id);
+    user.address = Address.fromString(id);
     user.save();
   }
 
   return user as User;
 }
 
-export function getActionById(id: string | null): Action {
-  let actionId = _generateActionId(id);
+export function getActionById(
+  id: string | null,
+  suffix: string | null = null
+): Action {
+  let actionId = _generateActionId(id, suffix);
   let action = Action.load(actionId);
   return action as Action;
 }
 
-export function createBaseAction(type: string, event: ethereum.Event): Action {
-  let actionId = _generateActionId(event.transaction.hash.toHexString());
+export function createBaseAction(
+  type: string,
+  event: ethereum.Event,
+  suffix: string | null = null
+): Action {
+  let actionId = _generateActionId(
+    event.transaction.hash.toHexString(),
+    suffix
+  );
   let entity = new Action(actionId);
 
   entity.inputTokenA = zero;
