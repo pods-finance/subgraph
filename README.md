@@ -1,9 +1,13 @@
 # subgraph
 A subgraph implementation for Pods v2 contracts
 
+
+## Deployment procedure
+0. `yarn run codegen` (if there were changes to the schema.graphql)
+1. `yarn deploy:kovan-dev --access-token XXXXXXX` (the $VARIANT here is kovan-dev | for the access token, see the dashboard for the pods account) 
 ## Configuration
 
-The configuration variables (e.g. the manager address or start block) can be managed in `src/addresses` files.
+The configuration variables (e.g. the manager address or start block) can be managed in `src/constants/addresses` files.
 
 ## Preprocessing
 
@@ -30,7 +34,3 @@ Because a) mustache can only handle `js` files as **source** and b) assembly scr
 - The `src/_generated` folder is not replaceable by a single `js` file because the `--outFile` flag is not usable with `tsc` when the `--module` flag is CommonJS. We need this so mustache can read the exports.
 - AssemblyScript doesn't allow for `js` or `json` files to be imported directly into `ts`
 
-
-## Deployment procedure
-0. `yarn run codegen` (if there were changes to the schema.graphql)
-1. `yarn deploy:kovan-dev --access-token XXXXXXX` (the $VARIANT here is kovan-dev | for the access token, see the dashboard for the pods account) 
