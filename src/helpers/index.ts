@@ -1,4 +1,4 @@
-import { log, ethereum, BigInt, Address } from "@graphprotocol/graph-ts";
+import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   Action,
   Option,
@@ -135,6 +135,7 @@ export function getOrCreatePosition(user: User, option: Option): Position {
 
     position.user = user.id;
     position.option = option.id;
+    position.expiration = option.expiration;
 
     position.premiumPaid = zero;
     position.premiumReceived = zero;

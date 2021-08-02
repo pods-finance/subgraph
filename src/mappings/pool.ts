@@ -1,4 +1,4 @@
-import { log, ethereum, Address, BigInt } from "@graphprotocol/graph-ts";
+import { log, BigInt } from "@graphprotocol/graph-ts";
 import { PoolCreated } from "../../generated/ConfigurationManager/OptionAMMFactory";
 import { OptionAMMPool as PoolTemplate } from "../../generated/templates";
 import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionAMMPool/OptionAMMPool";

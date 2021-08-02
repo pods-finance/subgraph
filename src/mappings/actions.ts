@@ -326,69 +326,57 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
 }
 
 export function handleOptionTransfer(event: Transfer): void {
-  let option = getOptionById(event.address.toHexString());
-
-  if (option == null) {
-    log.debug("PodLog Linked entities are missing: Option", []);
-    return;
-  }
-
-  /**
-   * Check for blacklist - transfers happening on between contracts
-   */
-
-  if (
-    Address.fromString(event.params.from.toHexString()) === ADDRESS_ZERO ||
-    Address.fromString(event.params.to.toHexString()) === ADDRESS_ZERO ||
-    getOptionFactoryById(event.params.from.toHexString()) != null ||
-    getOptionHelperById(event.params.from.toHexString()) != null ||
-    getPoolFactoryById(event.params.from.toHexString()) != null ||
-    getOptionFactoryById(event.params.to.toHexString()) != null ||
-    getOptionHelperById(event.params.to.toHexString()) != null ||
-    getOptionFactoryById(event.params.to.toHexString()) != null
-  ) {
-    return;
-  }
-
-  /**
-   * Check for existing options/pools with the from/to addresses
-   */
-
-  if (
-    getPoolById(event.params.from.toHexString()) != null ||
-    getOptionById(event.params.from.toHexString()) != null ||
-    getPoolById(event.params.to.toHexString()) != null ||
-    getOptionById(event.params.to.toHexString()) != null
-  ) {
-    return;
-  }
-
-  let actionTo = createBaseAction("TransferTo", event);
-  let actionFrom = createBaseAction("TransferFrom", event, "2");
-
-  let userFrom = getOrCreateUserById(event.params.from.toHexString());
-  let userTo = getOrCreateUserById(event.params.to.toHexString());
-
-  if (userFrom == null || userTo === null) {
-    log.debug("PodLog Linked entities are missing: User (2)", []);
-    return;
-  }
-
-  actionFrom.user = userFrom.id;
-  actionTo.user = userTo.id;
-
-  actionFrom.option = option.id;
-  actionTo.option = option.id;
-
-  actionFrom.inputTokenA = event.params.value;
-  actionTo.outputTokenA = event.params.value;
-
-  positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);
-  positionHandler.updatePositionTransferTo(userTo, option, actionTo);
-  statsHander.updateActivityTransfer(option, actionFrom, event);
-  actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
-  actionTo = trackHandler.updateNextValues(option, actionTo, zero);
-
-  actionTo.save();
-  actionFrom.save();
+  // TODO :: Fix the TransferTo/TransferFrom duplicates
+  // let option = getOptionById(event.address.toHexString());
+  // if (option == null) {
+  //   log.debug("PodLog Linked entities are missing: Option", []);
+  //   return;
+  // }
+  // /**
+  //  * Check for blacklist - transfers happening on between contracts
+  //  */
+  // if (
+  //   Address.fromString(event.params.from.toHexString()) === ADDRESS_ZERO ||
+  //   Address.fromString(event.params.to.toHexString()) === ADDRESS_ZERO ||
+  //   getOptionFactoryById(event.params.from.toHexString()) != null ||
+  //   getOptionHelperById(event.params.from.toHexString()) != null ||
+  //   getPoolFactoryById(event.params.from.toHexString()) != null ||
+  //   getOptionFactoryById(event.params.to.toHexString()) != null ||
+  //   getOptionHelperById(event.params.to.toHexString()) != null ||
+  //   getOptionFactoryById(event.params.to.toHexString()) != null
+  // ) {
+  //   return;
+  // }
+  // /**
+  //  * Check for existing options/pools with the from/to addresses
+  //  */
+  // if (
+  //   getPoolById(event.params.from.toHexString()) != null ||
+  //   getOptionById(event.params.from.toHexString()) != null ||
+  //   getPoolById(event.params.to.toHexString()) != null ||
+  //   getOptionById(event.params.to.toHexString()) != null
+  // ) {
+  //   return;
+  // }
+  // let actionTo = createBaseAction("TransferTo", event);
+  // let actionFrom = createBaseAction("TransferFrom", event, "2");
+  // let userFrom = getOrCreateUserById(event.params.from.toHexString());
+  // let userTo = getOrCreateUserById(event.params.to.toHexString());
+  // if (userFrom == null || userTo === null) {
+  //   log.debug("PodLog Linked entities are missing: User (2)", []);
+  //   return;
+  // }
+  // actionFrom.user = userFrom.id;
+  // actionTo.user = userTo.id;
+  // actionFrom.option = option.id;
+  // actionTo.option = option.id;
+  // actionFrom.inputTokenA = event.params.value;
+  // actionTo.outputTokenA = event.params.value;
+  // positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);
+  // positionHandler.updatePositionTransferTo(userTo, option, actionTo);
+  // statsHander.updateActivityTransfer(option, actionFrom, event);
+  // actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
+  // actionTo = trackHandler.updateNextValues(option, actionTo, zero);
+  // actionTo.save();
+  // actionFrom.save();
 }

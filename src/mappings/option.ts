@@ -1,4 +1,4 @@
-import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { OptionCreated } from "../../generated/ConfigurationManager/OptionFactory";
 import { PodOption as OptionTemplate } from "../../generated/templates";
 import { PodOption as OptionContract } from "../../generated/templates/PodOption/PodOption";
@@ -20,11 +20,11 @@ export function handleOptionCreated(event: OptionCreated): void {
   entity.strikeAsset = event.params.strikeAsset;
   entity.strikePrice = event.params.strikePrice;
 
-  entity.expiration = event.params.expiration;
-  entity.exerciseWindowSize = event.params.exerciseWindowSize;
-  entity.exerciseStart = event.params.expiration.minus(
-    (entity.exerciseStart || zero) as BigInt
-  );
+  entity.expiration = event.params.expiration.toI32();
+  entity.exerciseWindowSize = event.params.exerciseWindowSize.toI32();
+  entity.exerciseStart = event.params.expiration
+    .minus((event.params.exerciseWindowSize || zero) as BigInt)
+    .toI32();
 
   entity.underlyingAssetDecimals = BigInt.fromI32(
     contract.underlyingAssetDecimals()

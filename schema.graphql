@@ -141,8 +141,9 @@ type Option @entity {
   strikeAssetSymbol: String!
 
   strikePrice: BigInt!
-  expiration: BigInt!
-  exerciseWindowSize: BigInt!
+
+  expiration: Int!
+  exerciseWindowSize: Int!
 
   # Generated or Bound
   actions: [Action!]! @derivedFrom(field: "option")
@@ -150,7 +151,7 @@ type Option @entity {
   hourActivity: [OptionHourActivity!] @derivedFrom(field: "option")
   dayActivity: [OptionDayActivity!] @derivedFrom(field: "option")
   pool: Pool
-  exerciseStart: BigInt
+  exerciseStart: Int
 
   factory: OptionFactory!
 }
@@ -185,6 +186,9 @@ type Position @entity {
   id: ID!
   user: User!
   option: Option!
+  # Expiration chosen as sortable param *cloned* from the option
+  expiration: Int!
+
   # # # # # # # # #
   # Buyer's premium
   premiumPaid: BigInt!

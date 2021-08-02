@@ -1066,22 +1066,22 @@ export class Option extends Entity {
     this.set("strikePrice", Value.fromBigInt(value));
   }
 
-  get expiration(): BigInt {
+  get expiration(): i32 {
     let value = this.get("expiration");
-    return value.toBigInt();
+    return value.toI32();
   }
 
-  set expiration(value: BigInt) {
-    this.set("expiration", Value.fromBigInt(value));
+  set expiration(value: i32) {
+    this.set("expiration", Value.fromI32(value));
   }
 
-  get exerciseWindowSize(): BigInt {
+  get exerciseWindowSize(): i32 {
     let value = this.get("exerciseWindowSize");
-    return value.toBigInt();
+    return value.toI32();
   }
 
-  set exerciseWindowSize(value: BigInt) {
-    this.set("exerciseWindowSize", Value.fromBigInt(value));
+  set exerciseWindowSize(value: i32) {
+    this.set("exerciseWindowSize", Value.fromI32(value));
   }
 
   get actions(): Array<string> {
@@ -1161,21 +1161,13 @@ export class Option extends Entity {
     }
   }
 
-  get exerciseStart(): BigInt | null {
+  get exerciseStart(): i32 {
     let value = this.get("exerciseStart");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value.toI32();
   }
 
-  set exerciseStart(value: BigInt | null) {
-    if (value === null) {
-      this.unset("exerciseStart");
-    } else {
-      this.set("exerciseStart", Value.fromBigInt(value as BigInt));
-    }
+  set exerciseStart(value: i32) {
+    this.set("exerciseStart", Value.fromI32(value));
   }
 
   get factory(): string {
@@ -1429,6 +1421,15 @@ export class Position extends Entity {
 
   set option(value: string) {
     this.set("option", Value.fromString(value));
+  }
+
+  get expiration(): i32 {
+    let value = this.get("expiration");
+    return value.toI32();
+  }
+
+  set expiration(value: i32) {
+    this.set("expiration", Value.fromI32(value));
   }
 
   get premiumPaid(): BigInt {
