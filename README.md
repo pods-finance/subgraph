@@ -18,9 +18,11 @@ A representation of an AMM pool, trading between one type of option tokens and s
 #### Action
 The **action** entity will track interactions with the helper contract. The following will be regarded as actions:
 
-| | | | | | | | | | * | * |
-| - | - | - | - | - | - | - | - | - | - | - |
-| Buy | Sell | Resell | Add | Remove |Mint | Unmint | Exercise | Withdraw | *TransferTo* | *TranserFrom*
+| | | | | | | | | |
+| - | - | - | - | - | - | - | - | - |
+| Buy | Sell | Resell | Add | Remove |Mint | Unmint | Exercise | Withdraw |
+
+[*] Two extra actions may be take into account: *TransferTo* and *TransferFrom*.
 
 Every one of these actions will make use of 4 variables: `inputTokenA`, `inputTokenB`, `outputTokenA`, `outputTokenB`. These will store the amounts of tokens either sent or received for the action in question.
 
