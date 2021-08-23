@@ -42,7 +42,7 @@ export function handleBuy(event: OptionsBought): void {
   let option = getOptionById(event.params.optionAddress.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Buy Linked entities are missing: User / Option", []);
     return;
   }
   let pool = getPoolById(option.pool);
@@ -72,7 +72,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
   let option = getOptionById(event.params.optionAddress.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Sell Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -85,7 +85,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
   let existing = getActionById(id);
   if (existing.type == "Mint") {
     store.remove("Action", existing.id);
-    log.debug("PodLog Removed existing Mint for Sale.", []);
+    log.debug("PodLog Sell Removed existing Mint for Sale.", []);
   }
 
   action.user = user.id;
@@ -128,7 +128,7 @@ export function handleResell(event: OptionsSold): void {
   let option = getOptionById(event.params.optionAddress.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Resell Linked entities are missing: User / Option", []);
     return;
   }
   let pool = getPoolById(option.pool);
@@ -161,7 +161,7 @@ export function handleMint(event: Mint): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Mint Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -191,7 +191,7 @@ export function handleUnmint(event: Unmint): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Unmint Linked entities are missing: User / Option", []);
     return;
   }
   let pool = getPoolById(option.pool);
@@ -220,7 +220,7 @@ export function handleExercise(event: Exercise): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Exercise Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -247,7 +247,7 @@ export function handleWithdraw(event: Withdraw): void {
   let option = getOptionById(event.address.toHexString());
 
   if (user == null || option == null) {
-    log.debug("PodLog Linked entities are missing: User / Option", []);
+    log.debug("PodLog Withdraw Linked entities are missing: User / Option", []);
     return;
   }
 
@@ -272,7 +272,10 @@ export function handleAddLiquidity(event: AddLiquidity): void {
   let pool = getPoolById(event.address.toHexString());
 
   if (user == null || pool == null) {
-    log.debug("PodLog Linked entities are missing: User / Pool", []);
+    log.debug(
+      "PodLog AddLiquidity Linked entities are missing: User / Pool",
+      []
+    );
     return;
   }
 
@@ -301,7 +304,10 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
   let pool = getPoolById(event.address.toHexString());
 
   if (user == null || pool == null) {
-    log.debug("PodLog Linked entities are missing: User / Pool", []);
+    log.debug(
+      "PodLog RemoveLiquidity Linked entities are missing: User / Pool",
+      []
+    );
     return;
   }
 

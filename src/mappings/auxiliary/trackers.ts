@@ -48,7 +48,7 @@ export function callNextBuyingPrice(pool: Pool, amount: BigInt): BigInt {
   let query = contract.try_getOptionTradeDetailsExactAOutput(amount);
 
   if (query.reverted) {
-    log.info("PodLog] Buying price call reverted", []);
+    log.info("PodLog Buying price call reverted", []);
   } else {
     nextPrice = query.value.value0;
   }
@@ -63,7 +63,7 @@ export function callNextABPrice(pool: Pool): BigInt {
   let query = contract.try_getABPrice();
 
   if (query.reverted) {
-    log.info("PodLog] Buying price call reverted", []);
+    log.info("PodLog Buying price call reverted", []);
   } else {
     nextPrice = query.value;
   }

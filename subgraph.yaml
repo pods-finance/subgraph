@@ -6,9 +6,9 @@ dataSources:
     name: ConfigurationManager
     network: kovan
     source:
-      address: '0x11dB0eDFe06Cd06C9AFE96b9813043e0853e7926'
+      address: '0x0115e6592d0b09158e8c46ddcf64e8ff82545207'
       abi: ConfigurationManager
-      startBlock: 25055350
+      startBlock: 26514280
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
