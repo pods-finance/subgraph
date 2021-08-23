@@ -9,26 +9,18 @@ The main entry point is the configuration manager address. The manager will keep
 ---
 ## Entities
 
-### Option
+#### Option
 A representation of a put/call option instrument (address, underlying asset, strike asset, strike price etc.).
 
-### Pool
+#### Pool
 A representation of an AMM pool, trading between one type of option tokens and stablecoins (premium tokens).
 
-### Action
+#### Action
 The **action** entity will track interactions with the helper contract. The following will be regarded as actions:
-    
-1. Buy
-2. Sell
-3. Resell
-4. Add Liquidity
-5. Remove Liquidity
-6. Mint
-7. Unmint
-8. Exercise
-9. Withdraw
-10. (inactive) TransferTo
-11. (inactive) TranserFrom
+
+| | | | | | | | | | | |
+| - | - | - | - | - | - | - | - | - | - | - |
+| Buy | Sell | Resell | Add | Remove |Mint | Unmint | Exercise | Withdraw | *TransferTo\** | *TranserFrom\**
 
 Every one of these actions will make use of 4 variables: `inputTokenA`, `inputTokenB`, `outputTokenA`, `outputTokenB`. These will store the amounts of tokens either sent or received for the action in question.
 
@@ -36,7 +28,8 @@ For simplicity, we'll use the `U:S` or `underlying:strike` (e.g. ETH:USDC) to sh
 
 
 
-#### **Tracking put(s)**
+ → **Tracking put(s)**
+
 [*] Even though adding liquidity will be done with stablecoins only (in the case of a put), we'll track the balances of token A and token B after they are separated.
 
 | Type/Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
@@ -54,7 +47,7 @@ For simplicity, we'll use the `U:S` or `underlying:strike` (e.g. ETH:USDC) to sh
 | *put* | *transferFrom* | *options (OT)* | | | |
 
 
-#### **Tracking calls(s)**
+ → **Tracking call(s)**
 
 | Type/Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
 | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
@@ -67,21 +60,21 @@ For simplicity, we'll use the `U:S` or `underlying:strike` (e.g. ETH:USDC) to sh
 | call | unmint | options (OT) |  | collateral (S) | |
 | call | exercise | options (OT) | strike (S) | underlying (U) | |
 | call | withdraw | | |  collateral (U) | strike (S) |
-| *put* | *transferTo* | | | *options (OT)* | |
-| *put* | *transferFrom* | *options (OT)* | | | |
+| *call* | *transferTo* | | | *options (OT)* | |
+| *call* | *transferFrom* | *options (OT)* | | | |
 
-#### **Advanced data**
+ →  **Advanced data**
 
 For advanced metrics we'll be tracking certain parameters affected by each transaction happening in the pool (e.g. fee volumes, implied volatility or TVL).
 
 
-### Manager and Configurations
+#### Manager and Configurations
 The configuration manager will be represented by the Manager entity. Each manager will have a specific configuration that can be updated. The subgraph tracks every change, while keeping a pointer to the latest one.
 
-### User
+#### User
 An entity tracking each individual address that interacts with the contracts. This user will have an array of positions and an array of actions.
 
-### Position
+#### Position
 A position is a 1:1 link between a user and an option. These individual position will be created and updated after every interaction of the user with the option (or connected pool).
 
 Some examples of the parameters stored in the position are (but not limited to):
@@ -90,24 +83,24 @@ Some examples of the parameters stored in the position are (but not limited to):
 - amount of premium earned
 - amount of option tokens provided
 
-### OptionHourActivity and OptionDayActivity
+#### OptionHourActivity and OptionDayActivity
 
 These entities will store volumes and other interesting metrics for the entire protocol.
 
 
-### [Others]
+#### [Others]
 We'll use some other helper entities such as Spot Price, Pool Factory, Option Factory.
 
 ---
 ## Technical Specs
-### Deployment Procedure
+#### Deployment Procedure
 0. `yarn run codegen` (if there were changes to the schema.graphql)
 1. `yarn deploy:kovan-dev --access-token XXXXXXX` (the $VARIANT here is kovan-dev | for the access token, see the dashboard for the pods account) 
-### Configuration
+#### Configuration
 
 The configuration variables (e.g. the manager address or start block) can be managed in `src/constants/addresses` files.
 
-### Preprocessing
+#### Preprocessing
 
 In order to provide a dynamic generation and deploy for the subgraph (multi-network and multi-context), the `yarn deploy:$VARIANT` will include a series of preprocessing steps. The flow:
 
@@ -120,7 +113,7 @@ In order to provide a dynamic generation and deploy for the subgraph (multi-netw
 
 5. Based on the chosen variant, we'll use the $NAME variable to point to the correct subgraph by name and deploy everything.<br/>`[yarn deploy]`
 
-### Preprocessing caveats
+#### Preprocessing caveats
 
 We're initially declaring the coniguration variables in `src/constants/addresses`. We need to 
 - bind the config to the `yaml` template and
