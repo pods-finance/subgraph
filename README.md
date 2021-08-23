@@ -26,15 +26,15 @@ The **action** entity will track interactions with the helper contract. The foll
 
 Every one of these actions will make use of 4 variables: `inputTokenA`, `inputTokenB`, `outputTokenA`, `outputTokenB`. These will store the amounts of tokens either sent or received for the action in question.
 
-For simplicity, we'll use the `U:S` or `underlying:strike` (e.g. ETH:USDC) to showcase each action. The `OT` symbol will denote the "option token".
+For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to showcase each action. The `OT` symbol will denote the option token.
 
 
 
- → **Tracking put(s)**
+##### **Tracking put(s)**
 
 [*] Even though adding liquidity will be done with stablecoins only (in the case of a put), we'll track the balances of token A and token B after they are separated.
 
-| Type/Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
+| Type | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
 | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
 | put | buy |  | premium (S) | options (OT) |  |
 | put | sell |  | collateral (S) |  | premium (S) |
@@ -49,15 +49,15 @@ For simplicity, we'll use the `U:S` or `underlying:strike` (e.g. ETH:USDC) to sh
 | *put* | *transferFrom* | *options (OT)* | | | |
 
 
- → **Tracking call(s)**
+##### **Tracking call(s)**
 
-| Type/Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
+| Type | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
 | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
 | call | buy | | premium (S) | options (OT) | |
 | call | sell | collateral (U) | | | premium (S) |
 | call | resell | options (OT) | |  | premium (S) |
 | call | add^2 | options (OT) | stablecoins (S) | | |
-| put | remove | | | options (OT) | stablecoins (S) |
+| call | remove | | | options (OT) | stablecoins (S) |
 | call | mint | collateral (U) | | options (OT) | |
 | call | unmint | options (OT) |  | collateral (S) | |
 | call | exercise | options (OT) | strike (S) | underlying (U) | |
@@ -65,7 +65,7 @@ For simplicity, we'll use the `U:S` or `underlying:strike` (e.g. ETH:USDC) to sh
 | *call* | *transferTo* | | | *options (OT)* | |
 | *call* | *transferFrom* | *options (OT)* | | | |
 
- →  **Advanced data**
+##### **Advanced data**
 
 For advanced metrics we'll be tracking certain parameters affected by each transaction happening in the pool (e.g. fee volumes, implied volatility or TVL).
 
