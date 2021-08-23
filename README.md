@@ -129,3 +129,8 @@ Because a) mustache can only handle `js` files as **source** and b) assembly scr
 
 
 
+<style>
+    table {
+        width: 100%;
+    }
+</style>
