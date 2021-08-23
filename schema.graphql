@@ -124,7 +124,7 @@ type PoolFactory @entity {
 type Option @entity {
   "unique identifier, resolving to the option address"
   id: ID!
-  "address of the option"
+  "address of the option token"
   address: Bytes!
   "address of the deployer"
   from: Bytes!
@@ -185,19 +185,31 @@ type Option @entity {
 
 type Pool @entity {
   # Created
+  "unique identifier, resolving to the option address"
   id: ID!
-  from: Bytes!
+  "address of the option token"
   address: Bytes!
+  "address of the deployer"
+  from: Bytes!
+
+  "option connected to the pool 1:1"
   option: Option!
+  "factory (pool factory) creating the option"
   factory: PoolFactory!
 
+  "address of the ERC20 token for side A of the pool, usually the option token"
   tokenA: Bytes!
+  "address of the ERC20 token for side B of the pool, usually the strike token"
   tokenB: Bytes!
 
+  "decimals of the ERC20 token for side A of the pool"
   tokenADecimals: BigInt!
+  "decimals of the ERC20 token for side B of the pool"
   tokenBDecimals: BigInt!
 
+  "symbol of the ERC20 token for side A of the pool"
   tokenASymbol: String!
+  "symbol of the ERC20 token for side B of the pool"
   tokenBSymbol: String!
 }
 
