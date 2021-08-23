@@ -1178,6 +1178,33 @@ export class Option extends Entity {
   set factory(value: string) {
     this.set("factory", Value.fromString(value));
   }
+
+  get collateralAsset(): Bytes {
+    let value = this.get("collateralAsset");
+    return value.toBytes();
+  }
+
+  set collateralAsset(value: Bytes) {
+    this.set("collateralAsset", Value.fromBytes(value));
+  }
+
+  get collateralAssetDecimals(): BigInt {
+    let value = this.get("collateralAssetDecimals");
+    return value.toBigInt();
+  }
+
+  set collateralAssetDecimals(value: BigInt) {
+    this.set("collateralAssetDecimals", Value.fromBigInt(value));
+  }
+
+  get collateralAssetSymbol(): string {
+    let value = this.get("collateralAssetSymbol");
+    return value.toString();
+  }
+
+  set collateralAssetSymbol(value: string) {
+    this.set("collateralAssetSymbol", Value.fromString(value));
+  }
 }
 
 export class Pool extends Entity {
@@ -1210,15 +1237,6 @@ export class Pool extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get from(): Bytes {
-    let value = this.get("from");
-    return value.toBytes();
-  }
-
-  set from(value: Bytes) {
-    this.set("from", Value.fromBytes(value));
-  }
-
   get address(): Bytes {
     let value = this.get("address");
     return value.toBytes();
@@ -1226,6 +1244,15 @@ export class Pool extends Entity {
 
   set address(value: Bytes) {
     this.set("address", Value.fromBytes(value));
+  }
+
+  get from(): Bytes {
+    let value = this.get("from");
+    return value.toBytes();
+  }
+
+  set from(value: Bytes) {
+    this.set("from", Value.fromBytes(value));
   }
 
   get option(): string {

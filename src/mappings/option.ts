@@ -12,19 +12,30 @@ export function handleOptionCreated(event: OptionCreated): void {
   let contract = OptionContract.bind(optionId);
   OptionTemplate.create(optionId);
 
+  /**
+   * ---- Base option data ----
+   */
+
   entity.address = optionId;
   entity.from = event.params.deployer;
   entity.type = event.params._optionType;
+  entity.decimals = BigInt.fromI32(contract.decimals());
+  entity.symbol = contract.symbol();
+  entity.factory = event.address.toHexString();
 
-  entity.underlyingAsset = event.params.underlyingAsset;
-  entity.strikeAsset = event.params.strikeAsset;
   entity.strikePrice = event.params.strikePrice;
-
   entity.expiration = event.params.expiration.toI32();
   entity.exerciseWindowSize = event.params.exerciseWindowSize.toI32();
   entity.exerciseStart = event.params.expiration
     .minus((event.params.exerciseWindowSize || zero) as BigInt)
     .toI32();
+
+  /**
+   * ---- Underlying and Strike assets ----
+   */
+
+  entity.underlyingAsset = event.params.underlyingAsset;
+  entity.strikeAsset = event.params.strikeAsset;
 
   entity.underlyingAssetDecimals = BigInt.fromI32(
     contract.underlyingAssetDecimals()
@@ -36,10 +47,23 @@ export function handleOptionCreated(event: OptionCreated): void {
   );
   entity.strikeAssetSymbol = callERC20Symbol(entity.strikeAsset as Address);
 
-  entity.decimals = BigInt.fromI32(contract.decimals());
-  entity.symbol = contract.symbol();
+  /**
+   * ---- Inferred Collateral asset ----
+   */
 
-  entity.factory = event.address.toHexString();
+  entity.collateralAsset =
+    entity.type === 0 ? entity.strikeAsset : entity.underlyingAsset;
+  entity.collateralAssetDecimals =
+    entity.type === 0
+      ? entity.strikeAssetDecimals
+      : entity.underlyingAssetDecimals;
+  entity.collateralAssetSymbol =
+    entity.type === 0 ? entity.strikeAssetSymbol : entity.underlyingAssetSymbol;
+
+  /**
+   * ---- Dependencies ----
+   */
+
   getOrCreateManager(event);
 
   entity.save();
