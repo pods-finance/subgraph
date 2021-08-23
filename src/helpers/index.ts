@@ -98,6 +98,17 @@ export function getActionById(
   let action = Action.load(actionId);
   return action as Action;
 }
+export function getActionByIdFromEvent(
+  event: ethereum.Event,
+  suffix: string | null = null
+): Action {
+  let actionId = _generateActionId(
+    event.transaction.hash.toHexString(),
+    suffix
+  );
+  let action = Action.load(actionId);
+  return action as Action;
+}
 
 export function createBaseAction(
   type: string,

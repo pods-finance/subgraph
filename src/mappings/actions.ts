@@ -23,6 +23,7 @@ import {
   getOptionById,
   getPoolById,
   getActionById,
+  getActionByIdFromEvent,
   createBaseAction,
   convertExponentToBigInt,
   getOptionHelperById,
@@ -209,7 +210,12 @@ export function handleUnmint(event: Unmint): void {
   action.pool = pool.id;
 
   action.inputTokenA = event.params.optionAmount;
-  action.outputTokenB = event.params.strikeAmount;
+
+  if (option.type === put) {
+    action.outputTokenB = event.params.strikeAmount;
+  } else if (option.type === call) {
+    action.outputTokenA = event.params.strikeAmount;
+  }
 
   positionHandler.updatePositionUnmint(user, option, action);
   statsHander.updateActivityUnmint(option, action, event);
@@ -238,10 +244,19 @@ export function handleExercise(event: Exercise): void {
   action.option = option.id;
   action.pool = pool.id;
 
-  action.inputTokenA = event.params.amount;
-  action.outputTokenB = option.strikePrice
-    .times(event.params.amount)
-    .div(convertExponentToBigInt(pool.tokenADecimals));
+  if (option.type === put) {
+    action.inputTokenA = event.params.amount;
+    action.outputTokenB = option.strikePrice
+      .times(event.params.amount)
+      .div(convertExponentToBigInt(pool.tokenADecimals));
+  } else if (option.type === call) {
+    action.inputTokenA = event.params.amount;
+    action.inputTokenB = option.strikePrice
+      .times(event.params.amount)
+      .div(convertExponentToBigInt(pool.tokenADecimals));
+
+    action.outputTokenA = event.params.amount;
+  }
 
   positionHandler.updatePositionExercise(user, option, action);
   statsHander.updateActivityExercise(option, action, event);
@@ -285,6 +300,12 @@ export function handleAddLiquidity(event: AddLiquidity): void {
       []
     );
     return;
+  }
+
+  let existing = getActionById(action.id);
+  if (existing.type == "Mint") {
+    store.remove("Action", existing.id);
+    log.debug("PodLog Add Liquidity Removed existing Mint for Sale.", []);
   }
 
   action.user = user.id;
@@ -340,57 +361,64 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
 }
 
 export function handleOptionTransfer(event: Transfer): void {
-  // TODO :: Fix the TransferTo/TransferFrom duplicates
-  // let option = getOptionById(event.address.toHexString());
-  // if (option == null) {
-  //   log.debug("PodLog Linked entities are missing: Option", []);
-  //   return;
-  // }
-  // /**
-  //  * Check for blacklist - transfers happening on between contracts
-  //  */
-  // if (
-  //   Address.fromString(event.params.from.toHexString()) === ADDRESS_ZERO ||
-  //   Address.fromString(event.params.to.toHexString()) === ADDRESS_ZERO ||
-  //   getOptionFactoryById(event.params.from.toHexString()) != null ||
-  //   getOptionHelperById(event.params.from.toHexString()) != null ||
-  //   getPoolFactoryById(event.params.from.toHexString()) != null ||
-  //   getOptionFactoryById(event.params.to.toHexString()) != null ||
-  //   getOptionHelperById(event.params.to.toHexString()) != null ||
-  //   getOptionFactoryById(event.params.to.toHexString()) != null
-  // ) {
-  //   return;
-  // }
-  // /**
-  //  * Check for existing options/pools with the from/to addresses
-  //  */
-  // if (
-  //   getPoolById(event.params.from.toHexString()) != null ||
-  //   getOptionById(event.params.from.toHexString()) != null ||
-  //   getPoolById(event.params.to.toHexString()) != null ||
-  //   getOptionById(event.params.to.toHexString()) != null
-  // ) {
-  //   return;
-  // }
-  // let actionTo = createBaseAction("TransferTo", event);
-  // let actionFrom = createBaseAction("TransferFrom", event, "2");
-  // let userFrom = getOrCreateUserById(event.params.from.toHexString());
-  // let userTo = getOrCreateUserById(event.params.to.toHexString());
-  // if (userFrom == null || userTo === null) {
-  //   log.debug("PodLog Linked entities are missing: User (2)", []);
-  //   return;
-  // }
-  // actionFrom.user = userFrom.id;
-  // actionTo.user = userTo.id;
-  // actionFrom.option = option.id;
-  // actionTo.option = option.id;
-  // actionFrom.inputTokenA = event.params.value;
-  // actionTo.outputTokenA = event.params.value;
-  // positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);
-  // positionHandler.updatePositionTransferTo(userTo, option, actionTo);
-  // statsHander.updateActivityTransfer(option, actionFrom, event);
-  // actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
-  // actionTo = trackHandler.updateNextValues(option, actionTo, zero);
-  // actionTo.save();
-  // actionFrom.save();
+  let option = getOptionById(event.address.toHexString());
+  if (option == null) {
+    log.debug("PodLog Linked entities are missing: Option", []);
+    return;
+  }
+  /**
+   * Check for blacklist - transfers happening on between contracts
+   */
+  if (
+    Address.fromString(event.params.from.toHexString()) === ADDRESS_ZERO ||
+    Address.fromString(event.params.to.toHexString()) === ADDRESS_ZERO ||
+    getOptionFactoryById(event.params.from.toHexString()) != null ||
+    getOptionHelperById(event.params.from.toHexString()) != null ||
+    getPoolFactoryById(event.params.from.toHexString()) != null ||
+    getOptionFactoryById(event.params.to.toHexString()) != null ||
+    getOptionHelperById(event.params.to.toHexString()) != null ||
+    getPoolFactoryById(event.params.to.toHexString()) != null
+  ) {
+    return;
+  }
+  /**
+   * Check for existing options/pools with the from/to addresses
+   */
+  if (
+    getPoolById(event.params.from.toHexString()) != null ||
+    getOptionById(event.params.from.toHexString()) != null ||
+    getPoolById(event.params.to.toHexString()) != null ||
+    getOptionById(event.params.to.toHexString()) != null
+  ) {
+    return;
+  }
+
+  let existing = getActionByIdFromEvent(event);
+  if (existing) {
+    log.debug("PodLog Transfer existing actions.", []);
+    return;
+  }
+
+  let actionTo = createBaseAction("TransferTo", event);
+  let actionFrom = createBaseAction("TransferFrom", event, "2");
+  let userFrom = getOrCreateUserById(event.params.from.toHexString());
+  let userTo = getOrCreateUserById(event.params.to.toHexString());
+  if (userFrom == null || userTo === null) {
+    log.debug("PodLog Linked entities are missing: User (2)", []);
+    return;
+  }
+  actionFrom.user = userFrom.id;
+  actionTo.user = userTo.id;
+  actionFrom.option = option.id;
+  actionTo.option = option.id;
+  actionFrom.inputTokenA = event.params.value;
+  actionTo.outputTokenA = event.params.value;
+  positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);
+  positionHandler.updatePositionTransferTo(userTo, option, actionTo);
+  statsHander.updateActivityTransfer(option, actionFrom, event);
+  actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
+  actionTo = trackHandler.updateNextValues(option, actionTo, zero);
+
+  actionTo.save();
+  actionFrom.save();
 }
