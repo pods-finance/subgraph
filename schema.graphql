@@ -172,6 +172,8 @@ type Option @entity {
   pool: Pool
   "amount resolving to the unix timestamp (millis) used as start moment for the window of exercise"
   exerciseStart: Int
+  "factory (option factory) creating the option"
+  factory: OptionFactory!
 
   "address of the inferred collateral ERC20 token (strike for PUT, underlying for CALL)"
   collateralAsset: Bytes!
@@ -179,9 +181,6 @@ type Option @entity {
   collateralAssetDecimals: BigInt!
   "symbol of the inferred collateral ERC20 token"
   collateralAssetSymbol: String!
-
-  "factory (option factory) creating the option"
-  factory: OptionFactory!
 }
 
 type Pool @entity {
