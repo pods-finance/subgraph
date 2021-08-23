@@ -30,7 +30,7 @@ import {
   getOptionFactoryById,
 } from "../helpers";
 
-import { ADDRESS_ZERO, zero } from "../constants";
+import { ADDRESS_ZERO, put, call, zero } from "../constants";
 
 import * as positionHandler from "./auxiliary/position";
 import * as statsHander from "./auxiliary/activity";
@@ -92,10 +92,14 @@ export function handleSell(event: OptionsMintedAndSold): void {
   action.option = option.id;
   action.pool = pool.id;
 
-  action.inputTokenB = option.strikePrice
-    .times(event.params.optionsMintedAndSold)
-    .div(convertExponentToBigInt(pool.tokenADecimals));
   action.outputTokenB = event.params.outputBought;
+  if (option.type === put) {
+    action.inputTokenB = option.strikePrice
+      .times(event.params.optionsMintedAndSold)
+      .div(convertExponentToBigInt(pool.tokenADecimals));
+  } else if (option.type === call) {
+    action.inputTokenB = event.params.optionsMintedAndSold;
+  }
 
   metadata.optionsMintedAndSold = event.params.optionsMintedAndSold;
   action.metadata = metadata.id;
@@ -171,11 +175,15 @@ export function handleMint(event: Mint): void {
   action.option = option.id;
   action.pool = pool.id;
 
-  action.inputTokenB = option.strikePrice
-    .times(event.params.amount)
-    .div(convertExponentToBigInt(pool.tokenADecimals));
-
   action.outputTokenA = event.params.amount;
+
+  if (option.type === put) {
+    action.inputTokenB = option.strikePrice
+      .times(event.params.amount)
+      .div(convertExponentToBigInt(pool.tokenADecimals));
+  } else if (option.type === call) {
+    action.inputTokenA = event.params.amount;
+  }
 
   positionHandler.updatePositionMint(user, option, action);
 

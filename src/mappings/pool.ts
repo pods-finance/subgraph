@@ -17,25 +17,35 @@ export function handlePoolCreated(event: PoolCreated): void {
   }
 
   PoolTemplate.create(poolId);
+  let contract = PoolContract.bind(poolId);
+
+  /**
+   * ---- Base pool data ----
+   */
 
   entity.address = poolId;
   entity.from = event.params.deployer;
   entity.option = option.id;
+  entity.factory = event.address.toHexString();
 
-  option.pool = entity.id;
-
-  let contract = PoolContract.bind(poolId);
-
-  entity.tokenADecimals = BigInt.fromI32(contract.tokenADecimals());
-  entity.tokenBDecimals = BigInt.fromI32(contract.tokenBDecimals());
+  /**
+   * ---- TokenA and TokenB assets ----
+   */
 
   entity.tokenA = event.params.option;
   entity.tokenB = contract.tokenB();
 
+  entity.tokenADecimals = BigInt.fromI32(contract.tokenADecimals());
+  entity.tokenBDecimals = BigInt.fromI32(contract.tokenBDecimals());
+
   entity.tokenASymbol = callERC20Symbol(event.params.option);
   entity.tokenBSymbol = callERC20Symbol(contract.tokenB());
 
-  entity.factory = event.address.toHexString();
+  /**
+   * ---- Dependencies ----
+   */
+
+  option.pool = entity.id;
   getOrCreateManager(event);
 
   entity.save();

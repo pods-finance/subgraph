@@ -4,7 +4,7 @@ import { PodOption as OptionTemplate } from "../../generated/templates";
 import { PodOption as OptionContract } from "../../generated/templates/PodOption/PodOption";
 import { Option } from "../../generated/schema";
 import { getOrCreateManager, callERC20Symbol } from "../helpers";
-import { zero } from "../constants";
+import { zero, put } from "../constants";
 
 export function handleOptionCreated(event: OptionCreated): void {
   let optionId = event.params.option;
@@ -52,13 +52,15 @@ export function handleOptionCreated(event: OptionCreated): void {
    */
 
   entity.collateralAsset =
-    entity.type === 0 ? entity.strikeAsset : entity.underlyingAsset;
+    entity.type === put ? entity.strikeAsset : entity.underlyingAsset;
   entity.collateralAssetDecimals =
-    entity.type === 0
+    entity.type === put
       ? entity.strikeAssetDecimals
       : entity.underlyingAssetDecimals;
   entity.collateralAssetSymbol =
-    entity.type === 0 ? entity.strikeAssetSymbol : entity.underlyingAssetSymbol;
+    entity.type === put
+      ? entity.strikeAssetSymbol
+      : entity.underlyingAssetSymbol;
 
   /**
    * ---- Dependencies ----

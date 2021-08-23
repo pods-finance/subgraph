@@ -151,7 +151,7 @@ type Option @entity {
   "symbol of the strike ERC20 token"
   strikeAssetSymbol: String!
 
-  "amount used as strike price"
+  "amount used as strike price, padded with decimals"
   strikePrice: BigInt!
 
   "amount resolving to the unix timestamp (millis) used as expiration"
@@ -197,7 +197,7 @@ type Pool @entity {
   "factory (pool factory) creating the option"
   factory: PoolFactory!
 
-  "address of the ERC20 token for side A of the pool, usually the option token"
+  "address of the ERC20 token for side A of the pool, usually the option token | for some cases it can hold the underlying amount"
   tokenA: Bytes!
   "address of the ERC20 token for side B of the pool, usually the strike token"
   tokenB: Bytes!
