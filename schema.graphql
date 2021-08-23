@@ -122,37 +122,65 @@ type PoolFactory @entity {
 }
 
 type Option @entity {
-  # Created
+  "unique identifier, resolving to the option address"
   id: ID!
+  "address of the option"
   address: Bytes!
+  "address of the deployer"
   from: Bytes!
 
+  "binary type, resolving to 0 for PUT and 1 for CALL"
   type: Int!
+  "decimals of the ERC20 option token, usually 18"
   decimals: BigInt!
+  "symbol for the ERC20 option token"
   symbol: String!
 
+  "address of the underlying ERC20 token"
   underlyingAsset: Bytes!
+  "address of the strike ERC20 token"
   strikeAsset: Bytes!
 
+  "decimals of the underlying ERC20 token"
   underlyingAssetDecimals: BigInt!
+  "decimals of the strike ERC20 token"
   strikeAssetDecimals: BigInt!
 
+  "symbol of the underlying ERC20 token"
   underlyingAssetSymbol: String!
+  "symbol of the strike ERC20 token"
   strikeAssetSymbol: String!
 
+  "amount used as strike price"
   strikePrice: BigInt!
 
+  "amount resolving to the unix timestamp (millis) used as expiration"
   expiration: Int!
+  "amount resolving to the duration (millis) used for the window of exercise"
   exerciseWindowSize: Int!
 
   # Generated or Bound
+  "actions such as Buy, Sell, Mint, ... linked to the option or the connected pool"
   actions: [Action!]! @derivedFrom(field: "option")
+  "positions of the users (with >= 1 action) linked to the option or the connected pool"
   positions: [Position!] @derivedFrom(field: "option")
+  "aggregate activity on an hourly basis"
   hourActivity: [OptionHourActivity!] @derivedFrom(field: "option")
+  "aggregate activity on a daily basis"
   dayActivity: [OptionDayActivity!] @derivedFrom(field: "option")
+  "pool connected to the option 1:1"
   pool: Pool
+  "amount resolving to the unix timestamp (millis) used as start moment for the window of exercise"
   exerciseStart: Int
 
+  "address of the inferred collateral ERC20 token (strike for PUT, underlying for CALL)"
+  collateralAsset: Bytes!
+  "decimals of the inferred collateral ERC20 token"
+  collateralAssetDecimals: BigInt!
+  "symbol of the inferred collateral ERC20 token"
+  collateralAssetSymbol: String!
+
+  "factory (option factory) creating the option"
   factory: OptionFactory!
 }
 
