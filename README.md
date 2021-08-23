@@ -1,6 +1,15 @@
 # @pods-finance/subgraph
 🔮 A subgraph implementation for the Pods v2 contracts.
 
+
+Table of Contents
+=================
+
+* [@pods-finance/subgraph](#pods-financesubgraph)
+   * [Definitions](#definitions)
+   * [Entities](#entities)
+   * [Technical Specs](#technical-specs)
+
 ## Definitions
 The subgraph will track and serve protocol entities (e.g. options, pools), user actions (e.g. buy, mint), user positions (e.g. premium earned) and overall activity (e.g. hourly volume).
 
@@ -30,7 +39,7 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 
 
 
-##### **Tracking put(s)**
+##### Tracking put(s)
 
 [*] Even though adding liquidity will be done with stablecoins only (in the case of a put), we'll track the balances of token A and token B after they are separated.
 
@@ -49,7 +58,7 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 | *put* | *transferFrom* | *options (OT)* | | | |
 
 
-##### **Tracking call(s)**
+##### Tracking call(s)
 
 | Type | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
 | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
@@ -65,7 +74,7 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 | *call* | *transferTo* | | | *options (OT)* | |
 | *call* | *transferFrom* | *options (OT)* | | | |
 
-##### **Advanced data**
+##### Advanced data
 
 For advanced metrics we'll be tracking certain parameters affected by each transaction happening in the pool (e.g. fee volumes, implied volatility or TVL).
 
@@ -90,7 +99,7 @@ Some examples of the parameters stored in the position are (but not limited to):
 These entities will store volumes and other interesting metrics for the entire protocol.
 
 
-#### [Others]
+#### Others
 We'll use some other helper entities such as Spot Price, Pool Factory, Option Factory.
 
 ---
@@ -126,11 +135,3 @@ Because a) mustache can only handle `js` files as **source** and b) assembly scr
 - The `src/_generated` folder is not replaceable by a single `ts` file because mustache is not able to read `ts`. It can only handle `js` files as **source**.
 - The `src/_generated` folder is not replaceable by a single `js` file because the `--outFile` flag is not usable with `tsc` when the `--module` flag is CommonJS. We need this so mustache can read the exports.
 - AssemblyScript doesn't allow for `js` or `json` files to be imported directly into `ts`
-
-
-
-<style>
-    table {
-        width: 100%;
-    }
-</style>
