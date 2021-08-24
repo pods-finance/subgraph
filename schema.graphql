@@ -22,50 +22,72 @@ type Metadata @entity {
 }
 
 type Action @entity {
+  "unique identifier resolving to the hash of the transaction (custom suffix for TransferFrom)"
   id: ID!
+  "enum describing the type of transaction (e.g. Buy, Sell)"
   type: ActionType!
+  "user entity triggering the action"
   user: User!
+  "option entity for which the action is triggered"
   option: Option!
+  "pool entity for which the action is triggered"
   pool: Pool
 
+  "address of the caller"
   from: Bytes!
+  "transaction hash"
   hash: Bytes!
+  "amount resolving to the unix timestamp (millis) of the block that includes the action"
   timestamp: Int!
 
-  # Input for Option Tokens (A)
+  "amount resolving to an input for side A of the pool, the option tokens | for some cases it can hold the underlying amount for the action -- see readme"
   inputTokenA: BigInt!
-  # Input for Stablecoin Tokens (B)
+  "amount resolving to an input for side B of the pool, the stablecoins | for some cases it can hold the strike or premium amount for the action -- see readme"
   inputTokenB: BigInt!
-  # Output for Option Tokens (A)
+  "amount resolving to an output for side A of the pool, the option tokens"
   outputTokenA: BigInt!
-  # Output for Stablecoin Tokens (A)
+  "amount resolving to an output for side B of the pool, the stablecoins"
   outputTokenB: BigInt!
-  # Spot price at the time of the trade
+  "structure (holding an amount) resolving to the spot price at the time of the action or trade"
   spotPrice: SpotPrice
-  # Special metadata on a case-by-case basis
+  "special structure holding custom metadata on a case-by-case basis"
   metadata: Metadata
 
   ##### NEXT VALUES POST-ACTION ####
 
-  # Track next Implied Volatility
+  "amount tracking the implied volatility post-action"
   nextIV: BigInt
 
-  # Track next Premium
-  nextSellingPrice: BigInt #For one option
-  nextBuyingPrice: BigInt #For one option
+  "amount tracking the theoretical Black-Scholes price/premium for 1 option post-action"
+  nextABPrice: BigInt
+
+  "amount tracking the selling price for 1 option post-action"
+  nextSellingPrice: BigInt
+  "amount tracking the buying price for 1 option post-action"
+  nextBuyingPrice: BigInt
+  "amount tracking the selling price for the same amount of options as the current action, post-action (e.g. try to sell the same amount again)"
   nextDynamicSellingPrice: BigInt
+  "amount tracking the buying price for the same amount of options as the current action, post-action (e.g. try to sell the same amount again)"
   nextDynamicBuyingPrice: BigInt
 
+  "amount tracking this user's liquidity for side A of the pool, post-action"
   nextUserTokenALiquidity: BigInt
+  "amount tracking this user's liquidity for side B of the pool, post-action"
   nextUserTokenBLiquidity: BigInt
 
+  "amount tracking the total liquidity for side A of the pool, post-action"
   nextTBA: BigInt
+  "amount tracking the total liquidity for side B of the pool, post-action"
   nextTBB: BigInt
 
+  "amount tracking the deamortized balance for side A of the pool, post-action"
   nextDBA: BigInt
+  "amount tracking the deamortized balance for side B of the pool, post-action"
   nextDBB: BigInt
 
+  "amount *denominated in tokenB* tracking the balance of fees for side A of the pool, post-action"
   nextFeesA: BigInt
+  "amount *denominated in tokenB* tracking the balance of fees for side A of the pool, post-action"
   nextFeesB: BigInt
 
   nextCollateralTVL: BigInt
@@ -75,12 +97,11 @@ type Action @entity {
   nextUserSnapshotFIMP: BigInt
   nextUserTokenAOriginalBalance: BigInt
   nextUserTokenBOriginalBalance: BigInt
-
-  nextABPrice: BigInt
 }
 
 type SpotPrice @entity {
   id: ID!
+  "amount resolving to the spot price for the volatile asset at the time of the action"
   value: BigInt!
   action: Action
 }
@@ -91,7 +112,9 @@ type SpotPrice @entity {
 
 type Manager @entity {
   id: ID!
+  "entity array for all historical manager configurations"
   configurations: [Configuration!]! @derivedFrom(field: "manager")
+  "entity storing the latest manager configuration that is actively used"
   configuration: Configuration!
 }
 
@@ -122,14 +145,14 @@ type PoolFactory @entity {
 }
 
 type Option @entity {
-  "unique identifier, resolving to the option address"
+  "unique identifier resolving to the option address"
   id: ID!
   "address of the option token"
   address: Bytes!
   "address of the deployer"
   from: Bytes!
 
-  "binary type, resolving to 0 for PUT and 1 for CALL"
+  "binary type resolving to 0 for PUT and 1 for CALL"
   type: Int!
   "decimals of the ERC20 option token, usually 18"
   decimals: BigInt!
@@ -185,7 +208,7 @@ type Option @entity {
 
 type Pool @entity {
   # Created
-  "unique identifier, resolving to the option address"
+  "unique identifier resolving to the option address"
   id: ID!
   "address of the option token"
   address: Bytes!
@@ -197,9 +220,9 @@ type Pool @entity {
   "factory (pool factory) creating the option"
   factory: PoolFactory!
 
-  "address of the ERC20 token for side A of the pool, usually the option token | for some cases it can hold the underlying amount"
+  "address of the ERC20 token for side A of the pool, the option token"
   tokenA: Bytes!
-  "address of the ERC20 token for side B of the pool, usually the strike token"
+  "address of the ERC20 token for side B of the pool, the stable token"
   tokenB: Bytes!
 
   "decimals of the ERC20 token for side A of the pool"
@@ -229,9 +252,9 @@ type Position @entity {
   expiration: Int!
 
   # # # # # # # # #
-  # Buyer's premium
+  "amount resolving to the total premium paid buying options"
   premiumPaid: BigInt!
-  # Seller's premium
+  "amount resolving to the total premium received while selling or reselling options"
   premiumReceived: BigInt!
   #
   # Buyer's cover
@@ -253,11 +276,15 @@ type Position @entity {
   collateralWithdrawn: BigInt!
   #
   # LP's input amounts
+  "amount resolving to the volume of option tokens provided by the user over the lifetime of the pool"
   initialOptionsProvided: BigInt!
+  "amount resolving to the volume of stablecoins provided by the user over the lifetime of the pool"
   initialTokensProvided: BigInt!
   #
   # LP's output/exit amounts
+  "amount resolving to the volume of option tokens removed by the user over the lifetime of the pool"
   finalOptionsRemoved: BigInt!
+  "amount resolving to the volume of stablecoins removed by the user over the lifetime of the pool"
   finalTokensRemoved: BigInt!
   #
   # Transfers

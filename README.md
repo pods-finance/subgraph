@@ -33,7 +33,7 @@ The **action** entity will track interactions with the helper contract. The foll
 
 [*] Two extra actions may be take into account: *TransferTo* and *TransferFrom*.
 
-Every one of these actions will make use of 4 variables: `inputTokenA`, `inputTokenB`, `outputTokenA`, `outputTokenB`. These will store the amounts of tokens either sent or received for the action in question.
+Every one of these actions will make use of 4 variables: `inputTokenA`, `inputTokenB`, `outputTokenA`, `outputTokenB`. These will store the amounts of tokens either sent or received for the action in question. These values are padded with decimals, so the developer will have to resolve them to their humanized form.
 
 For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to showcase each action. The `OT` symbol will denote the option token.
 
@@ -43,7 +43,7 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 
 [*] Even though adding liquidity will be done with stablecoins only (in the case of a put), we'll track the balances of token A and token B after they are separated.
 
-| Type | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
+| Type / Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
 | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
 | put | buy |  | premium (S) | options (OT) |  |
 | put | sell |  | collateral (S) |  | premium (S) |
@@ -60,7 +60,7 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 
 ##### Tracking call(s)
 
-| Type | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
+| Type / Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
 | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
 | call | buy | | premium (S) | options (OT) | |
 | call | sell | collateral (U) | | | premium (S) |

@@ -248,6 +248,23 @@ export class Action extends Entity {
     }
   }
 
+  get nextABPrice(): BigInt | null {
+    let value = this.get("nextABPrice");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set nextABPrice(value: BigInt | null) {
+    if (value === null) {
+      this.unset("nextABPrice");
+    } else {
+      this.set("nextABPrice", Value.fromBigInt(value as BigInt));
+    }
+  }
+
   get nextSellingPrice(): BigInt | null {
     let value = this.get("nextSellingPrice");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -557,23 +574,6 @@ export class Action extends Entity {
         "nextUserTokenBOriginalBalance",
         Value.fromBigInt(value as BigInt)
       );
-    }
-  }
-
-  get nextABPrice(): BigInt | null {
-    let value = this.get("nextABPrice");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set nextABPrice(value: BigInt | null) {
-    if (value === null) {
-      this.unset("nextABPrice");
-    } else {
-      this.set("nextABPrice", Value.fromBigInt(value as BigInt));
     }
   }
 }

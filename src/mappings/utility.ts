@@ -16,14 +16,5 @@ export function handleSpotPrice(event: TradeInfo): void {
     action.save();
   }
 
-  // TODO :: Fix the TransferTo/TransferFrom duplicates
-  // if (action.type === "TransferTo" || action.type === "TransferFrom") {
-  //   let sister = getActionById(spotId, "2");
-  //   if (sister !== null) {
-  //     sister.spotPrice = spotId;
-  //     sister.save();
-  //   }
-  // }
-
   entity.save();
 }
