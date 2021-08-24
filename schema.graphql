@@ -273,7 +273,7 @@ type Position @entity {
   optionsExercised: BigInt!
   # Withdraw amounts
   underlyingWithdrawn: BigInt!
-  collateralWithdrawn: BigInt!
+  strikeWithdrawn: BigInt!
   #
   # LP's input amounts
   "amount resolving to the volume of option tokens provided by the user over the lifetime of the pool"

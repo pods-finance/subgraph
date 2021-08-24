@@ -1540,13 +1540,13 @@ export class Position extends Entity {
     this.set("underlyingWithdrawn", Value.fromBigInt(value));
   }
 
-  get collateralWithdrawn(): BigInt {
-    let value = this.get("collateralWithdrawn");
+  get strikeWithdrawn(): BigInt {
+    let value = this.get("strikeWithdrawn");
     return value.toBigInt();
   }
 
-  set collateralWithdrawn(value: BigInt) {
-    this.set("collateralWithdrawn", Value.fromBigInt(value));
+  set strikeWithdrawn(value: BigInt) {
+    this.set("strikeWithdrawn", Value.fromBigInt(value));
   }
 
   get initialOptionsProvided(): BigInt {

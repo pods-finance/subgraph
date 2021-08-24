@@ -102,7 +102,7 @@ export function updatePositionWithdraw(
     position.underlyingWithdrawn = position.underlyingWithdrawn.plus(
       action.outputTokenA
     );
-    position.collateralWithdrawn = position.collateralWithdrawn.plus(
+    position.strikeWithdrawn = position.strikeWithdrawn.plus(
       action.outputTokenB
     );
   }

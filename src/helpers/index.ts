@@ -169,7 +169,7 @@ export function getOrCreatePosition(user: User, option: Option): Position {
 
     position.optionsExercised = zero;
     position.underlyingWithdrawn = zero;
-    position.collateralWithdrawn = zero;
+    position.strikeWithdrawn = zero;
 
     position.save();
   }
