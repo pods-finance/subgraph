@@ -43,36 +43,36 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 
 [*] Even though adding liquidity will be done with stablecoins only (in the case of a put), we'll track the balances of token A and token B after they are separated.
 
-| Type / Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
-| ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
-| put | buy |  | premium (S) | options (OT) |  |
-| put | sell |  | collateral (S) |  | premium (S) |
-| put | resell | options (OT) | |  | premium (S) |
-| put | add^2 | options (OT) | stablecoins (S) | | |
-| put | remove | | | options (OT) | stablecoins (S) |
-| put | mint |  | collateral (S) | options (OT)  | |
-| put | unmint | options (OT) |  | | collateral (S) |
-| put | exercise | underlying (U) *or* options (OT) | | | collateral (S) |
-| put | withdraw | | | underlying (U) | collateral (S)
-| *put* | *transferTo* | | | *options (OT)* | |
-| *put* | *transferFrom* | *options (OT)* | | | |
+| # | Type/Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
+| - | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
+| 1 | put | buy |  | premium (S) | options (OT) |  |
+| 2 | put | sell |  | collateral (S) |  | premium (S) |
+| 3 | put | resell | options (OT) | |  | premium (S) |
+| 4 | put | add^2 | options (OT) | stablecoins (S) | | |
+| 5 | put | remove | | | options (OT) | stablecoins (S) |
+| 6 | put | mint |  | collateral (S) | options (OT)  | |
+| 7 | put | unmint | options (OT) |  | | collateral (S) |
+| 8 | put | exercise | underlying (U) | | | collateral (S) |
+| 9 | put | withdraw | | | underlying (U) | collateral (S)
+| 10 | *put* | *transferTo* | | | *options (OT)* | |
+| 11 | *put* | *transferFrom* | *options (OT)* | | | |
 
 
 ##### Tracking call(s)
 
-| Type / Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
-| ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
-| call | buy | | premium (S) | options (OT) | |
-| call | sell | collateral (U) | | | premium (S) |
-| call | resell | options (OT) | |  | premium (S) |
-| call | add^2 | options (OT) | stablecoins (S) | | |
-| call | remove | | | options (OT) | stablecoins (S) |
-| call | mint | collateral (U) | | options (OT) | |
-| call | unmint | options (OT) |  | collateral (S) | |
-| call | exercise | options (OT) | strike (S) | underlying (U) | |
-| call | withdraw | | |  collateral (U) | strike (S) |
-| *call* | *transferTo* | | | *options (OT)* | |
-| *call* | *transferFrom* | *options (OT)* | | | |
+| # | Type/Classification | Action | InputTokenA | InputTokenB | OutputTokenA | OutputTokenB |
+| - | ------------------- | ------ | ----------- | ----------- | ------------ | ------------ |
+| 1 | call | buy | | premium (S) | options (OT) | |
+| 2 | call | sell | collateral (U) | | | premium (S) |
+| 3 | call | resell | options (OT) | |  | premium (S) |
+| 4 | call | add^2 | options (OT) | stablecoins (S) | | |
+| 5 | call | remove | | | options (OT) | stablecoins (S) |
+| 6 | call | mint | collateral (U) | | options (OT) | |
+| 7 | call | unmint | options (OT) |  | collateral (S) | |
+| 8 | call | exercise | options (OT) | strike (S) | underlying (U) | |
+| 9 | call | withdraw | | |  collateral (U) | strike (S) |
+| 10 | *call* | *transferTo* | | | *options (OT)* | |
+| 11 | *call* | *transferFrom* | *options (OT)* | | | |
 
 ##### Advanced data
 
