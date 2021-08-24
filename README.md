@@ -68,7 +68,7 @@ For simplicity, we'll use the `U:S` or underlying:strike (e.g. ETH:USDC) to show
 | 4 | call | add^2 | options (OT) | stablecoins (S) | | |
 | 5 | call | remove | | | options (OT) | stablecoins (S) |
 | 6 | call | mint | collateral (U) | | options (OT) | |
-| 7 | call | unmint | options (OT) |  | collateral (S) | |
+| 7 | call | unmint | options (OT) |  | collateral (U) | |
 | 8 | call | exercise | options (OT) | strike (S) | underlying (U) | |
 | 9 | call | withdraw | | |  collateral (U) | strike (S) |
 | 10 | *call* | *transferTo* | | | *options (OT)* | |
