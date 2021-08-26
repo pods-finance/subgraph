@@ -985,6 +985,15 @@ export class Option extends Entity {
     this.set("type", Value.fromI32(value));
   }
 
+  get exerciseType(): i32 {
+    let value = this.get("exerciseType");
+    return value.toI32();
+  }
+
+  set exerciseType(value: i32) {
+    this.set("exerciseType", Value.fromI32(value));
+  }
+
   get decimals(): BigInt {
     let value = this.get("decimals");
     return value.toBigInt();

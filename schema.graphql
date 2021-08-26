@@ -154,6 +154,8 @@ type Option @entity {
 
   "binary type resolving to 0 for PUT and 1 for CALL"
   type: Int!
+  "binary type resolving to 0 for European and 1 for American"
+  exerciseType: Int!
   "decimals of the ERC20 option token, usually 18"
   decimals: BigInt!
   "symbol for the ERC20 option token"

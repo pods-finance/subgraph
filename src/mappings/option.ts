@@ -19,6 +19,7 @@ export function handleOptionCreated(event: OptionCreated): void {
   entity.address = optionId;
   entity.from = event.params.deployer;
   entity.type = event.params._optionType;
+  entity.exerciseType = event.params._exerciseType;
   entity.decimals = BigInt.fromI32(contract.decimals());
   entity.symbol = contract.symbol();
   entity.factory = event.address.toHexString();
