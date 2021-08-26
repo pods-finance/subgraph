@@ -4,5 +4,5 @@ exports.startBlock = exports.manager = exports.network = exports.dev = exports.v
 exports.variant = "experimental";
 exports.dev = true;
 exports.network = "kovan";
-exports.manager = "0x9ff1CdDd55ee91312358B9c7E3da54eB9eC18A60";
-exports.startBlock = 26926280;
+exports.manager = "0x0115e6592d0b09158e8c46ddcf64e8ff82545207";
+exports.startBlock = 26514280;
