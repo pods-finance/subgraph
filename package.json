@@ -16,6 +16,7 @@
     "deploy:mumbai-dev": "VARIANT=mumbai-dev yarn prepare && NAME=pods-mumbai-dev yarn deploy",
     "deploy:mumbai": "VARIANT=mumbai yarn prepare && NAME=pods-mumbai yarn deploy",
     "deploy:matic-dev": "VARIANT=matic-dev yarn prepare && NAME=pods-matic-dev yarn deploy",
+    "deploy:matic-legacy": "VARIANT=matic yarn prepare && NAME=pods-matic-legacy yarn deploy",
     "deploy:matic": "VARIANT=matic yarn prepare && NAME=pods-matic yarn deploy",
     "tsc": "tsc"
   },
