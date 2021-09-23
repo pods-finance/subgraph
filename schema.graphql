@@ -294,6 +294,11 @@ type Position @entity {
   "amount resolving to the volume of stablecoins removed by the user over the lifetime of the pool"
   finalTokensRemoved: BigInt!
   #
+  # LP's remaining amounts (changes after each addLiquidity, removeLiquidity, withdraw)
+  "amount resolving to the amount of option tokens currently available to remove from the pool"
+  remainingOptionsProvided: BigInt!
+  "amount resolving to the amount of stablecoins currently available to remove from the pool"
+  remainingTokensProvided: BigInt!
   # Transfers
   optionsSent: BigInt! # TransferFrom
   optionsReceived: BigInt! # TransferTo

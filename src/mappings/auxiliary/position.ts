@@ -1,6 +1,7 @@
-import { BigInt } from "@graphprotocol/graph-ts";
-import { Action, Option, User } from "../../../generated/schema";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { Action, Option, Pool, User } from "../../../generated/schema";
 import { getOrCreatePosition } from "../../helpers";
+import { callNextUserPoolLiquidity } from "./trackers";
 
 export function updatePositionBuy(
   user: User,
@@ -95,6 +96,7 @@ export function updatePositionExercise(
 export function updatePositionWithdraw(
   user: User,
   option: Option,
+  pool: Pool,
   action: Action
 ): void {
   let position = getOrCreatePosition(user, option);
@@ -107,12 +109,17 @@ export function updatePositionWithdraw(
     );
   }
 
+  let liquidity = callNextUserPoolLiquidity(pool, Address.fromString(user.id));
+  position.remainingOptionsProvided = liquidity[0];
+  position.remainingTokensProvided = liquidity[1];
+
   position.save();
 }
 
 export function updatePositionAddLiquidity(
   user: User,
   option: Option,
+  pool: Pool,
   action: Action
 ): void {
   let position = getOrCreatePosition(user, option);
@@ -125,12 +132,17 @@ export function updatePositionAddLiquidity(
     );
   }
 
+  let liquidity = callNextUserPoolLiquidity(pool, Address.fromString(user.id));
+  position.remainingOptionsProvided = liquidity[0];
+  position.remainingTokensProvided = liquidity[1];
+
   position.save();
 }
 
 export function updatePositionRemoveLiquidity(
   user: User,
   option: Option,
+  pool: Pool,
   action: Action
 ): void {
   let position = getOrCreatePosition(user, option);
@@ -142,6 +154,10 @@ export function updatePositionRemoveLiquidity(
       action.outputTokenB
     );
   }
+
+  let liquidity = callNextUserPoolLiquidity(pool, Address.fromString(user.id));
+  position.remainingOptionsProvided = liquidity[0];
+  position.remainingTokensProvided = liquidity[1];
 
   position.save();
 }

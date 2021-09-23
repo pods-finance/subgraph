@@ -1612,6 +1612,24 @@ export class Position extends Entity {
     this.set("finalTokensRemoved", Value.fromBigInt(value));
   }
 
+  get remainingOptionsProvided(): BigInt {
+    let value = this.get("remainingOptionsProvided");
+    return value.toBigInt();
+  }
+
+  set remainingOptionsProvided(value: BigInt) {
+    this.set("remainingOptionsProvided", Value.fromBigInt(value));
+  }
+
+  get remainingTokensProvided(): BigInt {
+    let value = this.get("remainingTokensProvided");
+    return value.toBigInt();
+  }
+
+  set remainingTokensProvided(value: BigInt) {
+    this.set("remainingTokensProvided", Value.fromBigInt(value));
+  }
+
   get optionsSent(): BigInt {
     let value = this.get("optionsSent");
     return value.toBigInt();

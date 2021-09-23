@@ -289,7 +289,7 @@ export function handleWithdraw(event: Withdraw): void {
   action.outputTokenA = event.params.underlyingAmount;
   action.outputTokenB = event.params.strikeAmount;
 
-  positionHandler.updatePositionWithdraw(user, option, action);
+  positionHandler.updatePositionWithdraw(user, option, pool, action);
   statsHander.updateActivityWithdraw(option, action, event);
   action = trackHandler.updateNextValues(option, action, zero);
 
@@ -324,7 +324,7 @@ export function handleAddLiquidity(event: AddLiquidity): void {
   action.inputTokenA = event.params.amountA;
   action.inputTokenB = event.params.amountB;
 
-  positionHandler.updatePositionAddLiquidity(user, option, action);
+  positionHandler.updatePositionAddLiquidity(user, option, pool, action);
   statsHander.updateActivityAddLiquidity(option, action, event);
   action = trackHandler.updateNextValues(
     option,
@@ -357,7 +357,7 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
   action.outputTokenA = event.params.amountA;
   action.outputTokenB = event.params.amountB;
 
-  positionHandler.updatePositionRemoveLiquidity(user, option, action);
+  positionHandler.updatePositionRemoveLiquidity(user, option, pool, action);
   statsHander.updateActivityRemoveLiquidity(option, action, event);
   action = trackHandler.updateNextValues(
     option,

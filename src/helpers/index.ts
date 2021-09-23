@@ -165,6 +165,9 @@ export function getOrCreatePosition(user: User, option: Option): Position {
     position.finalOptionsRemoved = zero;
     position.finalTokensRemoved = zero;
 
+    position.remainingOptionsProvided = zero;
+    position.remainingTokensProvided = zero;
+
     position.optionsSent = zero;
     position.optionsReceived = zero;
 
