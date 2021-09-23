@@ -4,5 +4,5 @@ exports.startBlock = exports.manager = exports.network = exports.dev = exports.v
 exports.variant = "mumbai-dev";
 exports.dev = true;
 exports.network = "mumbai";
-exports.manager = "0x0eBd48C1CdC5ec82E60d7AD8C41D3f31BD5a82fE";
+exports.manager = "0x8a4C944228661fa49829dd4DAC304cE4338D4FB2";
 exports.startBlock = 14270400;

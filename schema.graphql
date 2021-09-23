@@ -40,6 +40,9 @@ type Action @entity {
   "amount resolving to the unix timestamp (millis) of the block that includes the action"
   timestamp: Int!
 
+  "type (put/call) cloned from the option for filtering"
+  optionType: Int!
+
   "amount resolving to an input for side A of the pool, the option tokens | for some cases it can hold the underlying amount for the action -- see readme"
   inputTokenA: BigInt!
   "amount resolving to an input for side B of the pool, the stablecoins | for some cases it can hold the strike or premium amount for the action -- see readme"
@@ -250,10 +253,10 @@ type Position @entity {
   id: ID!
   user: User!
   option: Option!
-  # Expiration chosen as sortable param *cloned* from the option
+  "expiration chosen as sortable param *cloned* from the option"
   expiration: Int!
-  # Type chosen as sortable param *cloned* from the option
-  type: Int!
+  "Type chosen as sortable param *cloned* from the option"
+  optionType: Int!
 
   # # # # # # # # #
   "amount resolving to the total premium paid buying options"

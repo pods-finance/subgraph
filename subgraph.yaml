@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: ConfigurationManager
-    network: kovan
+    network: mainnet
     source:
-      address: '0x9ff1CdDd55ee91312358B9c7E3da54eB9eC18A60'
+      address: '0xE4Da64757b2B29dB43429A52CaF7aD884c76f8b0'
       abi: ConfigurationManager
-      startBlock: 26926280
+      startBlock: 13215188
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -41,7 +41,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: OptionFactory
-    network: kovan
+    network: mainnet
     source:
       abi: OptionFactory
     mapping:
@@ -65,7 +65,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionHelper
-    network: kovan
+    network: mainnet
     source:
       abi: OptionHelper
     mapping:
@@ -91,7 +91,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMFactory
-    network: kovan
+    network: mainnet
     source:
       abi: OptionAMMFactory
     mapping:
@@ -113,7 +113,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: PodOption
-    network: kovan
+    network: mainnet
     source:
       abi: PodOption
     mapping:
@@ -143,7 +143,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMPool
-    network: kovan
+    network: mainnet
     source:
       abi: OptionAMMPool
     mapping:

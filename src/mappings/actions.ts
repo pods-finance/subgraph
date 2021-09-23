@@ -51,6 +51,7 @@ export function handleBuy(event: OptionsBought): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   action.inputTokenB = event.params.inputSold;
   action.outputTokenA = event.params.optionsBought;
@@ -91,6 +92,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   action.outputTokenB = event.params.outputBought;
   if (option.type === put) {
@@ -144,6 +146,7 @@ export function handleResell(event: OptionsSold): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   action.inputTokenA = event.params.optionsSold;
   action.outputTokenB = event.params.outputReceived;
@@ -176,6 +179,7 @@ export function handleMint(event: Mint): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   action.outputTokenA = event.params.amount;
 
@@ -209,6 +213,7 @@ export function handleUnmint(event: Unmint): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   action.inputTokenA = event.params.optionAmount;
 
@@ -243,6 +248,7 @@ export function handleExercise(event: Exercise): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   if (option.type === put) {
     action.inputTokenA = event.params.amount;
@@ -278,6 +284,7 @@ export function handleWithdraw(event: Withdraw): void {
   action.user = user.id;
   action.option = option.id;
   action.pool = pool.id;
+  action.optionType = option.type;
 
   action.outputTokenA = event.params.underlyingAmount;
   action.outputTokenB = event.params.strikeAmount;
@@ -307,14 +314,15 @@ export function handleAddLiquidity(event: AddLiquidity): void {
     log.debug("PodLog Add Liquidity Removed existing Mint for Sale.", []);
   }
 
+  let option = getOptionById(pool.option);
+
   action.user = user.id;
   action.pool = pool.id;
   action.option = pool.option;
+  action.optionType = option.type;
 
   action.inputTokenA = event.params.amountA;
   action.inputTokenB = event.params.amountB;
-
-  let option = getOptionById(pool.option);
 
   positionHandler.updatePositionAddLiquidity(user, option, action);
   statsHander.updateActivityAddLiquidity(option, action, event);
@@ -339,14 +347,15 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
     return;
   }
 
+  let option = getOptionById(pool.option);
+
   action.user = user.id;
   action.pool = pool.id;
   action.option = pool.option;
+  action.optionType = option.type;
 
   action.outputTokenA = event.params.amountA;
   action.outputTokenB = event.params.amountB;
-
-  let option = getOptionById(pool.option);
 
   positionHandler.updatePositionRemoveLiquidity(user, option, action);
   statsHander.updateActivityRemoveLiquidity(option, action, event);
@@ -410,6 +419,9 @@ export function handleOptionTransfer(event: Transfer): void {
   actionTo.user = userTo.id;
   actionFrom.option = option.id;
   actionTo.option = option.id;
+  actionFrom.optionType = option.type;
+  actionTo.optionType = option.type;
+
   actionFrom.inputTokenA = event.params.value;
   actionTo.outputTokenA = event.params.value;
   positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);

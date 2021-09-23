@@ -161,6 +161,15 @@ export class Action extends Entity {
     this.set("timestamp", Value.fromI32(value));
   }
 
+  get optionType(): i32 {
+    let value = this.get("optionType");
+    return value.toI32();
+  }
+
+  set optionType(value: i32) {
+    this.set("optionType", Value.fromI32(value));
+  }
+
   get inputTokenA(): BigInt {
     let value = this.get("inputTokenA");
     return value.toBigInt();
@@ -1468,13 +1477,13 @@ export class Position extends Entity {
     this.set("expiration", Value.fromI32(value));
   }
 
-  get type(): i32 {
-    let value = this.get("type");
+  get optionType(): i32 {
+    let value = this.get("optionType");
     return value.toI32();
   }
 
-  set type(value: i32) {
-    this.set("type", Value.fromI32(value));
+  set optionType(value: i32) {
+    this.set("optionType", Value.fromI32(value));
   }
 
   get premiumPaid(): BigInt {
