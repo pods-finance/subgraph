@@ -252,6 +252,8 @@ type Position @entity {
   option: Option!
   # Expiration chosen as sortable param *cloned* from the option
   expiration: Int!
+  # Type chosen as sortable param *cloned* from the option
+  type: Int!
 
   # # # # # # # # #
   "amount resolving to the total premium paid buying options"

@@ -147,6 +147,7 @@ export function getOrCreatePosition(user: User, option: Option): Position {
     position.user = user.id;
     position.option = option.id;
     position.expiration = option.expiration;
+    position.type = option.type;
 
     position.premiumPaid = zero;
     position.premiumReceived = zero;

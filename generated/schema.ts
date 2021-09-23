@@ -1468,6 +1468,15 @@ export class Position extends Entity {
     this.set("expiration", Value.fromI32(value));
   }
 
+  get type(): i32 {
+    let value = this.get("type");
+    return value.toI32();
+  }
+
+  set type(value: i32) {
+    this.set("type", Value.fromI32(value));
+  }
+
   get premiumPaid(): BigInt {
     let value = this.get("premiumPaid");
     return value.toBigInt();
