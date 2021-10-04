@@ -50,8 +50,9 @@ export function handleManagerModuleSet(event: ModuleSet): void {
 
   let address = event.params.newAddress;
 
-  if (event.params.name.toHexString() == MODULE_AMM_FACTORY) {
-    if (getPoolFactoryById(address.toHexString()) !== null) return;
+  if (address && event.params.name.toHexString() == MODULE_AMM_FACTORY) {
+    let existing = PoolFactory.load(address.toHexString());
+    if (existing != null) return;
     let module = new PoolFactory(address.toHexString());
     PoolFactoryTemplate.create(address);
     configuration.poolFactory = address.toHexString();
@@ -59,8 +60,12 @@ export function handleManagerModuleSet(event: ModuleSet): void {
     module.save();
     manager.configuration = configuration.id;
     manager.save();
-  } else if (event.params.name.toHexString() == MODULE_OPTION_FACTORY) {
-    if (getOptionFactoryById(address.toHexString()) !== null) return;
+  } else if (
+    address &&
+    event.params.name.toHexString() == MODULE_OPTION_FACTORY
+  ) {
+    let existing = OptionFactory.load(address.toHexString());
+    if (existing != null) return;
     let module = new OptionFactory(address.toHexString());
     OptionFactoryTemplate.create(address);
     configuration.optionFactory = address.toHexString();
@@ -69,8 +74,12 @@ export function handleManagerModuleSet(event: ModuleSet): void {
 
     manager.configuration = configuration.id;
     manager.save();
-  } else if (event.params.name.toHexString() == MODULE_OPTION_HELPER) {
-    if (getOptionHelperById(address.toHexString()) !== null) return;
+  } else if (
+    address &&
+    event.params.name.toHexString() == MODULE_OPTION_HELPER
+  ) {
+    let existing = OptionHelper.load(address.toHexString());
+    if (existing != null) return;
     let module = new OptionHelper(address.toHexString());
     OptionHelperTemplate.create(address);
     configuration.optionHelper = address.toHexString();

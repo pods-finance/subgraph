@@ -4,26 +4,26 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pods-finance/$NAME",
+    "deploy": "graph deploy pods-finance/$NAME --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "configure": "tsc src/constants/addresses/$VARIANT.ts --outDir src/constants/_generated",
     "template": "mustache src/constants/_generated/$VARIANT.js subgraph.template.yaml > subgraph.yaml && mustache src/constants/_generated/$VARIANT.js src/constants/env.mustache > src/constants/env.ts",
-    "prepare": "yarn configure && yarn template",
-    "deploy:experimental": "VARIANT=experimental yarn prepare && NAME=pods-experimental yarn deploy",
-    "deploy:mainnet-dev": "VARIANT=mainnet-dev yarn prepare && NAME=pods-dev yarn deploy",
-    "deploy:mainnet": "VARIANT=mainnet yarn prepare && NAME=pods yarn deploy",
-    "deploy:kovan-dev": "VARIANT=kovan-dev yarn prepare && NAME=pods-kovan-dev yarn deploy",
-    "deploy:kovan": "VARIANT=kovan yarn prepare && NAME=pods-kovan yarn deploy",
-    "deploy:mumbai-dev": "VARIANT=mumbai-dev yarn prepare && NAME=pods-mumbai-dev yarn deploy",
-    "deploy:mumbai": "VARIANT=mumbai yarn prepare && NAME=pods-mumbai yarn deploy",
-    "deploy:matic-dev": "VARIANT=matic-dev yarn prepare && NAME=pods-matic-dev yarn deploy",
-    "deploy:matic": "VARIANT=matic yarn prepare && NAME=pods-matic yarn deploy",
+    "setup": "yarn configure && yarn template",
+    "deploy:experimental": "VARIANT=experimental yarn setup && NAME=pods-experimental yarn deploy",
+    "deploy:mainnet-dev": "VARIANT=mainnet-dev yarn setup && NAME=pods-dev yarn deploy",
+    "deploy:mainnet": "VARIANT=mainnet yarn setup && NAME=pods yarn deploy",
+    "deploy:kovan-dev": "VARIANT=kovan-dev yarn setup && NAME=pods-kovan-dev yarn deploy",
+    "deploy:kovan": "VARIANT=kovan yarn setup && NAME=pods-kovan yarn deploy",
+    "deploy:mumbai-dev": "VARIANT=mumbai-dev yarn setup && NAME=pods-mumbai-dev yarn deploy",
+    "deploy:mumbai": "VARIANT=mumbai yarn setup && NAME=pods-mumbai yarn deploy",
+    "deploy:matic-dev": "VARIANT=matic-dev yarn setup && NAME=pods-matic-dev yarn deploy",
+    "deploy:matic": "VARIANT=matic yarn setup && NAME=pods-matic yarn deploy",
     "tsc": "tsc"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.19.0",
-    "@graphprotocol/graph-ts": "0.19.0"
+    "@graphprotocol/graph-cli": "0.22.2"
   },
   "devDependencies": {
+    "@graphprotocol/graph-ts": "^0.22.1",
     "mustache": "^4.2.0",
     "typescript": "^4.2.4"
   }

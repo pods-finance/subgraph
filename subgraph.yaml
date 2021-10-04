@@ -4,14 +4,14 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: ConfigurationManager
-    network: mainnet
+    network: mumbai
     source:
-      address: '0xE4Da64757b2B29dB43429A52CaF7aD884c76f8b0'
+      address: '0x8a4C944228661fa49829dd4DAC304cE4338D4FB2'
       abi: ConfigurationManager
-      startBlock: 13215188
+      startBlock: 14270400
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Manager
@@ -41,12 +41,12 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: OptionFactory
-    network: mainnet
+    network: mumbai
     source:
       abi: OptionFactory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - OptionFactory
@@ -65,12 +65,12 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionHelper
-    network: mainnet
+    network: mumbai
     source:
       abi: OptionHelper
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - OptionHelper
@@ -91,12 +91,12 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMFactory
-    network: mainnet
+    network: mumbai
     source:
       abi: OptionAMMFactory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - PoolFactory
@@ -113,12 +113,12 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: PodOption
-    network: mainnet
+    network: mumbai
     source:
       abi: PodOption
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Option
@@ -143,12 +143,12 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMPool
-    network: mainnet
+    network: mumbai
     source:
       abi: OptionAMMPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Pool
