@@ -11,7 +11,7 @@ dataSources:
       startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Manager
@@ -46,7 +46,7 @@ templates:
       abi: OptionFactory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - OptionFactory
@@ -70,7 +70,7 @@ templates:
       abi: OptionHelper
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - OptionHelper
@@ -96,7 +96,7 @@ templates:
       abi: OptionAMMFactory
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - PoolFactory
@@ -118,7 +118,7 @@ templates:
       abi: PodOption
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Option
@@ -148,7 +148,7 @@ templates:
       abi: OptionAMMPool
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - Pool

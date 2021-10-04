@@ -1,5 +1,5 @@
-export let variant = 'mainnet-dev';
+export let variant = 'mumbai-dev';
 export let dev = true;
-export let network = 'mainnet';
-export let manager = '0xE4Da64757b2B29dB43429A52CaF7aD884c76f8b0';
-export let startBlock = 13215188;
+export let network = 'mumbai';
+export let manager = '0x8a4C944228661fa49829dd4DAC304cE4338D4FB2';
+export let startBlock = 14270400;

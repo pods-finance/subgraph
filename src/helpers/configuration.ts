@@ -39,16 +39,25 @@ export function getOrCreateManager(event: ethereum.Event): Manager {
 export function createConfiguration(event: ethereum.Event): Configuration {
   let managerId = getManagerId();
   let manager = Manager.load(managerId);
-
-  let current = Configuration.load(manager.configuration);
+  let current = Configuration.load(manager!.configuration);
 
   let configuration = new Configuration(_generateConfigurationId(event));
   configuration.timestamp = event.block.timestamp.toI32();
-  configuration.manager = manager.id;
-  configuration.owner = current.owner;
-  configuration.optionFactory = current.optionFactory;
-  configuration.optionHelper = current.optionHelper;
-  configuration.poolFactory = current.poolFactory;
+  configuration.manager = manager!.id;
+  configuration.owner =
+    !!current && current.owner ? current.owner : (ADDRESS_ZERO as Bytes);
+  configuration.optionFactory =
+    !!current && current.optionFactory
+      ? current.optionFactory
+      : ADDRESS_ZERO.toHexString();
+  configuration.optionHelper =
+    !!current && current.optionHelper
+      ? current.optionHelper
+      : ADDRESS_ZERO.toHexString();
+  configuration.poolFactory =
+    !!current && current.poolFactory
+      ? current.poolFactory
+      : ADDRESS_ZERO.toHexString();
 
   configuration.save();
   return configuration as Configuration;

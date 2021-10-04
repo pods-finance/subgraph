@@ -223,14 +223,12 @@ export function updateNextValues(
   action: Action,
   reference: BigInt
 ): Action {
-  log.info("PodLog Op pool, {}", [option.pool.toString()]);
-
   if (!isDev()) return action;
 
-  let pool = getPoolById(option.pool);
+  let pool = option && option.pool ? getPoolById(option.pool!) : null;
   let user = getUserById(action.user);
 
-  if (pool == null) return action;
+  if (user == null || pool == null) return action;
   let oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals));
 
   let nextIV = callNextIV(pool);

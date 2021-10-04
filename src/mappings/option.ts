@@ -44,9 +44,11 @@ export function handleOptionCreated(event: OptionCreated): void {
   entity.strikeAssetDecimals = BigInt.fromI32(contract.strikeAssetDecimals());
 
   entity.underlyingAssetSymbol = callERC20Symbol(
-    entity.underlyingAsset as Address
+    Address.fromString(entity.underlyingAsset.toHexString())
   );
-  entity.strikeAssetSymbol = callERC20Symbol(entity.strikeAsset as Address);
+  entity.strikeAssetSymbol = callERC20Symbol(
+    Address.fromString(entity.strikeAsset.toHexString())
+  );
 
   /**
    * ---- Inferred Collateral asset ----

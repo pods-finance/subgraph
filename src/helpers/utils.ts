@@ -1,4 +1,4 @@
-import { log, Address, BigInt } from "@graphprotocol/graph-ts";
+import { Address, Bytes, BigInt } from "@graphprotocol/graph-ts";
 
 import { one, zero } from "../constants";
 import { ERC20 as ERC20Contract } from "../../generated/templates/PodOption/ERC20";

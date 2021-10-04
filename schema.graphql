@@ -125,7 +125,7 @@ type Configuration @entity {
   id: ID!
   manager: Manager!
 
-  owner: Bytes
+  owner: Bytes!
   optionFactory: OptionFactory
   optionHelper: OptionHelper
   poolFactory: PoolFactory

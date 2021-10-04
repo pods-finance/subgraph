@@ -59,24 +59,24 @@ function _generateActivityId(
   return id;
 }
 
-export function getOptionById(id: string): Option {
+export function getOptionById(id: string): Option | null {
   let option = Option.load(id);
-  return option as Option;
+  return option;
 }
 
-export function getPoolById(id: string): Pool {
+export function getPoolById(id: string): Pool | null {
   let pool = Pool.load(id);
-  return pool as Pool;
+  return pool;
 }
 
-export function getUserById(id: string): User {
+export function getUserById(id: string): User | null {
   let user = User.load(id);
-  return user as User;
+  return user;
 }
 
-export function getSpotPriceById(id: string): SpotPrice {
+export function getSpotPriceById(id: string): SpotPrice | null {
   let price = SpotPrice.load(id);
-  return price as SpotPrice;
+  return price;
 }
 
 export function getOrCreateUserById(id: string): User {
@@ -91,23 +91,23 @@ export function getOrCreateUserById(id: string): User {
 }
 
 export function getActionById(
-  id: string | null,
+  id: string,
   suffix: string | null = null
-): Action {
+): Action | null {
   let actionId = _generateActionId(id, suffix);
   let action = Action.load(actionId);
-  return action as Action;
+  return action;
 }
 export function getActionByIdFromEvent(
   event: ethereum.Event,
   suffix: string | null = null
-): Action {
+): Action | null {
   let actionId = _generateActionId(
     event.transaction.hash.toHexString(),
     suffix
   );
   let action = Action.load(actionId);
-  return action as Action;
+  return action;
 }
 
 export function createBaseAction(
