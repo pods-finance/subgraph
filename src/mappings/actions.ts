@@ -31,7 +31,7 @@ import {
   getOptionFactoryById,
 } from "../helpers";
 
-import { ADDRESS_ZERO, put, call, zero } from "../constants";
+import { ADDRESS_ZERO, put, call, zero, isTransferTracked } from "../constants";
 
 import * as positionHandler from "./auxiliary/position";
 import * as statsHander from "./auxiliary/activity";
@@ -369,6 +369,7 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
 }
 
 export function handleOptionTransfer(event: Transfer): void {
+  if (!isTransferTracked()) return;
   let option = getOptionById(event.address.toHexString());
   if (option == null) {
     log.debug("PodLog Linked entities are missing: Option", []);

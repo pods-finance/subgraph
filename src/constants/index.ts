@@ -3,6 +3,10 @@ import * as environment from "./env";
 
 import { convertStringToPaddedZero } from "../helpers/utils";
 
+export function isTransferTracked(): boolean {
+  return false;
+}
+
 export function isDev(): boolean {
   return environment.dev;
 }
