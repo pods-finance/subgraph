@@ -990,6 +990,7 @@ export class Option extends Entity {
     this.set("collateralAsset", Value.fromBytes(Bytes.empty()));
     this.set("collateralAssetDecimals", Value.fromBigInt(BigInt.zero()));
     this.set("collateralAssetSymbol", Value.fromString(""));
+    this.set("seriesFeeVolume", Value.fromBigInt(BigInt.zero()));
   }
 
   save(): void {
@@ -1273,6 +1274,15 @@ export class Option extends Entity {
 
   set collateralAssetSymbol(value: string) {
     this.set("collateralAssetSymbol", Value.fromString(value));
+  }
+
+  get seriesFeeVolume(): BigInt {
+    let value = this.get("seriesFeeVolume");
+    return value!.toBigInt();
+  }
+
+  set seriesFeeVolume(value: BigInt) {
+    this.set("seriesFeeVolume", Value.fromBigInt(value));
   }
 }
 

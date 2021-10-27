@@ -1,4 +1,4 @@
-import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts";
+import { ethereum, BigInt, Address, log } from "@graphprotocol/graph-ts";
 import {
   Action,
   Option,

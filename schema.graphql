@@ -90,7 +90,7 @@ type Action @entity {
 
   "amount *denominated in tokenB* tracking the balance of fees for side A of the pool, post-action"
   nextFeesA: BigInt
-  "amount *denominated in tokenB* tracking the balance of fees for side A of the pool, post-action"
+  "amount *denominated in tokenB* tracking the balance of fees for side B of the pool, post-action"
   nextFeesB: BigInt
 
   nextCollateralTVL: BigInt
@@ -209,6 +209,10 @@ type Option @entity {
   collateralAssetDecimals: BigInt!
   "symbol of the inferred collateral ERC20 token"
   collateralAssetSymbol: String!
+
+  # Series Data #
+  "amount *denominated in tokenB/strke* tracking the volume of fees (normally, removing liq. causes fees to be redeemed)"
+  seriesFeeVolume: BigInt!
 }
 
 type Pool @entity {

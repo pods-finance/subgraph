@@ -2,7 +2,7 @@ import { log, Address, BigInt } from "@graphprotocol/graph-ts";
 import { Action, Pool, Option, User } from "../../../generated/schema";
 import { OptionAMMPool as PoolContract } from "../../../generated/templates/OptionAMMPool/OptionAMMPool";
 import { ERC20 as ERC20Contract } from "../../../generated/templates/PodOption/ERC20";
-import { isDev, one, zero } from "../../constants";
+import { isDev, one, zero, two } from "../../constants";
 import {
   getPoolById,
   getUserById,
@@ -218,6 +218,22 @@ export function callNextUserSnapshot(user: User, pool: Pool): BigInt[] {
   return snapshot as BigInt[];
 }
 
+export function updateNextSeriesFeeVolume(
+  option: Option,
+  fees: BigInt[]
+): BigInt | null {
+  if (option == null) return null;
+
+  let currentFeeVolume = fees[0].plus(fees[1]);
+  let difference = currentFeeVolume.minus(option.seriesFeeVolume);
+
+  if (difference > zero) {
+    return currentFeeVolume;
+  }
+
+  return null;
+}
+
 export function updateNextValues(
   option: Option,
   action: Action,
@@ -271,6 +287,12 @@ export function updateNextValues(
 
   let ABPrice = callNextABPrice(pool);
   action.nextABPrice = ABPrice;
+
+  let seriesFeeVolume = updateNextSeriesFeeVolume(option, fees);
+  if (seriesFeeVolume) {
+    option.seriesFeeVolume = seriesFeeVolume;
+    option.save();
+  }
 
   return action;
 }

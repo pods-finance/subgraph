@@ -69,6 +69,8 @@ export function handleOptionCreated(event: OptionCreated): void {
    * ---- Dependencies ----
    */
 
+  entity.seriesFeeVolume = zero;
+
   getOrCreateManager(event);
 
   entity.save();
