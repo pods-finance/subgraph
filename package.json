@@ -11,6 +11,8 @@
     "deploy:experimental": "VARIANT=experimental yarn setup && NAME=pods-experimental yarn deploy",
     "deploy:mainnet-dev": "VARIANT=mainnet-dev yarn setup && NAME=pods-dev yarn deploy",
     "deploy:mainnet": "VARIANT=mainnet yarn setup && NAME=pods yarn deploy",
+    "deploy:arbitrum-dev": "VARIANT=arbitrum-dev yarn setup && NAME=pods-arbitrum-dev yarn deploy",
+    "deploy:arbitrum": "VARIANT=arbitrum yarn setup && NAME=pods-arbitrum yarn deploy",
     "deploy:kovan-dev": "VARIANT=kovan-dev yarn setup && NAME=pods-kovan-dev yarn deploy",
     "deploy:kovan": "VARIANT=kovan yarn setup && NAME=pods-kovan yarn deploy",
     "deploy:mumbai-dev": "VARIANT=mumbai-dev yarn setup && NAME=pods-mumbai-dev yarn deploy",

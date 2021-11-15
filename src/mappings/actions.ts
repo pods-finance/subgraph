@@ -100,7 +100,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
       .times(event.params.optionsMintedAndSold)
       .div(convertExponentToBigInt(pool.tokenADecimals));
   } else if (option.type === call) {
-    action.inputTokenB = event.params.optionsMintedAndSold;
+    action.inputTokenA = event.params.optionsMintedAndSold;
   }
 
   metadata.optionsMintedAndSold = event.params.optionsMintedAndSold;
@@ -220,7 +220,7 @@ export function handleUnmint(event: Unmint): void {
   if (option.type === put) {
     action.outputTokenB = event.params.strikeAmount;
   } else if (option.type === call) {
-    action.outputTokenA = event.params.strikeAmount;
+    action.outputTokenA = event.params.optionAmount;
   }
 
   positionHandler.updatePositionUnmint(user, option, action);
