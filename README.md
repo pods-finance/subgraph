@@ -1,5 +1,14 @@
 # @pods-finance/subgraph
-🔮 A subgraph implementation for the Pods v2 contracts.
+🔮 A subgraph implementation for the Pods v2 contracts. The "dev" flavour includes extra analytics.
+
+[Mainnet](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods)
+| [Mainnet Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-dev)
+| [Kovan](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-kovan)
+| [Kovan Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-kovan-dev)
+| [Matic](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-matic)
+| [Matic Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-matic-dev)
+| [Mumbai](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-mumbai)
+| [Mumbai Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-mumbai-dev)
 
 
 Table of Contents
