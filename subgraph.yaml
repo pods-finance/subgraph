@@ -8,7 +8,7 @@ dataSources:
     source:
       address: '0xD23548bfE7A9F1B7598f40bc6698A2D10091E75B'
       abi: ConfigurationManager
-      startBlock: 5867837
+      startBlock: 5867000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
