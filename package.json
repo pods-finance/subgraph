@@ -15,6 +15,7 @@
     "deploy:arbitrum": "VARIANT=arbitrum yarn setup && NAME=pods-arbitrum yarn deploy",
     "deploy:kovan-dev": "VARIANT=kovan-dev yarn setup && NAME=pods-kovan-dev yarn deploy",
     "deploy:kovan": "VARIANT=kovan yarn setup && NAME=pods-kovan yarn deploy",
+    "deploy:goerli": "VARIANT=goerli yarn setup && NAME=pods-goerli yarn deploy",
     "deploy:mumbai-dev": "VARIANT=mumbai-dev yarn setup && NAME=pods-mumbai-dev yarn deploy",
     "deploy:mumbai": "VARIANT=mumbai yarn setup && NAME=pods-mumbai yarn deploy",
     "deploy:matic-dev": "VARIANT=matic-dev yarn setup && NAME=pods-matic-dev yarn deploy",
