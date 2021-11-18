@@ -5,6 +5,7 @@
 | [Mainnet Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-dev)
 | [Kovan](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-kovan)
 | [Kovan Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-kovan-dev)
+| [Goerli](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-goerli)
 | [Matic](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-matic)
 | [Matic Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-matic-dev)
 | [Mumbai](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-mumbai)
