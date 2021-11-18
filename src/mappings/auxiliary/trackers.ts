@@ -182,7 +182,6 @@ export function callNextFees(pool: Pool): BigInt[] {
 
 function callNextTVLs(pool: Pool): BigInt[] {
   let balances = [zero, zero, zero] as BigInt[];
-  let oneAdapted = one.times(convertExponentToBigInt(pool.tokenADecimals));
 
   let nextCollateralTVL = callNextERC20Balance(
     Address.fromString(pool.tokenB.toHexString()),
@@ -192,7 +191,7 @@ function callNextTVLs(pool: Pool): BigInt[] {
   let nextPoolTokenATVL = callNextERC20Balance(
     Address.fromString(pool.tokenA.toHexString()),
     Address.fromString(pool.id)
-  ).times(callNextSellingPrice(pool, oneAdapted));
+  );
 
   let nextPoolTokenBTVL = callNextERC20Balance(
     Address.fromString(pool.tokenB.toHexString()),
