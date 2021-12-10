@@ -60,6 +60,40 @@ export class Metadata extends Entity {
       this.set("optionsMintedAndSold", Value.fromBigInt(<BigInt>value));
     }
   }
+
+  get feeA(): string | null {
+    let value = this.get("feeA");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set feeA(value: string | null) {
+    if (!value) {
+      this.unset("feeA");
+    } else {
+      this.set("feeA", Value.fromString(<string>value));
+    }
+  }
+
+  get feeB(): string | null {
+    let value = this.get("feeB");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set feeB(value: string | null) {
+    if (!value) {
+      this.unset("feeB");
+    } else {
+      this.set("feeB", Value.fromString(<string>value));
+    }
+  }
 }
 
 export class Action extends Entity {
@@ -78,6 +112,7 @@ export class Action extends Entity {
     this.set("inputTokenB", Value.fromBigInt(BigInt.zero()));
     this.set("outputTokenA", Value.fromBigInt(BigInt.zero()));
     this.set("outputTokenB", Value.fromBigInt(BigInt.zero()));
+    this.set("metadata", Value.fromString(""));
   }
 
   save(): void {
@@ -239,21 +274,13 @@ export class Action extends Entity {
     }
   }
 
-  get metadata(): string | null {
+  get metadata(): string {
     let value = this.get("metadata");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+    return value!.toString();
   }
 
-  set metadata(value: string | null) {
-    if (!value) {
-      this.unset("metadata");
-    } else {
-      this.set("metadata", Value.fromString(<string>value));
-    }
+  set metadata(value: string) {
+    this.set("metadata", Value.fromString(value));
   }
 
   get nextIV(): BigInt | null {
@@ -644,6 +671,158 @@ export class SpotPrice extends Entity {
 
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
+  }
+
+  get action(): string | null {
+    let value = this.get("action");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set action(value: string | null) {
+    if (!value) {
+      this.unset("action");
+    } else {
+      this.set("action", Value.fromString(<string>value));
+    }
+  }
+}
+
+export class FeePool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("address", Value.fromBytes(Bytes.empty()));
+    this.set("type", Value.fromString(""));
+    this.set("pool", Value.fromString(""));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save FeePool entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save FeePool entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("FeePool", id.toString(), this);
+    }
+  }
+
+  static load(id: string): FeePool | null {
+    return changetype<FeePool | null>(store.get("FeePool", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value!.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get type(): string {
+    let value = this.get("type");
+    return value!.toString();
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+
+  get pool(): string {
+    let value = this.get("pool");
+    return value!.toString();
+  }
+
+  set pool(value: string) {
+    this.set("pool", Value.fromString(value));
+  }
+}
+
+export class Fee extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("feePool", Value.fromString(""));
+    this.set("value", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Fee entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        "Cannot save Fee entity with non-string ID. " +
+          'Considering using .toHex() to convert the "id" to a string.'
+      );
+      store.set("Fee", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Fee | null {
+    return changetype<Fee | null>(store.get("Fee", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get feePool(): string {
+    let value = this.get("feePool");
+    return value!.toString();
+  }
+
+  set feePool(value: string) {
+    this.set("feePool", Value.fromString(value));
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value!.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
+  }
+
+  get metadata(): string | null {
+    let value = this.get("metadata");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set metadata(value: string | null) {
+    if (!value) {
+      this.unset("metadata");
+    } else {
+      this.set("metadata", Value.fromString(<string>value));
+    }
   }
 
   get action(): string | null {
@@ -1301,6 +1480,8 @@ export class Pool extends Entity {
     this.set("tokenBDecimals", Value.fromBigInt(BigInt.zero()));
     this.set("tokenASymbol", Value.fromString(""));
     this.set("tokenBSymbol", Value.fromString(""));
+    this.set("feePoolA", Value.fromString(""));
+    this.set("feePoolB", Value.fromString(""));
   }
 
   save(): void {
@@ -1417,6 +1598,24 @@ export class Pool extends Entity {
 
   set tokenBSymbol(value: string) {
     this.set("tokenBSymbol", Value.fromString(value));
+  }
+
+  get feePoolA(): string {
+    let value = this.get("feePoolA");
+    return value!.toString();
+  }
+
+  set feePoolA(value: string) {
+    this.set("feePoolA", Value.fromString(value));
+  }
+
+  get feePoolB(): string {
+    let value = this.get("feePoolB");
+    return value!.toString();
+  }
+
+  set feePoolB(value: string) {
+    this.set("feePoolB", Value.fromString(value));
   }
 }
 

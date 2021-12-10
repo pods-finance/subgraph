@@ -8,6 +8,9 @@ import {
   OptionHourActivity,
   OptionDayActivity,
   SpotPrice,
+  FeePool,
+  Metadata,
+  Fee,
 } from "../../generated/schema";
 
 import { zero } from "../constants";
@@ -55,6 +58,16 @@ function _generateActivityId(
     .concat(type)
     .concat("-")
     .concat(index);
+
+  return id;
+}
+
+function _generateFeeId(transactionId: string, type: string): string {
+  let id = "Fee"
+    .concat("-")
+    .concat(transactionId)
+    .concat("-")
+    .concat(type);
 
   return id;
 }
@@ -115,10 +128,8 @@ export function createBaseAction(
   event: ethereum.Event,
   suffix: string | null = null
 ): Action {
-  let actionId = _generateActionId(
-    event.transaction.hash.toHexString(),
-    suffix
-  );
+  let transactionId = event.transaction.hash.toHexString();
+  let actionId = _generateActionId(transactionId, suffix);
   let entity = new Action(actionId);
 
   entity.inputTokenA = zero;
@@ -126,13 +137,52 @@ export function createBaseAction(
   entity.outputTokenA = zero;
   entity.outputTokenB = zero;
 
-  let price = getSpotPriceById(actionId);
-  if (price) entity.spotPrice = price.id;
-
   entity.from = event.transaction.from;
   entity.type = type;
   entity.hash = event.transaction.hash;
   entity.timestamp = event.block.timestamp.toI32();
+
+  /**
+   * ---- Handle spot price ----
+   */
+
+  let price = getSpotPriceById(actionId);
+  if (price) entity.spotPrice = price.id;
+
+  /**
+   * ---- Handle metadata ----
+   * [It may have been already created by the Fee events]
+   */
+
+  let metadata = getOrCreateMetadataById(transactionId);
+  if (metadata) entity.metadata = metadata.id;
+
+  /**
+   * ---- Handle fees ----
+   * [This case should handle Fee(s) that are registered before the Action]
+   */
+
+  let feeA = getFeeByIdAndType(transactionId, "A");
+  if (feeA !== null) {
+    feeA.metadata = metadata.id;
+    feeA.action = entity.id;
+
+    metadata.feeA = feeA.id;
+
+    feeA.save();
+    metadata.save();
+  }
+
+  let feeB = getFeeByIdAndType(transactionId, "B");
+  if (feeB !== null) {
+    feeB.metadata = metadata.id;
+    feeB.action = entity.id;
+
+    metadata.feeB = feeB.id;
+
+    feeB.save();
+    metadata.save();
+  }
 
   return entity;
 }
@@ -241,4 +291,39 @@ export function getOrCreateOptionDayActivity(
   }
 
   return activity as OptionDayActivity;
+}
+
+export function getFeePoolById(id: string): FeePool | null {
+  let feePool = FeePool.load(id);
+  return feePool;
+}
+
+export function getOrCreateMetadataById(id: string): Metadata {
+  let metdata = Metadata.load(id);
+  if (metdata == null) {
+    metdata = new Metadata(id);
+    metdata.id = id;
+    metdata.save();
+  }
+
+  return metdata as Metadata;
+}
+
+export function getFeeByFeeId(id: string): Fee | null {
+  let fee = Fee.load(id);
+  return fee;
+}
+
+export function getFeeByIdAndType(
+  transactionId: string,
+  type: string
+): Fee | null {
+  let id = _generateFeeId(transactionId, type);
+  let fee = Fee.load(id);
+  return fee;
+}
+
+export function createFeeByIdAndType(transactionId: string, type: string): Fee {
+  let fee = new Fee(_generateFeeId(transactionId, type));
+  return fee as Fee;
 }

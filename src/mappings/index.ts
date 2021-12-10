@@ -18,4 +18,4 @@ export {
   handleManagerModuleSet,
 } from "./manager";
 
-export { handleSpotPrice } from "./utility";
+export { handleSpotPrice, handleFeeWithdrawn } from "./utility";

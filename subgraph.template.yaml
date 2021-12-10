@@ -30,6 +30,8 @@ dataSources:
           file: ./abis/OptionAMMPool.json
         - name: OptionHelper
           file: ./abis/OptionHelper.json
+        - name: FeePool
+          file: ./abis/FeePool.json
       eventHandlers:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleManagerOwnershipTransferred
@@ -164,4 +166,24 @@ templates:
           handler: handleRemoveLiquidity
         - event: TradeInfo(uint256,uint256)
           handler: handleSpotPrice
+      file: ./src/mappings/index.ts
+  - kind: ethereum/contract
+    name: FeePool
+    network: {{network}}
+    source:
+      abi: FeePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - FeePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: FeePool
+          file: ./abis/FeePool.json
+      eventHandlers:
+        - event: FeeWithdrawn(address,address,uint256,uint256)
+          handler: handleFeeWithdrawn
       file: ./src/mappings/index.ts

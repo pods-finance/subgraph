@@ -1,8 +1,12 @@
 import { log, BigInt } from "@graphprotocol/graph-ts";
 import { PoolCreated } from "../../generated/ConfigurationManager/OptionAMMFactory";
-import { OptionAMMPool as PoolTemplate } from "../../generated/templates";
+import {
+  OptionAMMPool as PoolTemplate,
+  FeePool as FeePoolTemplate,
+} from "../../generated/templates";
 import { OptionAMMPool as PoolContract } from "../../generated/templates/OptionAMMPool/OptionAMMPool";
-import { Pool } from "../../generated/schema";
+import {} from "../../generated/templates";
+import { Pool, FeePool } from "../../generated/schema";
 import { callERC20Symbol, getOptionById, getOrCreateManager } from "../helpers";
 
 export function handlePoolCreated(event: PoolCreated): void {
@@ -40,6 +44,31 @@ export function handlePoolCreated(event: PoolCreated): void {
 
   entity.tokenASymbol = callERC20Symbol(event.params.option);
   entity.tokenBSymbol = callERC20Symbol(contract.tokenB());
+
+  /**
+   * ---- Fee Pools ----
+   */
+
+  let feePoolAAddress = contract.feePoolA();
+  let feePoolA = new FeePool(feePoolAAddress.toHexString());
+
+  FeePoolTemplate.create(feePoolAAddress);
+
+  feePoolA.address = feePoolAAddress;
+  feePoolA.type = "A";
+  feePoolA.save();
+
+  let feePoolBAddress = contract.feePoolB();
+  let feePoolB = new FeePool(feePoolBAddress.toHexString());
+
+  FeePoolTemplate.create(feePoolBAddress);
+
+  feePoolB.address = feePoolBAddress;
+  feePoolB.type = "B";
+  feePoolB.save();
+
+  entity.feePoolA = feePoolA.id;
+  entity.feePoolB = feePoolB.id;
 
   /**
    * ---- Dependencies ----

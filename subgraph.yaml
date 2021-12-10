@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: ConfigurationManager
-    network: goerli
+    network: kovan
     source:
-      address: '0xD23548bfE7A9F1B7598f40bc6698A2D10091E75B'
+      address: '0x9ff1CdDd55ee91312358B9c7E3da54eB9eC18A60'
       abi: ConfigurationManager
-      startBlock: 5867000
+      startBlock: 26926280
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -30,6 +30,8 @@ dataSources:
           file: ./abis/OptionAMMPool.json
         - name: OptionHelper
           file: ./abis/OptionHelper.json
+        - name: FeePool
+          file: ./abis/FeePool.json
       eventHandlers:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleManagerOwnershipTransferred
@@ -41,7 +43,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: OptionFactory
-    network: goerli
+    network: kovan
     source:
       abi: OptionFactory
     mapping:
@@ -65,7 +67,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionHelper
-    network: goerli
+    network: kovan
     source:
       abi: OptionHelper
     mapping:
@@ -91,7 +93,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMFactory
-    network: goerli
+    network: kovan
     source:
       abi: OptionAMMFactory
     mapping:
@@ -113,7 +115,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: PodOption
-    network: goerli
+    network: kovan
     source:
       abi: PodOption
     mapping:
@@ -143,7 +145,7 @@ templates:
       file: ./src/mappings/index.ts
   - kind: ethereum/contract
     name: OptionAMMPool
-    network: goerli
+    network: kovan
     source:
       abi: OptionAMMPool
     mapping:
@@ -164,4 +166,24 @@ templates:
           handler: handleRemoveLiquidity
         - event: TradeInfo(uint256,uint256)
           handler: handleSpotPrice
+      file: ./src/mappings/index.ts
+  - kind: ethereum/contract
+    name: FeePool
+    network: kovan
+    source:
+      abi: FeePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - FeePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: FeePool
+          file: ./abis/FeePool.json
+      eventHandlers:
+        - event: FeeWithdrawn(address,address,uint256,uint256)
+          handler: handleFeeWithdrawn
       file: ./src/mappings/index.ts

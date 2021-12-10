@@ -16,9 +16,20 @@ enum ActionType {
   TransferTo
 }
 
+enum FeePoolType {
+  A
+  B
+}
+
+# -------------
+# Elements
+# -------------
+
 type Metadata @entity {
   id: ID!
   optionsMintedAndSold: BigInt
+  feeA: Fee
+  feeB: Fee
 }
 
 type Action @entity {
@@ -54,7 +65,7 @@ type Action @entity {
   "structure (holding an amount) resolving to the spot price at the time of the action or trade"
   spotPrice: SpotPrice
   "special structure holding custom metadata on a case-by-case basis"
-  metadata: Metadata
+  metadata: Metadata!
 
   ##### NEXT VALUES POST-ACTION ####
 
@@ -109,9 +120,21 @@ type SpotPrice @entity {
   action: Action
 }
 
-# -------------
-# Elements
-# -------------
+type FeePool @entity {
+  id: ID!
+  address: Bytes!
+  type: FeePoolType!
+  pool: Pool!
+}
+
+type Fee @entity {
+  id: ID!
+  feePool: FeePool!
+  value: BigInt!
+
+  metadata: Metadata
+  action: Action
+}
 
 type Manager @entity {
   id: ID!
@@ -243,6 +266,12 @@ type Pool @entity {
   tokenASymbol: String!
   "symbol of the ERC20 token for side B of the pool"
   tokenBSymbol: String!
+
+  "FeePool storing LP fees (accruing for side A of the pool)"
+  feePoolA: FeePool!
+
+  "FeePool storing LP fees (accruing for side B of the pool)"
+  feePoolB: FeePool!
 }
 
 type User @entity {

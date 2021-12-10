@@ -16,13 +16,7 @@ import {
   OptionHelper as OptionHelperTemplate,
 } from "../../generated/templates";
 
-import {
-  getOrCreateManager,
-  createConfiguration,
-  getPoolFactoryById,
-  getOptionFactoryById,
-  getOptionHelperById,
-} from "../helpers";
+import { getOrCreateManager, createConfiguration } from "../helpers";
 import {
   MODULE_AMM_FACTORY,
   MODULE_OPTION_FACTORY,

@@ -1,3 +1,9 @@
+/**
+ *
+ * ---- DEPRECATED ----
+ *
+ */
+
 export let variant = "mumbai";
 export let dev = false;
 export let network = "mumbai";

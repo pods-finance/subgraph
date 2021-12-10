@@ -29,6 +29,7 @@ import {
   getOptionHelperById,
   getPoolFactoryById,
   getOptionFactoryById,
+  getOrCreateMetadataById,
 } from "../helpers";
 
 import { ADDRESS_ZERO, put, call, zero, isTransferTracked } from "../constants";
@@ -69,7 +70,7 @@ export function handleBuy(event: OptionsBought): void {
 export function handleSell(event: OptionsMintedAndSold): void {
   let id = event.transaction.hash.toHexString();
   let action = createBaseAction("Sell", event);
-  let metadata = new Metadata(id);
+  let metadata = getOrCreateMetadataById(action.metadata);
   let user = getOrCreateUserById(event.params.seller.toHexString());
   let option = getOptionById(event.params.optionAddress.toHexString());
   let pool = option && option.pool ? getPoolById(option.pool!) : null;
