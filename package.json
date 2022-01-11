@@ -16,10 +16,10 @@
     "deploy:kovan-dev": "VARIANT=kovan-dev yarn setup && NAME=pods-kovan-dev yarn deploy",
     "deploy:kovan": "VARIANT=kovan yarn setup && NAME=pods-kovan yarn deploy",
     "deploy:goerli": "VARIANT=goerli yarn setup && NAME=pods-goerli yarn deploy",
-    "deprecated::deploy:mumbai-dev": "VARIANT=mumbai-dev yarn setup && NAME=pods-mumbai-dev yarn deploy",
-    "deprecated::deploy:mumbai": "VARIANT=mumbai yarn setup && NAME=pods-mumbai yarn deploy",
     "deploy:matic-dev": "VARIANT=matic-dev yarn setup && NAME=pods-matic-dev yarn deploy",
     "deploy:matic": "VARIANT=matic yarn setup && NAME=pods-matic yarn deploy",
+    "deprecated::deploy:mumbai-dev": "VARIANT=mumbai-dev yarn setup && NAME=pods-mumbai-dev yarn deploy",
+    "deprecated::deploy:mumbai": "VARIANT=mumbai yarn setup && NAME=pods-mumbai yarn deploy",
     "tsc": "tsc"
   },
   "dependencies": {
