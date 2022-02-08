@@ -1,5 +1,5 @@
-export let variant = 'goerli';
+export let variant = 'bsc';
 export let dev = false;
-export let network = 'goerli';
-export let manager = '0xD23548bfE7A9F1B7598f40bc6698A2D10091E75B';
-export let startBlock = 5867000;
+export let network = 'bsc';
+export let manager = '0x91fcfa40e54587205ff167867ee397770c319de1';
+export let startBlock = 15054900;
