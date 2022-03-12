@@ -9,6 +9,7 @@
 | [Optimism](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-optimism)
 | [Fantom](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-fantom)
 | [Avalanche](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-avalanche)
+| [BSC](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-bsc)
 
 
 

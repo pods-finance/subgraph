@@ -1,29 +1,43 @@
 {
-  "name": "pods",
-  "license": "UNLICENSED",
-  "scripts": {
-    "codegen": "graph codegen",
-    "build": "graph build",
-    "cleanup": "rm -rf src/constants/_generated/*",
-    "deploy": "graph deploy pods-finance/$NAME --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "configure": "yarn cleanup && tsc src/constants/addresses/$VARIANT.ts --outDir src/constants/_generated",
-    "template": "mustache src/constants/_generated/$VARIANT.js subgraph.template.yaml > subgraph.yaml && mustache src/constants/_generated/$VARIANT.js src/constants/env.mustache > src/constants/_generated/env.ts",
-    "setup": "yarn configure && yarn template",
-    "deploy:experimental": "VARIANT=experimental yarn setup && NAME=pods-experimental yarn deploy",
-    "deploy:mainnet": "VARIANT=mainnet yarn setup && NAME=pods yarn deploy",
-    "deploy:bsc": "VARIANT=bsc yarn setup && NAME=pods-bsc yarn deploy",
-    "deploy:arbitrum": "VARIANT=arbitrum yarn setup && NAME=pods-arbitrum yarn deploy",
-    "deploy:kovan": "VARIANT=kovan yarn setup && NAME=pods-kovan yarn deploy",
-    "deploy:goerli": "VARIANT=goerli yarn setup && NAME=pods-goerli yarn deploy",
-    "deploy:matic": "VARIANT=matic yarn setup && NAME=pods-matic yarn deploy",
-    "tsc": "tsc"
+  "name": "@pods-finance/subgraph",
+  "description": "A hybrid networking SDK for future Pods apps and integrations",
+  "version": "1.0.0",
+  "author": "Pods Finance",
+  "bugs": {
+    "url": "https://github.com/pods-finance/subgraph/issues",
+    "email": "tech@pods.finance"
   },
+  "contributors": [
+    "Razvan Gabriel Apostu <razvan@pods.finance>"
+  ],
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.22.2"
+    "@graphprotocol/graph-cli": "0.22.2",
+    "global": "^4.4.0"
   },
   "devDependencies": {
     "@graphprotocol/graph-ts": "^0.22.1",
     "mustache": "^4.2.0",
     "typescript": "^4.2.4"
+  },
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "graph build",
+    "cleanup": "rm -rf src/constants/_generated/*",
+    "codegen": "graph codegen",
+    "configure": "yarn cleanup && tsc src/constants/addresses/$VARIANT.ts --outDir src/constants/_generated",
+    "deploy": "graph deploy pods-finance/$NAME --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy:arbitrum": "VARIANT=arbitrum yarn setup && NAME=pods-arbitrum yarn deploy",
+    "deploy:avalanche": "VARIANT=avalanche yarn setup && NAME=pods-avalanche yarn deploy",
+    "deploy:bsc": "VARIANT=bsc yarn setup && NAME=pods-bsc yarn deploy",
+    "deploy:experimental": "VARIANT=experimental yarn setup && NAME=pods-experimental yarn deploy",
+    "deploy:fantom": "VARIANT=fantom yarn setup && NAME=pods-fantom yarn deploy",
+    "deploy:goerli": "VARIANT=goerli yarn setup && NAME=pods-goerli yarn deploy",
+    "deploy:kovan": "VARIANT=kovan yarn setup && NAME=pods-kovan yarn deploy",
+    "deploy:mainnet": "VARIANT=mainnet yarn setup && NAME=pods yarn deploy",
+    "deploy:matic": "VARIANT=matic yarn setup && NAME=pods-matic yarn deploy",
+    "deploy:optimism": "VARIANT=optimism yarn setup && NAME=pods-optimism yarn deploy",
+    "setup": "yarn configure && yarn template",
+    "template": "mustache src/constants/_generated/$VARIANT.js subgraph.template.yaml > subgraph.yaml && mustache src/constants/_generated/$VARIANT.js src/constants/env.mustache > src/constants/_generated/env.ts",
+    "tsc": "tsc"
   }
 }
