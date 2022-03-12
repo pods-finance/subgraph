@@ -1,15 +1,17 @@
 # @pods-finance/subgraph
-🔮 A subgraph implementation for the Pods v2 contracts. The "dev" flavour includes extra analytics.
+🔮 A subgraph implementation for the Pods v2 contracts. The "light" flavour excludes extra analytics.
 
 [Mainnet](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods)
-| [Mainnet Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-dev)
 | [Kovan](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-kovan)
-| [Kovan Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-kovan-dev)
 | [Goerli](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-goerli)
 | [Matic](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-matic)
-| [Matic Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-matic-dev)
-| [Mumbai](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-mumbai)
-| [Mumbai Dev](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-mumbai-dev)
+| [Arbitrum](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-arbitrum)
+| [Optimism](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-optimism)
+| [Fantom](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-fantom)
+| [Avalanche](https://thegraph.com/legacy-explorer/subgraph/pods-finance/pods-avalanche)
+
+
+
 
 
 Table of Contents
@@ -21,7 +23,7 @@ Table of Contents
    * [Technical Specs](#technical-specs)
 
 ## Definitions
-The subgraph will track and serve protocol entities (e.g. options, pools), user actions (e.g. buy, mint), user positions (e.g. premium earned) and overall activity (e.g. hourly volume).
+The subgraph will track and serve protocol entities (e.g. options, pools), user actions (e.g. buy, mint), user positions (e.g. premium earned).
 
 The main entry point is the configuration manager address. The manager will keep track of global variables and whitelisted factories (for options and pools) and will track any meaningful interaction with these contracts.
 
@@ -103,12 +105,6 @@ Some examples of the parameters stored in the position are (but not limited to):
 - amount of options bought
 - amount of premium earned
 - amount of option tokens provided
-
-#### OptionHourActivity and OptionDayActivity
-
-These entities will store volumes and other interesting metrics for the entire protocol.
-
-
 #### Others
 We'll use some other helper entities such as Spot Price, Pool Factory, Option Factory.
 
@@ -116,7 +112,7 @@ We'll use some other helper entities such as Spot Price, Pool Factory, Option Fa
 ## Technical Specs
 #### Deployment Procedure
 0. `yarn run codegen` (if there were changes to the schema.graphql)
-1. `yarn deploy:kovan-dev --access-token XXXXXXX` (the $VARIANT here is kovan-dev | for the access token, see the dashboard for the pods account) 
+1. `yarn deploy:kovan --access-token XXXXXXX` (the $VARIANT here is kovan | for the access token, see the dashboard for the pods account) 
 #### Configuration
 
 The configuration variables (e.g. the manager address or start block) can be managed in `src/constants/addresses` files.
@@ -125,7 +121,7 @@ The configuration variables (e.g. the manager address or start block) can be man
 
 In order to provide a dynamic generation and deploy for the subgraph (multi-network and multi-context), the `yarn deploy:$VARIANT` will include a series of preprocessing steps. The flow:
 
-1. The deploy **variant** will decide the network and the context e.g. `yarn deploy:kovan-dev` will set the $VARIANT variable
+1. The deploy **variant** will decide the network and the context e.g. `yarn deploy:kovan` will set the $VARIANT variable
 2. Based on the chosen variant, the right typescript configuration file will be compiled into a javascript file that will be used as **source** for mustache.<br/>`[yarn configure] src/constants/addresses/$VARIANT.ts → src/_generated/$VARIANT.js`
 
 3. Mustache is used to bind the newly created `src/_generated/$VARIANT.js` configuration to the subgraph YAML template.<br/>`[yarn template 1/2] subgraph.template.yaml → subgraph.yaml`

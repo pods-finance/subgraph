@@ -215,10 +215,7 @@ type Option @entity {
   actions: [Action!]! @derivedFrom(field: "option")
   "positions of the users (with >= 1 action) linked to the option or the connected pool"
   positions: [Position!] @derivedFrom(field: "option")
-  "aggregate activity on an hourly basis"
-  hourActivity: [OptionHourActivity!] @derivedFrom(field: "option")
-  "aggregate activity on a daily basis"
-  dayActivity: [OptionDayActivity!] @derivedFrom(field: "option")
+
   "pool connected to the option 1:1"
   pool: Pool
   "amount resolving to the unix timestamp (millis) used as start moment for the window of exercise"
@@ -335,37 +332,4 @@ type Position @entity {
   # Transfers
   optionsSent: BigInt! # TransferFrom
   optionsReceived: BigInt! # TransferTo
-}
-
-type OptionHourActivity @entity {
-  id: ID!
-  option: Option!
-
-  timestamp: Int!
-  day: Int!
-  hour: Int!
-
-  hourlyPremiumReceived: BigInt!
-  hourlyPremiumPaid: BigInt!
-
-  hourlyGrossVolumeOptions: BigInt!
-  hourlyGrossVolumeTokens: BigInt!
-
-  hourlyActionsCount: BigInt!
-}
-
-type OptionDayActivity @entity {
-  id: ID!
-  option: Option!
-
-  timestamp: Int!
-  day: Int!
-
-  dailyPremiumReceived: BigInt!
-  dailyPremiumPaid: BigInt!
-
-  dailyGrossVolumeOptions: BigInt!
-  dailyGrossVolumeTokens: BigInt!
-
-  dailyActionsCount: BigInt!
 }

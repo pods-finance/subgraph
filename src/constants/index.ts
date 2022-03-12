@@ -1,5 +1,6 @@
+import * as environment from "./_generated/env";
+
 import { BigInt, Bytes } from "@graphprotocol/graph-ts";
-import * as environment from "./env";
 
 import { convertStringToPaddedZero } from "../helpers/utils";
 
@@ -7,8 +8,8 @@ export function isTransferTracked(): boolean {
   return false;
 }
 
-export function isDev(): boolean {
-  return environment.dev;
+export function isLight(): boolean {
+  return environment.light;
 }
 
 export function getManagerId(): string {

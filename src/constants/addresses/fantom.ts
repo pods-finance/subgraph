@@ -1,5 +1,5 @@
 export let variant = "fantom";
-export let dev = false;
+export let light = false;
 export let network = "fantom";
-export let manager = "";
-export let startBlock = 0;
+export let manager = "0x95483B9F251569F8922fCE16e7c02f80c5cEd5da";
+export let startBlock = 30403830;

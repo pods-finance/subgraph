@@ -1,13 +1,14 @@
-import { log, Address, BigInt } from "@graphprotocol/graph-ts";
-import { Action, Pool, Option, User } from "../../../generated/schema";
-import { OptionAMMPool as PoolContract } from "../../../generated/templates/OptionAMMPool/OptionAMMPool";
-import { ERC20 as ERC20Contract } from "../../../generated/templates/PodOption/ERC20";
-import { isDev, one, zero, two } from "../../constants";
+import { Action, Option, Pool, User } from "../../../generated/schema";
+import { Address, BigInt, log } from "@graphprotocol/graph-ts";
 import {
+  convertExponentToBigInt,
   getPoolById,
   getUserById,
-  convertExponentToBigInt,
 } from "../../helpers";
+import { isLight, one, two, zero } from "../../constants";
+
+import { ERC20 as ERC20Contract } from "../../../generated/templates/PodOption/ERC20";
+import { OptionAMMPool as PoolContract } from "../../../generated/templates/OptionAMMPool/OptionAMMPool";
 
 function callNextERC20Balance(address: Address, owner: Address): BigInt {
   let balance = zero;
@@ -238,7 +239,7 @@ export function updateNextValues(
   action: Action,
   reference: BigInt
 ): Action {
-  if (!isDev()) return action;
+  if (isLight()) return action;
 
   let pool = option && option.pool ? getPoolById(option.pool!) : null;
   let user = getUserById(action.user);

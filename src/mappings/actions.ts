@@ -1,42 +1,39 @@
-import { log, store, Address } from "@graphprotocol/graph-ts";
+import * as positionHandler from "./auxiliary/position";
+import * as trackHandler from "./auxiliary/trackers";
+
+import { ADDRESS_ZERO, call, isTransferTracked, put, zero } from "../constants";
 import {
-  OptionsBought,
-  OptionsSold,
-  OptionsMintedAndSold,
-} from "../../generated/ConfigurationManager/OptionHelper";
+  AddLiquidity,
+  RemoveLiquidity,
+} from "../../generated/templates/OptionAMMPool/OptionAMMPool";
+import { Address, log, store } from "@graphprotocol/graph-ts";
 import {
   Exercise,
   Mint,
   Unmint,
   Withdraw,
 } from "../../generated/templates/PodOption/PodOption";
-import { Transfer } from "../../generated/templates/PodOption/ERC20";
 import {
-  AddLiquidity,
-  RemoveLiquidity,
-} from "../../generated/templates/OptionAMMPool/OptionAMMPool";
-
-import { Metadata } from "../../generated/schema";
-
+  OptionsBought,
+  OptionsMintedAndSold,
+  OptionsSold,
+} from "../../generated/ConfigurationManager/OptionHelper";
 import {
-  getOrCreateUserById,
-  getOptionById,
-  getPoolById,
+  convertExponentToBigInt,
+  createBaseAction,
   getActionById,
   getActionByIdFromEvent,
-  createBaseAction,
-  convertExponentToBigInt,
-  getOptionHelperById,
-  getPoolFactoryById,
+  getOptionById,
   getOptionFactoryById,
+  getOptionHelperById,
   getOrCreateMetadataById,
+  getOrCreateUserById,
+  getPoolById,
+  getPoolFactoryById,
 } from "../helpers";
 
-import { ADDRESS_ZERO, put, call, zero, isTransferTracked } from "../constants";
-
-import * as positionHandler from "./auxiliary/position";
-import * as statsHander from "./auxiliary/activity";
-import * as trackHandler from "./auxiliary/trackers";
+import { Metadata } from "../../generated/schema";
+import { Transfer } from "../../generated/templates/PodOption/ERC20";
 
 export function handleBuy(event: OptionsBought): void {
   let action = createBaseAction("Buy", event);
@@ -58,7 +55,6 @@ export function handleBuy(event: OptionsBought): void {
   action.outputTokenA = event.params.optionsBought;
 
   positionHandler.updatePositionBuy(user, option, action);
-  statsHander.updateActivityBuy(option, action, event);
   action = trackHandler.updateNextValues(
     option,
     action,
@@ -114,12 +110,7 @@ export function handleSell(event: OptionsMintedAndSold): void {
     action,
     event.params.optionsMintedAndSold
   );
-  statsHander.updateActivitySell(
-    option,
-    action,
-    event,
-    event.params.optionsMintedAndSold
-  );
+
   action = trackHandler.updateNextValues(
     option,
     action,
@@ -153,7 +144,6 @@ export function handleResell(event: OptionsSold): void {
   action.outputTokenB = event.params.outputReceived;
 
   positionHandler.updatePositionResell(user, option, action);
-  statsHander.updateActivityResell(option, action, event);
   action = trackHandler.updateNextValues(
     option,
     action,
@@ -193,9 +183,6 @@ export function handleMint(event: Mint): void {
   }
 
   positionHandler.updatePositionMint(user, option, action);
-
-  statsHander.updateActivityMint(option, action, event);
-
   action = trackHandler.updateNextValues(option, action, event.params.amount);
 
   action.save();
@@ -225,7 +212,6 @@ export function handleUnmint(event: Unmint): void {
   }
 
   positionHandler.updatePositionUnmint(user, option, action);
-  statsHander.updateActivityUnmint(option, action, event);
   action = trackHandler.updateNextValues(
     option,
     action,
@@ -266,7 +252,6 @@ export function handleExercise(event: Exercise): void {
   }
 
   positionHandler.updatePositionExercise(user, option, action);
-  statsHander.updateActivityExercise(option, action, event);
   action = trackHandler.updateNextValues(option, action, zero);
 
   action.save();
@@ -291,7 +276,6 @@ export function handleWithdraw(event: Withdraw): void {
   action.outputTokenB = event.params.strikeAmount;
 
   positionHandler.updatePositionWithdraw(user, option, pool, action);
-  statsHander.updateActivityWithdraw(option, action, event);
   action = trackHandler.updateNextValues(option, action, zero);
 
   action.save();
@@ -324,7 +308,6 @@ export function handleAddLiquidity(event: AddLiquidity): void {
   action.inputTokenB = event.params.amountB;
 
   positionHandler.updatePositionAddLiquidity(user, option, pool, action);
-  statsHander.updateActivityAddLiquidity(option, action, event);
   action = trackHandler.updateNextValues(
     option,
     action,
@@ -356,7 +339,6 @@ export function handleRemoveLiquidity(event: RemoveLiquidity): void {
   action.outputTokenB = event.params.amountB;
 
   positionHandler.updatePositionRemoveLiquidity(user, option, pool, action);
-  statsHander.updateActivityRemoveLiquidity(option, action, event);
   action = trackHandler.updateNextValues(
     option,
     action,
@@ -425,7 +407,6 @@ export function handleOptionTransfer(event: Transfer): void {
   actionTo.outputTokenA = event.params.value;
   positionHandler.updatePositionTransferFrom(userFrom, option, actionFrom);
   positionHandler.updatePositionTransferTo(userTo, option, actionTo);
-  statsHander.updateActivityTransfer(option, actionFrom, event);
   actionFrom = trackHandler.updateNextValues(option, actionFrom, zero);
   actionTo = trackHandler.updateNextValues(option, actionTo, zero);
 

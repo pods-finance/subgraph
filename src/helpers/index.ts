@@ -1,17 +1,15 @@
-import { ethereum, BigInt, Address, log } from "@graphprotocol/graph-ts";
 import {
   Action,
-  Option,
-  User,
-  Pool,
-  Position,
-  OptionHourActivity,
-  OptionDayActivity,
-  SpotPrice,
+  Fee,
   FeePool,
   Metadata,
-  Fee,
+  Option,
+  Pool,
+  Position,
+  SpotPrice,
+  User,
 } from "../../generated/schema";
+import { Address, BigInt, ethereum, log } from "@graphprotocol/graph-ts";
 
 import { zero } from "../constants";
 
@@ -42,22 +40,6 @@ function _generatePositionId(userId: string, optionId: string): string {
     .concat(userId)
     .concat("-")
     .concat(optionId);
-
-  return id;
-}
-
-function _generateActivityId(
-  type: string,
-  optionId: string,
-  index: string
-): string {
-  let id = "Activity"
-    .concat("-")
-    .concat(optionId)
-    .concat("-")
-    .concat(type)
-    .concat("-")
-    .concat(index);
 
   return id;
 }
@@ -229,68 +211,6 @@ export function getOrCreatePosition(user: User, option: Option): Position {
   }
 
   return position as Position;
-}
-
-export function getOrCreateOptionHourActivity(
-  option: Option,
-  event: ethereum.Event
-): OptionHourActivity {
-  let timestamp = event.block.timestamp.toI32();
-  let hourIndex = timestamp / (60 * 60);
-  let dayIndex = timestamp / (60 * 60 * 24);
-
-  let id = _generateActivityId(
-    "hour",
-    option.id,
-    BigInt.fromI32(hourIndex).toString()
-  );
-
-  let activity = OptionHourActivity.load(id);
-  if (activity == null) {
-    activity = new OptionHourActivity(id);
-    activity.option = option.id;
-    activity.timestamp = timestamp;
-    activity.day = dayIndex;
-    activity.hour = hourIndex;
-
-    activity.hourlyPremiumReceived = zero;
-    activity.hourlyPremiumPaid = zero;
-    activity.hourlyGrossVolumeOptions = zero;
-    activity.hourlyGrossVolumeTokens = zero;
-    activity.hourlyActionsCount = zero;
-  }
-
-  return activity as OptionHourActivity;
-}
-
-export function getOrCreateOptionDayActivity(
-  option: Option,
-  event: ethereum.Event
-): OptionDayActivity {
-  let timestamp = event.block.timestamp.toI32();
-  let dayIndex = timestamp / (60 * 60 * 24);
-
-  let id = _generateActivityId(
-    "day",
-    option.id,
-    BigInt.fromI32(dayIndex).toString()
-  );
-
-  let activity = OptionDayActivity.load(id);
-  if (activity == null) {
-    activity = new OptionDayActivity(id);
-    activity.option = option.id;
-    activity.timestamp = timestamp;
-    activity.day = dayIndex;
-
-    activity.dailyPremiumReceived = zero;
-    activity.dailyPremiumPaid = zero;
-    activity.dailyGrossVolumeOptions = zero;
-    activity.dailyGrossVolumeTokens = zero;
-    activity.dailyActionsCount = zero;
-  }
-
-  return activity as OptionDayActivity;
 }
 
 export function getFeePoolById(id: string): FeePool | null {
